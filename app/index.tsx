@@ -7,7 +7,7 @@ const App = () => {
   return (
     <View className='flex-1 items-center justify-center bg-white'>
         <Text className='text-3xl font-pblack'>
-          Yo!
+          Yos!
         </Text>
         <Link href="/profile">Go to Profile</Link>
     </View>
