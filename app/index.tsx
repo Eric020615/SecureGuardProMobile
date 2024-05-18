@@ -1,16 +1,37 @@
 import React from 'react'
-import { StatusBar } from 'expo-status-bar'
-import { Link } from 'expo-router'
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView, Image } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import Images from "../constants/images"
+import CustomButton from "../components/CustomButton"
+import { Redirect, router } from 'expo-router'
 
 const App = () => {
   return (
-    <View className='flex-1 items-center justify-center bg-white'>
-        <Text className='text-3xl font-pblack'>
-          Yos!
-        </Text>
-        <Link href="/profile">Go to Profile</Link>
-    </View>
+    <SafeAreaView className='bg-[#F5F5F5] h-full'>
+      <ScrollView contentContainerStyle={{ height: '100%'}}>
+        <View className='w-full min-h-[85vh]'>
+          <View className='w-full h-[50%] flex items-center'> 
+            <Image source={Images.background}/>
+            <Image source={Images.apartmentBuilding} className='absolute top-14'/>
+          </View>
+          <View className='w-full h-fit my-10 mx-5'>
+            <Text className='text-2xl font-pregular italic'>
+              Welcome to
+            </Text>
+            <Text className='text-5xl font-bold'>
+              Gate Mate
+            </Text>
+          </View>
+          <View className='items-center mx-5 mt-10'>
+            <CustomButton 
+              title='Get Started' 
+              handlePress={() => { router.push("/sign-in") }} 
+              containerStyles='bg-primary p-3 w-full m-4'
+              />
+          </View>
+        </View>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
