@@ -7,8 +7,6 @@ import { Redirect, router } from 'expo-router'
 import { Env } from "@env";
 
 const App = () => {
-  console.log("hello")
-  console.log(Env.API_KEY)
   return (
     <SafeAreaView className='bg-[#F5F5F5] h-full'>
       <ScrollView contentContainerStyle={{ height: '100%'}}>

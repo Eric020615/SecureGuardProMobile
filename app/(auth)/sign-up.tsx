@@ -30,14 +30,14 @@ const SignUp = () => {
     initialValues: signUpformDataJson,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      signIn();
+      signUp();
     },
   });
-  const signIn = async () => {
+
+  const signUp = async () => {
     setIsSubmitting(true);
     try {
-      const response = await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
-      console.log(response);
+      await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
     } catch (error) {
       console.log(error);
     } finally {

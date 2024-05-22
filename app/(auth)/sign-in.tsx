@@ -8,10 +8,11 @@ import FIREBASE from "../../config/FirebaseConfig";
 import CustomButton from "../../components/CustomButton";
 import { Link } from "expo-router";
 import { signInformDataJson } from "../../config/constant/auth/index";
+import { signInWithEmailAndPassword } from "firebase/auth";
 
 interface SignInForm {
-  email: String;
-  password: String;
+  email: string;
+  password: string;
 }
 
 const SignIn = () => {
@@ -28,13 +29,20 @@ const SignIn = () => {
     initialValues: signInformDataJson,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      setIsSubmitting(true);
-      console.log("hello")
-      console.log(values)
-      formik.resetForm();
-      setIsSubmitting(false)
+      signIn();
     },
   });
+
+  const signIn = async () => {
+    setIsSubmitting(true);
+    try {
+      const response = await signInWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   return (
     <SafeAreaView className="bg-white h-full">
