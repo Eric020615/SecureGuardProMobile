@@ -18,7 +18,7 @@ const CustomButton = ({
 } : ButtonProps
 ) => {
   return (
-    <TouchableOpacity 
+    <TouchableOpacity
       onPress={handlePress}
       activeOpacity={0.7}
       className={`rounded-xl justify-center 

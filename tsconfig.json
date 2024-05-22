@@ -1,5 +1,9 @@
 {
-  "compilerOptions": {},
+  "compilerOptions": {
+    "paths": {
+      "@env": ["./config/env.js"]
+    }
+  },
   "extends": "expo/tsconfig.base",
   "include": [
     "src/**/*.ts",

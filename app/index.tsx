@@ -4,8 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Images from "../constants/images"
 import CustomButton from "../components/CustomButton"
 import { Redirect, router } from 'expo-router'
+import { Env } from "@env";
 
 const App = () => {
+  console.log("hello")
+  console.log(Env.API_KEY)
   return (
     <SafeAreaView className='bg-[#F5F5F5] h-full'>
       <ScrollView contentContainerStyle={{ height: '100%'}}>
@@ -14,7 +17,7 @@ const App = () => {
             <Image source={Images.background}/>
             <Image source={Images.apartmentBuilding} className='absolute top-14'/>
           </View>
-          <View className='w-full h-fit my-10 mx-5'>
+          <View className='w-full h-fit mt-10 mb-5 mx-5'>
             <Text className='text-2xl font-pregular italic'>
               Welcome to
             </Text>
@@ -22,10 +25,10 @@ const App = () => {
               Gate Mate
             </Text>
           </View>
-          <View className='items-center mx-5 mt-10'>
+          <View className='items-center mx-5'>
             <CustomButton 
               title='Get Started' 
-              handlePress={() => { router.push("/sign-in") }} 
+              handlePress={() => { router.push("/sign-up") }} 
               containerStyles='bg-primary p-3 w-full m-4'
               />
           </View>
