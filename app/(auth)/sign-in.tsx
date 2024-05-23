@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import FIREBASE from "../../config/FirebaseConfig";
 import CustomButton from "../../components/CustomButton";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { signInformDataJson } from "../../config/constant/auth/index";
 import { signInWithEmailAndPassword } from "firebase/auth";
 
@@ -37,6 +37,7 @@ const SignIn = () => {
     setIsSubmitting(true);
     try {
       const response = await signInWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+      router.replace("/home");
     } catch (error) {
       console.log(error);
     } finally {

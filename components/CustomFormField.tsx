@@ -31,7 +31,7 @@ const CustomFormField = ({
       <Text className='text-base text-black'>
         {title}
       </Text>
-      <View className={`border-2 w-full h-14 px-4 
+      <View className={`border-2 w-full h-[50px] px-4 
       bg-white rounded-2xl focus:border-secondary items-center 
       flex-row`}>
         <TextInput

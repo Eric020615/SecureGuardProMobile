@@ -5,6 +5,7 @@
   "scripts": {
     "start": "cross-env EXPO_NO_DOTENV=1 expo start --tunnel",
     "start:dev": "cross-env APP_ENV=development yarn run start",
+    "start:prod": "cross-env APP_ENV=production yarn run start",
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web"
@@ -30,7 +31,8 @@
     "react-native-web": "~0.19.6",
     "typescript": "^5.3.0",
     "yup": "^1.4.0",
-    "zod": "^3.23.8"
+    "zod": "^3.23.8",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

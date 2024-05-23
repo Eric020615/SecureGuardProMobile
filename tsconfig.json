@@ -1,7 +1,9 @@
 {
   "compilerOptions": {
     "paths": {
-      "@env": ["./config/env.js"]
+      "@env": [
+        "./config/env.js"
+      ]
     }
   },
   "extends": "expo/tsconfig.base",
@@ -13,5 +15,7 @@
     "App.tsx",
     "nativewind.d.ts",
     "App/**/*.tsx",
+    ".expo/types/**/*.ts",
+    "expo-env.d.ts"
   ]
 }

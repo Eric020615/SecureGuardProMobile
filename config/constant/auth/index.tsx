@@ -4,6 +4,15 @@ export const signUpformDataJson = {
     confirmPassword: ""
 }
 
+export const userInforformDataJson = {
+    firstName: '',
+    lastName: '',
+    phoneNumber: '',
+    unitNumber: '',
+    birthDay: '',
+    gender: ''
+}
+
 export const signInformDataJson = {
     email: "",
     password: ""
