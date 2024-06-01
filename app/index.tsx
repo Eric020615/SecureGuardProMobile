@@ -1,10 +1,9 @@
 import React from 'react'
 import { View, Text, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Images from "../constants/images"
+import Images from "../assets/images"
 import CustomButton from "../components/CustomButton"
 import { Redirect, router } from 'expo-router'
-import { Env } from "@env";
 
 const App = () => {
   return (
@@ -26,7 +25,7 @@ const App = () => {
           <View className='items-center mx-5'>
             <CustomButton 
               title='Get Started' 
-              handlePress={() => { router.push("/user-information") }} 
+              handlePress={() => { router.push("/sign-up") }} 
               containerStyles='bg-primary p-3 w-full m-4'
               />
           </View>

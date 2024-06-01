@@ -1,7 +1,6 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
-import { icons } from "../constants/index"
-import { useFormik, FormikErrors } from 'formik'
+import { icons } from "../assets"
 
 interface CustomFormFieldProps {
   title: String

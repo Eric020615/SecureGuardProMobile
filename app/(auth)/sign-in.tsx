@@ -4,7 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomFormField from "../../components/CustomFormField";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import FIREBASE from "../../config/FirebaseConfig";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { signInformDataJson } from "../../config/constant/auth/index";
@@ -16,7 +15,6 @@ interface SignInForm {
 }
 
 const SignIn = () => {
-  const auth = FIREBASE.FIREBASE_AUTH;
   const [isSubmitting, setIsSubmitting] = useState(false)
   const validationSchema = Yup.object().shape({
     email: Yup.string().email('Invalid Email').required("Email is required"),
@@ -36,7 +34,7 @@ const SignIn = () => {
   const signIn = async () => {
     setIsSubmitting(true);
     try {
-      const response = await signInWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+      // const response = await signInWithEmailAndPassword(auth, formik.values.email, formik.values.password);
       router.replace("/home");
     } catch (error) {
       console.log(error);

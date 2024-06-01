@@ -7,8 +7,8 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link } from "expo-router";
 import { signUpformDataJson } from "../../config/constant/auth/index";
-import FIREBASE from "../../config/FirebaseConfig";
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../../zustand/authService/auth";
+import { useApplication } from "../../zustand/index";
 
 interface UserSignUpForm {
   email: string;
@@ -23,7 +23,6 @@ const SignUp = () => {
     password: Yup.string().min(6, 'Password must be at least 6 characters').required("Password is required"),
     confirmPassword: Yup.string().oneOf([Yup.ref("password")], "Passwords must match").required("Confirm Password is required"),
   });
-  const auth = FIREBASE.FIREBASE_AUTH;
   const formik = useFormik<UserSignUpForm>({
     enableReinitialize: true,
     validateOnBlur: false,
@@ -33,11 +32,13 @@ const SignUp = () => {
       signUp();
     },
   });
+  const authSelector = useAuth((state) => state.signUp);
 
   const signUp = async () => {
     setIsSubmitting(true);
     try {
-      await createUserWithEmailAndPassword(auth, formik.values.email, formik.values.password);
+      const response = await authSelector(formik.values)
+      console.log(response);
     } catch (error) {
       console.log(error);
     } finally {
