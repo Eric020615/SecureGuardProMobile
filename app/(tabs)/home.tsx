@@ -2,7 +2,7 @@ import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '../../components/CustomButton'
-import { Link } from 'expo-router'
+import { Link, router } from 'expo-router'
 import { images, icons } from "../../assets/index"
 
 const Home = () => {
@@ -18,15 +18,21 @@ const Home = () => {
           <View className='p-8'>
             <Text className='text-black text-lg font-psemibold mb-4'>About Your Property</Text>
             <View className='flex flex-row gap-5'>
-              <TouchableOpacity className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'>
+              <TouchableOpacity 
+                className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'
+                onPress={() => router.push("/package")}>
                 <Image source={icons.packages} className='mb-2'/>
                 <Text className='text-sm'>Package</Text>
               </TouchableOpacity>
-              <TouchableOpacity className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'>
+              <TouchableOpacity 
+                className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'
+                onPress={() => router.push("/facility")}>
                 <Image source={icons.facility} className='mb-2'/>
                 <Text className='text-sm'>Facility</Text>
               </TouchableOpacity>
-              <TouchableOpacity className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'>
+              <TouchableOpacity 
+                className='p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1'
+                onPress={() => router.push('/notices')}>
                 <Image source={icons.notices} className='mb-2'/>
                 <Text className='text-sm'>Notices</Text>
               </TouchableOpacity>
