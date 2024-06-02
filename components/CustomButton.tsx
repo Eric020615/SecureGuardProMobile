@@ -1,12 +1,13 @@
 import { TouchableOpacity, Text } from 'react-native'
-import React from 'react'
+import React, { ReactElement } from 'react'
 
 interface ButtonProps {
-  title: string
+  title?: string
   handlePress: () => void
-  containerStyles: string
+  containerStyles?: string
   textStyles?: string
   isLoading?: boolean
+  reactNativeIcons?: ReactElement
 }
 
 const CustomButton = ({ 
@@ -14,7 +15,8 @@ const CustomButton = ({
     handlePress, 
     containerStyles,
     textStyles,
-    isLoading
+    isLoading,
+    reactNativeIcons
 } : ButtonProps
 ) => {
   return (
@@ -24,10 +26,13 @@ const CustomButton = ({
       className={`rounded-xl justify-center 
       items-center ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
       disabled={isLoading}>
-      <Text className={`text-white font-psemibold text-lg 
-      ${textStyles}`}>
-        {title}
-      </Text>
+      {reactNativeIcons ? reactNativeIcons : null}
+      {title && (
+        <Text className={`text-white font-psemibold text-lg 
+        ${textStyles}`}>
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   )
 }
