@@ -11,6 +11,9 @@ import logout from "../assets/icons/logout.png";
 import eyeHide from "../assets/icons/eye-hide.png";
 import eye from "../assets/icons/eye.png";
 import play from "../assets/icons/play.png";
+import facility from "../assets/icons/facility.png";
+import notices from "../assets/icons/notices.png";
+import packages from "../assets/icons/package.png";
 
 export default {
   play,
@@ -26,4 +29,7 @@ export default {
   logout,
   eyeHide,
   eye,
+  facility,
+  notices, 
+  packages
 };
