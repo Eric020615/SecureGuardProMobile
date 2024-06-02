@@ -122,16 +122,16 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : "application/json",
                 },
               };
-              Axios.post(baseURL, {
+              response = await Axios.post(
+                baseURL,
+                data,
                 requestOptions,
-                data: data,
-              })
+              )
             }
             success = true;
           } catch (error) {
-            console.log(error.response)
-            console.log(error.request)
-            console.log(error.message)
+            console.log(error.response.data)
+            response = error.response.data
           }
         }
         if (!success) {
@@ -140,7 +140,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
         return response;
       };
       const response = await performRequest();
-      return [true, response?.data];
+      return [success, response];
     } catch (error: any) {
       return [false, error]
     }

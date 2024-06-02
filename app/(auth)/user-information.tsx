@@ -37,7 +37,6 @@ const UserInformation = () => {
   });
 
   const userInformation = useUser();
-  console.log(userInformation);
 
   return (
     <SafeAreaView className="bg-white h-full">

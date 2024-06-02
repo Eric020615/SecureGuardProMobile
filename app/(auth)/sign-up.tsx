@@ -1,11 +1,11 @@
-import { View, Text, ScrollView, Button } from "react-native";
+import { View, Text, ScrollView, Button, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomFormField from "../../components/CustomFormField";
 import CustomButton from "../../components/CustomButton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import { signUpformDataJson } from "../../config/constant/auth/index";
 import { useAuth } from "../../zustand/authService/auth";
 import { useApplication } from "../../zustand/index";
@@ -38,7 +38,12 @@ const SignUp = () => {
     setIsSubmitting(true);
     try {
       const response = await authSelector(formik.values)
-      console.log(response);
+      if(response.success){
+        router.replace("/home");
+      }
+      else{
+        Alert.alert(response.msg)
+      }
     } catch (error) {
       console.log(error);
     } finally {

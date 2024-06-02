@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomFormField from "../../components/CustomFormField";
@@ -8,6 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { signInformDataJson } from "../../config/constant/auth/index";
 import { signInWithEmailAndPassword } from "firebase/auth";
+import { useAuth } from "../../zustand/authService/auth";
 
 interface SignInForm {
   email: string;
@@ -30,12 +31,19 @@ const SignIn = () => {
       signIn();
     },
   });
+  const authSelector = useAuth((state) => state.signIn);
 
   const signIn = async () => {
     setIsSubmitting(true);
     try {
-      // const response = await signInWithEmailAndPassword(auth, formik.values.email, formik.values.password);
-      router.replace("/home");
+      const response = await authSelector(formik.values)
+      console.log(response)
+      if(response.success){
+        router.replace("/home");
+      }
+      else{
+        Alert.alert(response.msg)
+      }
     } catch (error) {
       console.log(error);
     } finally {

@@ -7,7 +7,7 @@ export const listUrl = {
             type: IType.post
         },
         signUp: {
-            path: 'create-user',
+            path: 'sign-up',
             type: IType.post
         }
     }
