@@ -1,5 +1,5 @@
 import { UserInformationForm } from "../types"
-import { userInforformDataJson } from "../../config/constant/auth"
+import { userInforformDataJson } from "../../config/auth"
 import { create } from "zustand"
 
 interface UserState {

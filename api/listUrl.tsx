@@ -1,4 +1,4 @@
-import { IType } from "../config/constant"
+import { IType } from "../config"
 
 export const listUrl = {
     auth: {

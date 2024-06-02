@@ -6,7 +6,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
-import { signInformDataJson } from "../../config/constant/auth/index";
+import { signInformDataJson } from "../../config/auth/index";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../../zustand/authService/auth";
 
