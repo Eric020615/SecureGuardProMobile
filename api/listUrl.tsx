@@ -10,5 +10,11 @@ export const listUrl = {
             path: 'sign-up',
             type: IType.post
         }
+    },
+    facility: {
+        book: {
+            path: "facility/book",
+            type: IType.post
+        }
     }
 }

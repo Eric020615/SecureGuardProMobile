@@ -7,13 +7,8 @@ import * as Yup from "yup";
 import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { signInformDataJson } from "../../config/auth/index";
-import { signInWithEmailAndPassword } from "firebase/auth";
 import { useAuth } from "../../zustand/authService/auth";
-
-interface SignInForm {
-  email: string;
-  password: string;
-}
+import { SignInForm } from "../../zustand/types";
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

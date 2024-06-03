@@ -18,3 +18,10 @@ export interface SignInForm {
     password: string;
 }
 
+export interface FacilityBookingForm {
+    facility: number;
+    startDate: string;
+    endDate: string;
+    numOfGuest: number;
+}
+

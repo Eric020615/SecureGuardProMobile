@@ -1,7 +1,6 @@
-import { View, Text, FlatList, Image, SafeAreaView, ImageBackground } from "react-native";
-import React, { Dispatch, SetStateAction, useState } from "react";
+import { View, Image, SafeAreaView } from "react-native";
+import React, { Dispatch, SetStateAction, useId, useState } from "react";
 import Swiper from "react-native-swiper-flatlist";
-import { images } from "../assets/index";
 
 const zoomIn = {
   0: {
@@ -27,7 +26,7 @@ interface CustomSwiperProps {
 }
 
 const CustomSwiper = ({ item, onChangeIndex }: CustomSwiperProps) => {
-  
+  const id = useId()
   return (
     <SafeAreaView>
       <Swiper 
@@ -39,7 +38,7 @@ const CustomSwiper = ({ item, onChangeIndex }: CustomSwiperProps) => {
         className="max-h-64 my-4"
       >
         {item.map((x) => (
-          <View>
+          <View key={x.id}>
             <Image 
               source={x.image} 
               resizeMode="contain" 

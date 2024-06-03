@@ -11,28 +11,63 @@ import Iconicons from "react-native-vector-icons/Ionicons";
 import CustomButton from "../../components/CustomButton";
 import CustomSwiper from "../../components/CustomSwiper";
 import { router } from "expo-router";
-import { FacilityList } from "../../config/facilities/index";
+import { FacilityList, GuestList } from "../../config/facilities/index";
 import DatePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
-import Swiper from "react-native-swiper";
-import CustomFormField from "../../components/CustomFormField";
-import { event } from "cypress/types/jquery";
+import { useFormik } from "formik";
+import * as Yup from "yup";
+import { FacilityBookingForm } from "../../zustand/types";
+import { Picker } from "@react-native-picker/picker";
+
+interface FacilityBooking {
+  facility: number,
+  startDate: Date,
+  endDate: Date,
+  numGuest: number
+}
 
 const Facility = () => {
   const [facility, setFacility] = useState(0);
   const [date, setDate] = useState<Date>(new Date());
+  const [facilityBooking, setFacilityBooking] = useState<FacilityBooking>({
+    facility: facility,
+    startDate: new Date(),
+    endDate: new Date(),
+    numGuest: 0 
+  })
   const [showCalendar, setShowCalendar] = useState(false);
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  useEffect(() => {}, [facility]);
+  const validationSchema = Yup.object().shape({
+    facility: Yup.number().required(),
+    startDate: Yup.date().required(),
+    endDate: Yup.date().required(),
+    numGuests: Yup.number().required()
+  });
+
+  const formik = useFormik<FacilityBooking>({
+    enableReinitialize: true,
+    validateOnBlur: false,
+    initialValues: facilityBooking,
+    validationSchema: validationSchema,
+    onSubmit: (values) => {
+      console.log("hello2")
+      console.log(formik.values)
+    },
+  });
+
+  useEffect(() => {
+    formik.setFieldValue("facility", facility);
+  }, [facility]);
 
   const onDatePickerChange = (event, selectedDate) => {
     if (event.type === "dismissed") {
       setShowCalendar(false);
       return;
     }
-    setDate(selectedDate);
+    formik.setFieldValue("startDate", selectedDate);
     setShowCalendar(false);
   };
 
@@ -41,6 +76,7 @@ const Facility = () => {
       setShowStartTime(false);
       return;
     }
+    formik.setFieldValue("startDate", selectedTime);
     setShowStartTime(false);
   };
 
@@ -49,6 +85,7 @@ const Facility = () => {
       setShowEndTime(false);
       return;
     }
+    formik.setFieldValue("endDate", selectedTime);
     setShowEndTime(false);
   };
 
@@ -84,7 +121,7 @@ const Facility = () => {
               handlePress={() => {
                 setShowCalendar(true);
               }}
-              title={date.toDateString()}
+              title={formik.values.startDate.toDateString()}
               textStyles="text-sm text-white"
             />
             {showCalendar && (
@@ -100,8 +137,6 @@ const Facility = () => {
                   />
                 ) : (
                   <DatePicker
-                    onTouchCancel={() => console.log("cancel")}
-                    onPointerCancel={() => console.log("cancel")}
                     mode="date"
                     value={date}
                     display="calendar"
@@ -113,70 +148,94 @@ const Facility = () => {
               </>
             )}
           </View>
-          <View className="mt-4">
-            <Text className="text-base font-bold">Start Time</Text>
-            <CustomButton
-              containerStyles="items-center h-fit bg-primary p-3 w-full mt-3"
-              handlePress={() => {
-                setShowStartTime(true);
-              }}
-              title={date.toDateString()}
-              textStyles="text-sm text-white"
-            />
-            {showStartTime && (
-              <>
-                {Platform.OS === "ios" ? (
-                  <DatePicker
-                    mode="time"
-                    value={date}
-                    display="spinner"
-                    is24Hour={true}
-                    onChange={onStartTimePickerChange}
-                  />
-                ) : (
-                  <DatePicker
-                    mode="time"
-                    value={date}
-                    display="spinner"
-                    is24Hour={true}
-                    onChange={onStartTimePickerChange}
-                  />
-                )}
-              </>
-            )}
+          <View className="flex flex-row gap-3 mt-1">
+            <View className="flex-1">
+              <Text className="text-base font-bold">Start Time</Text>
+              <CustomButton
+                containerStyles="items-center h-fit bg-primary p-3 mt-3"
+                handlePress={() => {
+                  setShowStartTime(true);
+                }}
+                title={moment(formik.values.startDate).format("HH:mm")}
+                textStyles="text-sm text-white"
+              />
+              {showStartTime && (
+                <>
+                  {Platform.OS === "ios" ? (
+                    <DatePicker
+                      mode="time"
+                      value={date}
+                      display="spinner"
+                      is24Hour={true}
+                      onChange={onStartTimePickerChange}
+                    />
+                  ) : (
+                    <DatePicker
+                      mode="time"
+                      value={date}
+                      display="spinner"
+                      is24Hour={true}
+                      onChange={onStartTimePickerChange}
+                    />
+                  )}
+                </>
+              )}
+            </View>
+            <View className="flex-1">
+              <Text className="text-base font-bold">End Time</Text>
+              <CustomButton
+                containerStyles="items-center h-fit bg-primary p-3 mt-3"
+                handlePress={() => {
+                  setShowEndTime(true);
+                }}
+                title={moment(formik.values.endDate).format("HH:mm")}
+                textStyles="text-sm text-white"
+              />
+              {showEndTime && (
+                <>
+                  {Platform.OS === "ios" ? (
+                    <DatePicker
+                      mode="time"
+                      value={date}
+                      display="spinner"
+                      is24Hour={true}
+                      onChange={onEndTimePickerChange}
+                    />
+                  ) : (
+                    <DatePicker
+                      mode="time"
+                      value={date}
+                      display="spinner"
+                      is24Hour={true}
+                      onChange={onEndTimePickerChange}
+                    />
+                  )}
+                </>
+              )}
+            </View>
           </View>
-          <View className="mt-4">
-            <Text className="text-base font-bold">End Time</Text>
-            <CustomButton
-              containerStyles="items-center h-fit bg-primary p-3 w-full mt-3"
-              handlePress={() => {
-                setShowEndTime(true);
+          <View>
+            <Text className="text-base font-bold mt-4">Number of Guests</Text>
+            <Picker
+              selectedValue={formik.values.numGuest}
+              onValueChange={(itemValue, itemIndex) => {
+                formik.setFieldValue("numGuest", itemValue);
               }}
-              title={date.toDateString()}
-              textStyles="text-sm text-white"
-            />
-            {showEndTime && (
-              <>
-                {Platform.OS === "ios" ? (
-                  <DatePicker
-                    mode="time"
-                    value={date}
-                    display="spinner"
-                    is24Hour={true}
-                    onChange={onEndTimePickerChange}
-                  />
-                ) : (
-                  <DatePicker
-                    mode="time"
-                    value={date}
-                    display="spinner"
-                    is24Hour={true}
-                    onChange={onEndTimePickerChange}
-                  />
-                )}
-              </>
-            )}
+            >
+              {
+                GuestList.map((x) => (
+                  <Picker.Item label={x.title} value={x.num} />
+                ))
+              }
+            </Picker>
           </View>
+          <CustomButton
+            title="Submit"
+            handlePress={formik.handleSubmit}
+            containerStyles="border-primary border bg-white p-3 w-full mt-2 flex flex-row self-center"
+            isLoading={isSubmitting}
+            textStyles="text-sm text-primary"
+          />
         </View>
       </ScrollView>
     </SafeAreaView>
