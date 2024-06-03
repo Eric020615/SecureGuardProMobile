@@ -17,13 +17,14 @@ import moment from "moment";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { FacilityBookingForm } from "../../zustand/types";
+import { useFacility } from "../../zustand/facilityService/facility";
 import { Picker } from "@react-native-picker/picker";
 
 interface FacilityBooking {
   facility: number,
   startDate: Date,
   endDate: Date,
-  numGuest: number
+  numofGuest: number
 }
 
 const Facility = () => {
@@ -33,7 +34,7 @@ const Facility = () => {
     facility: facility,
     startDate: new Date(),
     endDate: new Date(),
-    numGuest: 0 
+    numofGuest: 0 
   })
   const [showCalendar, setShowCalendar] = useState(false);
   const [showStartTime, setShowStartTime] = useState(false);
@@ -44,7 +45,7 @@ const Facility = () => {
     facility: Yup.number().required(),
     startDate: Yup.date().required(),
     endDate: Yup.date().required(),
-    numGuests: Yup.number().required()
+    numofGuest: Yup.number().required()
   });
 
   const formik = useFormik<FacilityBooking>({
@@ -55,8 +56,16 @@ const Facility = () => {
     onSubmit: (values) => {
       console.log("hello2")
       console.log(formik.values)
+      submitBooking({
+        facilityId: formik.values.facility,
+        startDate: formik.values.startDate.toISOString(),
+        endDate: formik.values.endDate.toISOString(),
+        numOfGuest: formik.values.numofGuest
+      })
     },
   });
+
+  const submitBooking = useFacility((state) => state.submitBooking)
 
   useEffect(() => {
     formik.setFieldValue("facility", facility);
@@ -217,9 +226,9 @@ const Facility = () => {
           <View>
             <Text className="text-base font-bold mt-4">Number of Guests</Text>
             <Picker
-              selectedValue={formik.values.numGuest}
+              selectedValue={formik.values.numofGuest}
               onValueChange={(itemValue, itemIndex) => {
-                formik.setFieldValue("numGuest", itemValue);
+                formik.setFieldValue("numOfGuest", itemValue);
               }}
             >
               {

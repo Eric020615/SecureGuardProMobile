@@ -19,7 +19,7 @@ export interface SignInForm {
 }
 
 export interface FacilityBookingForm {
-    facility: number;
+    facilityId: number;
     startDate: string;
     endDate: string;
     numOfGuest: number;

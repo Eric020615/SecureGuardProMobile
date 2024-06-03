@@ -13,15 +13,16 @@ interface IHandler {
 }
 
 export interface IResponse<T> {
-    success: boolean,
-    msg: string,
-    data: T
+  success: boolean;
+  msg: string;
+  data: T;
 }
 
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
   const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
     try {
       const { path, type, data, isBloob } = payload;
+      const token = payload._token
       const baseURL = `${process.env.BACKEND_API}${path}`;
       let success = false;
       const maxAttempt = 2;
@@ -39,7 +40,6 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 paramsSerializer: (params) => parseParams(params),
                 headers: {
                   "Content-Type": "application/json",
-                
                 },
               });
             } else if (type === "put") {
@@ -121,28 +121,29 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     ? "application/x-www-form-urlencoded"
                     : "application/json",
                 },
+                ...(token != null
+                  ? {
+                      Authorization: `Bearer ${token}`,
+                    }
+                : {})
               };
-              response = await Axios.post(
-                baseURL,
-                data,
-                requestOptions,
-              )
+              response = await Axios.post(baseURL, data, requestOptions);
             }
             success = true;
           } catch (error) {
-            console.log(error.response.data)
-            response = error.response.data
+            console.log(error.response.data);
+            response = error.response.data;
           }
         }
         if (!success) {
-            console.log("All attempts to perform request failed");
+          console.log("All attempts to perform request failed");
         }
         return response;
       };
       const response = await performRequest();
       return [success, response];
     } catch (error: any) {
-      return [false, error]
+      return [false, error];
     }
   };
   return _handler(payload);
