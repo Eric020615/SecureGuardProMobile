@@ -32,7 +32,6 @@ const SignIn = () => {
     setIsSubmitting(true);
     try {
       const response = await authSelector(formik.values)
-      console.log(response)
       if(response.success){
         router.replace("/home");
       }

@@ -16,7 +16,6 @@ import DatePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { FacilityBookingForm } from "../../zustand/types";
 import { useFacility } from "../../zustand/facilityService/facility";
 import { Picker } from "@react-native-picker/picker";
 
@@ -54,8 +53,6 @@ const Facility = () => {
     initialValues: facilityBooking,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log("hello2")
-      console.log(formik.values)
       submitBooking({
         facilityId: formik.values.facility,
         startDate: formik.values.startDate.toISOString(),
@@ -115,7 +112,7 @@ const Facility = () => {
             <CustomButton
               containerStyles="items-center h-fit"
               handlePress={() => {
-                router.push("/home");
+                router.push("/facilityHistory");
               }}
               title="View history"
               textStyles="text-sm text-gray-500"
@@ -138,7 +135,7 @@ const Facility = () => {
                 {Platform.OS === "ios" ? (
                   <DatePicker
                     mode="date"
-                    value={date}
+                    value={formik.values.startDate}
                     display="spinner"
                     minimumDate={moment().toDate()}
                     maximumDate={moment().add(2, "week").toDate()}
@@ -147,7 +144,7 @@ const Facility = () => {
                 ) : (
                   <DatePicker
                     mode="date"
-                    value={date}
+                    value={formik.values.startDate}
                     display="calendar"
                     minimumDate={moment().toDate()}
                     maximumDate={moment().add(2, "week").toDate()}
@@ -173,7 +170,7 @@ const Facility = () => {
                   {Platform.OS === "ios" ? (
                     <DatePicker
                       mode="time"
-                      value={date}
+                      value={formik.values.endDate}
                       display="spinner"
                       is24Hour={true}
                       onChange={onStartTimePickerChange}
@@ -181,7 +178,7 @@ const Facility = () => {
                   ) : (
                     <DatePicker
                       mode="time"
-                      value={date}
+                      value={formik.values.startDate}
                       display="spinner"
                       is24Hour={true}
                       onChange={onStartTimePickerChange}
@@ -205,7 +202,7 @@ const Facility = () => {
                   {Platform.OS === "ios" ? (
                     <DatePicker
                       mode="time"
-                      value={date}
+                      value={formik.values.endDate}
                       display="spinner"
                       is24Hour={true}
                       onChange={onEndTimePickerChange}
@@ -213,7 +210,7 @@ const Facility = () => {
                   ) : (
                     <DatePicker
                       mode="time"
-                      value={date}
+                      value={formik.values.endDate}
                       display="spinner"
                       is24Hour={true}
                       onChange={onEndTimePickerChange}
@@ -228,7 +225,7 @@ const Facility = () => {
             <Picker
               selectedValue={formik.values.numofGuest}
               onValueChange={(itemValue, itemIndex) => {
-                formik.setFieldValue("numOfGuest", itemValue);
+                formik.setFieldValue("numofGuest", itemValue);
               }}
             >
               {

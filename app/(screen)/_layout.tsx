@@ -13,6 +13,12 @@ const ScreenLayout = () => {
           }}
         />
         <Stack.Screen
+          name="facilityHistory"
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
           name="notices"
           options={{
             headerShown: false,

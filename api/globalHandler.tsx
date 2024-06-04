@@ -22,7 +22,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
   const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
     try {
       const { path, type, data, isBloob } = payload;
-      const token = payload._token
+      const token = payload._token;
       const baseURL = `${process.env.BACKEND_API}${path}`;
       let success = false;
       const maxAttempt = 2;
@@ -120,13 +120,14 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : payload.isUrlencoded
                     ? "application/x-www-form-urlencoded"
                     : "application/json",
+                  ...(token != null
+                    ? {
+                        Authorization: `Bearer ${token}`,
+                      }
+                    : {}),
                 },
-                ...(token != null
-                  ? {
-                      Authorization: `Bearer ${token}`,
-                    }
-                : {})
               };
+              console.log(requestOptions);
               response = await Axios.post(baseURL, data, requestOptions);
             }
             success = true;

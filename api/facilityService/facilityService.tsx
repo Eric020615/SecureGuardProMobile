@@ -1,13 +1,16 @@
 import { FacilityBookingForm } from "../../zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const submitBooking = async (IBooking: FacilityBookingForm) : Promise<any> => {
     try {
+        const token = await AsyncStorage.getItem("token")
         const [success, data] = await GlobalHandler({
             path: listUrl.facility.book.path,
             type: listUrl.facility.book.type,
-            data: IBooking
+            data: IBooking,
+            _token: token
         })
         const result : IResponse<any> = {
             success,
