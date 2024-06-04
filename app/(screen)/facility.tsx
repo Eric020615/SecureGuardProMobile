@@ -53,7 +53,6 @@ const Facility = () => {
     initialValues: facilityBooking,
     validationSchema: validationSchema,
     onSubmit: (values) => {
-      console.log(formik.values)
       submitBooking({
         facilityId: formik.values.facilityId,
         startDate: formik.values.startDate.toISOString(),
