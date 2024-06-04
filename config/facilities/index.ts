@@ -2,21 +2,27 @@ import { images } from "../../assets/index"
 
 export const FacilityList = [
     {
-        id: 1,
-        name: "Badminton Court",
+        key: 0,
+        name: "BC",
         image: images.badmintonCourt
     },
     {
-        id: 2,
-        name: "Basketball Court",
+        key: 1,
+        name: "BBC",
         image: images.basketballCourt
     },
     {
-        id: 3,
-        name: "GymRoom",
+        key: 2,
+        name: "GR",
         image: images.gymRoom
     },
 ]
+
+export const FacilityName = {
+    "BC": "Badminton Court",
+    "BBC": "Basketball Court",
+    "GR": "Gym Room"    
+}
 
 export const GuestList = [
     {

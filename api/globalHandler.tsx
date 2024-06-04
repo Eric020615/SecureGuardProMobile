@@ -40,6 +40,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 paramsSerializer: (params) => parseParams(params),
                 headers: {
                   "Content-Type": "application/json",
+                  "Authorization": `Bearer ${token}`
                 },
               });
             } else if (type === "put") {
@@ -127,12 +128,10 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : {}),
                 },
               };
-              console.log(requestOptions);
               response = await Axios.post(baseURL, data, requestOptions);
             }
             success = true;
           } catch (error) {
-            console.log(error.response.data);
             response = error.response.data;
           }
         }

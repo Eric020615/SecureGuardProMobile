@@ -19,9 +19,16 @@ export interface SignInForm {
 }
 
 export interface FacilityBookingForm {
-    facilityId: number;
+    facilityId: string;
     startDate: string;
     endDate: string;
     numOfGuest: number;
 }
 
+export interface getBookingHistory {
+    facilityId: number;
+    startDate: string;
+    endDate: string;
+    numOfGuest: number;
+    userGUID: string;
+}

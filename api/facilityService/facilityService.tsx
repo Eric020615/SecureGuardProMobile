@@ -27,3 +27,30 @@ export const submitBooking = async (IBooking: FacilityBookingForm) : Promise<any
         return result;
     }
 }
+
+export const getBookingHistory = async (isPast: boolean): Promise<any> => {
+    try {
+        const token = await AsyncStorage.getItem("token")
+        const [success, data] = await GlobalHandler({
+            path: listUrl.facility.getBookingHistory.path,
+            type: listUrl.facility.getBookingHistory.type,
+            data: {
+                isPast: isPast
+            },
+            _token: token
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': data?.message,
+            data: success ? data?.data.data : undefined
+        }
+        return result;
+    } catch (error) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}

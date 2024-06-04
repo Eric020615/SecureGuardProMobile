@@ -15,6 +15,10 @@ export const listUrl = {
         book: {
             path: "facility/book",
             type: IType.post
+        },
+        getBookingHistory: {
+            path: "facility",
+            type: IType.get
         }
     }
 }

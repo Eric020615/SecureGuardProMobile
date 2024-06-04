@@ -20,17 +20,17 @@ import { useFacility } from "../../zustand/facilityService/facility";
 import { Picker } from "@react-native-picker/picker";
 
 interface FacilityBooking {
-  facility: number,
+  facilityId: string,
   startDate: Date,
   endDate: Date,
   numofGuest: number
 }
 
 const Facility = () => {
-  const [facility, setFacility] = useState(0);
+  const [facilityId, setFacilityId] = useState("BC");
   const [date, setDate] = useState<Date>(new Date());
   const [facilityBooking, setFacilityBooking] = useState<FacilityBooking>({
-    facility: facility,
+    facilityId: facilityId,
     startDate: new Date(),
     endDate: new Date(),
     numofGuest: 0 
@@ -41,7 +41,7 @@ const Facility = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    facility: Yup.number().required(),
+    facilityId: Yup.string().required(),
     startDate: Yup.date().required(),
     endDate: Yup.date().required(),
     numofGuest: Yup.number().required()
@@ -53,8 +53,9 @@ const Facility = () => {
     initialValues: facilityBooking,
     validationSchema: validationSchema,
     onSubmit: (values) => {
+      console.log(formik.values)
       submitBooking({
-        facilityId: formik.values.facility,
+        facilityId: formik.values.facilityId,
         startDate: formik.values.startDate.toISOString(),
         endDate: formik.values.endDate.toISOString(),
         numOfGuest: formik.values.numofGuest
@@ -65,8 +66,8 @@ const Facility = () => {
   const submitBooking = useFacility((state) => state.submitBooking)
 
   useEffect(() => {
-    formik.setFieldValue("facility", facility);
-  }, [facility]);
+    formik.setFieldValue("facilityId", facilityId);
+  }, [facilityId]);
 
   const onDatePickerChange = (event, selectedDate) => {
     if (event.type === "dismissed") {
@@ -119,7 +120,7 @@ const Facility = () => {
             />
           </View>
           <Text className="text-4xl text-black font-bold mt-6">Facilities</Text>
-          <CustomSwiper item={FacilityList} onChangeIndex={setFacility} />
+          <CustomSwiper item={FacilityList} onChangeIndex={setFacilityId} />
           <View>
             <Text className="text-base font-bold">Select Date</Text>
             <CustomButton
@@ -230,7 +231,10 @@ const Facility = () => {
             >
               {
                 GuestList.map((x) => (
-                  <Picker.Item label={x.title} value={x.num} />
+                  <Picker.Item 
+                    key={x.num}
+                    label={x.title} 
+                    value={x.num} />
                 ))
               }
             </Picker>

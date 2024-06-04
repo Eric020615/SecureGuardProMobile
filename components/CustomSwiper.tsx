@@ -1,6 +1,7 @@
 import { View, Image, SafeAreaView } from "react-native";
 import React, { Dispatch, SetStateAction, useId, useState } from "react";
 import Swiper from "react-native-swiper-flatlist";
+import { FacilityList } from "../config/facilities";
 
 const zoomIn = {
   0: {
@@ -22,7 +23,7 @@ const zoomOut = {
 
 interface CustomSwiperProps {
   item: any[];
-  onChangeIndex: Dispatch<SetStateAction<number>>
+  onChangeIndex: Dispatch<SetStateAction<string>>
 }
 
 const CustomSwiper = ({ item, onChangeIndex }: CustomSwiperProps) => {
@@ -31,14 +32,18 @@ const CustomSwiper = ({ item, onChangeIndex }: CustomSwiperProps) => {
     <SafeAreaView>
       <Swiper 
         onChangeIndex={
-          (index) => { 
-            onChangeIndex(index.index)
+          (change) => { 
+            FacilityList.forEach((x) => {
+              if(x.key == change.index){
+                onChangeIndex(x.name);
+              }
+            })
           }
         }
         className="max-h-64 my-4"
       >
-        {item.map((x) => (
-          <View key={x.id}>
+        {item.map((x, index) => (
+          <View key={index}>
             <Image 
               source={x.image} 
               resizeMode="contain" 
