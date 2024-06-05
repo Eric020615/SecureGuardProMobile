@@ -41,16 +41,17 @@ const Facility = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const validationSchema = Yup.object().shape({
-    facilityId: Yup.string().required(),
-    startDate: Yup.date().required(),
-    endDate: Yup.date().required(),
-    numofGuest: Yup.number().required()
+    facilityId: Yup.string().required("Date is required"),
+    startDate: Yup.date().required("Start time is required"),
+    endDate: Yup.date().required("End time is required")
+      .min(Yup.ref("startDate"), "End date must be after start date"),
+    numofGuest: Yup.number().required("Number of guest is required")
   });
 
   const formik = useFormik<FacilityBooking>({
     enableReinitialize: true,
     validateOnBlur: false,
-    initialValues: facilityBooking,
+    initialValues: {} as FacilityBooking,
     validationSchema: validationSchema,
     onSubmit: (values) => {
       submitBooking({
@@ -69,6 +70,8 @@ const Facility = () => {
   }, [facilityId]);
 
   const onDatePickerChange = (event, selectedDate) => {
+    console.log(formik.values)
+    console.log(formik.errors)
     if (event.type === "dismissed") {
       setShowCalendar(false);
       return;
@@ -127,7 +130,7 @@ const Facility = () => {
               handlePress={() => {
                 setShowCalendar(true);
               }}
-              title={formik.values.startDate.toDateString()}
+              title={formik.values.startDate ? formik.values.startDate.toDateString() : "-"}
               textStyles="text-sm text-white"
             />
             {showCalendar && (
@@ -135,7 +138,7 @@ const Facility = () => {
                 {Platform.OS === "ios" ? (
                   <DatePicker
                     mode="date"
-                    value={formik.values.startDate}
+                    value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
                     display="spinner"
                     minimumDate={moment().toDate()}
                     maximumDate={moment().add(2, "week").toDate()}
@@ -144,7 +147,7 @@ const Facility = () => {
                 ) : (
                   <DatePicker
                     mode="date"
-                    value={formik.values.startDate}
+                    value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
                     display="calendar"
                     minimumDate={moment().toDate()}
                     maximumDate={moment().add(2, "week").toDate()}
@@ -153,6 +156,11 @@ const Facility = () => {
                 )}
               </>
             )}
+            { formik.touched.startDate && 
+              formik.errors.startDate && (
+                <Text className="text-red-700">{formik.errors.startDate as string}</Text>
+              )
+            }
           </View>
           <View className="flex flex-row gap-3 mt-1">
             <View className="flex-1">
@@ -162,7 +170,7 @@ const Facility = () => {
                 handlePress={() => {
                   setShowStartTime(true);
                 }}
-                title={moment(formik.values.startDate).format("HH:mm")}
+                title={formik.values.startDate ? moment(formik.values.startDate).format("HH:mm") : "-"}
                 textStyles="text-sm text-white"
               />
               {showStartTime && (
@@ -170,7 +178,7 @@ const Facility = () => {
                   {Platform.OS === "ios" ? (
                     <DatePicker
                       mode="time"
-                      value={formik.values.endDate}
+                      value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
                       display="spinner"
                       is24Hour={true}
                       onChange={onStartTimePickerChange}
@@ -178,7 +186,7 @@ const Facility = () => {
                   ) : (
                     <DatePicker
                       mode="time"
-                      value={formik.values.startDate}
+                      value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
                       display="spinner"
                       is24Hour={true}
                       onChange={onStartTimePickerChange}
@@ -194,7 +202,7 @@ const Facility = () => {
                 handlePress={() => {
                   setShowEndTime(true);
                 }}
-                title={moment(formik.values.endDate).format("HH:mm")}
+                title={formik.values.endDate ? moment(formik.values.endDate).format("HH:mm") : "-"}
                 textStyles="text-sm text-white"
               />
               {showEndTime && (
@@ -202,7 +210,7 @@ const Facility = () => {
                   {Platform.OS === "ios" ? (
                     <DatePicker
                       mode="time"
-                      value={formik.values.endDate}
+                      value={formik.values.endDate ? formik.values.endDate : moment().toDate()}
                       display="spinner"
                       is24Hour={true}
                       onChange={onEndTimePickerChange}
@@ -210,7 +218,7 @@ const Facility = () => {
                   ) : (
                     <DatePicker
                       mode="time"
-                      value={formik.values.endDate}
+                      value={formik.values.endDate ? formik.values.endDate : moment().toDate()}
                       display="spinner"
                       is24Hour={true}
                       onChange={onEndTimePickerChange}
