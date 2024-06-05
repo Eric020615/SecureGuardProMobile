@@ -8,6 +8,7 @@ import { useFacility } from "../../zustand/facilityService/facility";
 import { getBookingHistory } from "../../zustand/types";
 import { FacilityName } from "../../config/facilities";
 import moment from "moment";
+import "moment-timezone"
 
 const facilityHistory = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
@@ -71,13 +72,13 @@ const facilityHistory = () => {
                   </Text>
                   <View className="flex flex-row gap-1">
                     <Text className="">
-                        {moment(x.startDate.substring(0, 21)).format("d MMM YYYY, hh:mm")}
+                        {moment(x.startDate).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")}
                     </Text>
                     <Text>
                         -
                     </Text>
                     <Text className="">
-                        {moment(x.endDate.substring(0, 21)).format("hh:mm")}
+                        {moment(x.endDate).tz('Asia/Kuala_Lumpur').format("HH:mm")}
                     </Text>
                   </View>
                 </View>
