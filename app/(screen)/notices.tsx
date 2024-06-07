@@ -49,7 +49,7 @@ const Notices = () => {
                   <Text>{x.description}</Text>
                 </View>
                 <View>
-                  <Text className="font-bold">{x.startDate}</Text>
+                  <Text className="font-bold">{moment(x.startDate).fromNow()}</Text>
                 </View>
               </View>
             ))}
