@@ -5,12 +5,23 @@ import Images from "../assets/images"
 import CustomButton from "../components/CustomButton"
 import { Redirect, router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useAuth } from "../zustand/authService/auth";
 
 const App = () => {
+  const checkJwtAuth = useAuth((state) => state.checkJwtAuth);
   const checkToken = async () => {
-    const value = await AsyncStorage.getItem("token");
-    if(value){
-      router.push("/home")
+    try {
+      const value = await AsyncStorage.getItem("token");
+      const response = await checkJwtAuth(value)
+      if(response.success){
+        router.push("/home")
+      }
+      else{
+        router.push("/sign-in")
+      }
+    } catch (error) {
+      console.log(error)
+      router.push("/sign-in")
     }
   }
 

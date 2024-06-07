@@ -49,3 +49,26 @@ export const signIn = async (ISignIn: SignInForm) : Promise<any> => {
         return result;
     }
 }
+
+export const checkAuth = async (token: string) : Promise<any> => {
+    try {
+        const [success, data] = await GlobalHandler({
+            path: listUrl.auth.checkJwtAuth.path,
+            type: listUrl.auth.checkJwtAuth.type,
+            _token: token
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': data?.message,
+            data: success ? data?.data : undefined
+        }
+        return result;
+    } catch (error) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}

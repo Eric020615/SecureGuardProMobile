@@ -1,5 +1,4 @@
 import Axios from "axios";
-import { error } from "cypress/types/jquery";
 import queryString from "query-string";
 
 interface IHandler {

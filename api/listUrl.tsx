@@ -9,7 +9,11 @@ export const listUrl = {
         signUp: {
             path: 'sign-up',
             type: IType.post
-        }
+        },
+        checkJwtAuth: {
+            path: 'check-auth',
+            type: IType.post
+        },
     },
     facility: {
         book: {

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { SignInForm, UserSignUpForm } from "../types"
-import { signIn, signUp } from "../../api/authService/authService"
+import { checkAuth, signIn, signUp } from "../../api/authService/authService"
 
 const application = (set, get) => ({
     signUp: async (userSignUpForm: UserSignUpForm) => {
@@ -14,6 +14,14 @@ const application = (set, get) => ({
     signIn: async (userSignInForm: SignInForm) => {
         try {
             const response = await signIn(userSignInForm);
+            return response;
+        } catch (error) {
+            console.log(error)
+        }
+    },
+    checkJwtAuth: async (token: string) => {
+        try {
+            const response = await checkAuth(token);
             return response;
         } catch (error) {
             console.log(error)
