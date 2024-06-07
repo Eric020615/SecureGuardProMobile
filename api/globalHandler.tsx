@@ -39,7 +39,11 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                 paramsSerializer: (params) => parseParams(params),
                 headers: {
                   "Content-Type": "application/json",
-                  "Authorization": `Bearer ${token}`
+                  ...(token != null
+                    ? {
+                        Authorization: `Bearer ${token}`,
+                      }
+                    : {}),
                 },
               });
             } else if (type === "put") {

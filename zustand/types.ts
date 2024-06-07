@@ -32,3 +32,10 @@ export interface getBookingHistory {
     numOfGuest: number;
     userGUID: string;
 }
+
+export interface getNotice {
+    title: string;
+    description: string;
+    startDate: string;
+    endDate: string;
+}

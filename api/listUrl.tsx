@@ -24,5 +24,11 @@ export const listUrl = {
             path: "facility",
             type: IType.get
         }
+    },
+    notice: {
+        getNoticesByResident: {
+            path: "resident/notice",
+            type: IType.get
+        }
     }
 }
