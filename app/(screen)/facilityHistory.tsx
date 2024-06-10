@@ -8,20 +8,20 @@ import { useFacility } from "../../zustand/facilityService/facility";
 import { getBookingHistory } from "../../zustand/types";
 import { FacilityName } from "../../config/facilities";
 import moment from "moment";
-import "moment-timezone"
+import "moment-timezone";
 
 const facilityHistory = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
-  const [isPast, setIsPast] = useState(true)
+  const [isPast, setIsPast] = useState(true);
   const [bookingHistory, setBookingHistory] = useState<getBookingHistory[]>([]);
 
   useEffect(() => {
     getData(isPast);
   }, []);
-  
+
   useEffect(() => {
-    getData(isPast)
-  }, [isPast])
+    getData(isPast);
+  }, [isPast]);
 
   const getData = async (isPast: boolean) => {
     const response = await getBookingHistory(isPast);
@@ -48,16 +48,28 @@ const facilityHistory = () => {
           </Text>
           <View className="flex flex-row justify-between mt-5">
             <CustomButton
-              containerStyles={`${isPast ? "bg-primary": "bg-white"} p-2 mr-5 flex-1 rounded-2xl`}
-              handlePress={() => {setIsPast(!isPast)}}
+              containerStyles={`${
+                isPast ? "bg-primary" : "bg-white"
+              } p-2 mr-5 flex-1 rounded-2xl`}
+              handlePress={() => {
+                setIsPast(!isPast);
+              }}
               title="Past"
-              textStyles={`text-base ${isPast ? "text-white" : "text-primary"} `}
+              textStyles={`text-base ${
+                isPast ? "text-white" : "text-primary"
+              } `}
             />
             <CustomButton
-              containerStyles={`${!isPast ? "bg-primary": "bg-white"} p-2 flex-1 rounded-2xl`}
-              handlePress={() => {setIsPast(!isPast)}}
+              containerStyles={`${
+                !isPast ? "bg-primary" : "bg-white"
+              } p-2 flex-1 rounded-2xl`}
+              handlePress={() => {
+                setIsPast(!isPast);
+              }}
               title="Upcoming"
-              textStyles={`text-base ${!isPast ? "text-white" : "text-primary"} `}
+              textStyles={`text-base ${
+                !isPast ? "text-white" : "text-primary"
+              } `}
             />
           </View>
           {bookingHistory.length > 0 &&
@@ -72,18 +84,36 @@ const facilityHistory = () => {
                   </Text>
                   <View className="flex flex-row gap-1">
                     <Text className="">
-                        {moment(x.startDate).tz('Asia/Kuala_Lumpur').format("DD MMM YYYY, HH:mm")}
+                      {moment(x.startDate)
+                        .tz("Asia/Kuala_Lumpur")
+                        .format("DD MMM YYYY, HH:mm")}
                     </Text>
-                    <Text>
-                        -
-                    </Text>
+                    <Text>-</Text>
                     <Text className="">
-                        {moment(x.endDate).tz('Asia/Kuala_Lumpur').format("HH:mm")}
+                      {moment(x.endDate)
+                        .tz("Asia/Kuala_Lumpur")
+                        .format("HH:mm")}
                     </Text>
                   </View>
                 </View>
                 <View>
                   <Text className="font-bold">{x.numOfGuest} Guests(s)</Text>
+                  {moment(x.startDate).tz("Asia/Kuala_Lumpur") >
+                    moment().tz("Asia/Kuala_Lumpur") && (
+                    <CustomButton
+                      containerStyles="flex flex-row self-end h-fit mt-1"
+                      handlePress={() => {
+                        router.push("/facility");
+                      }}
+                      reactNativeIcons={
+                        <Iconicons
+                          name="close-circle"
+                          color={"#ff0000"}
+                          size={16}
+                        />
+                      }
+                    />
+                  )}
                 </View>
               </View>
             ))}

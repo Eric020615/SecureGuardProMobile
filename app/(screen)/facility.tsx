@@ -15,7 +15,7 @@ import { router } from "expo-router";
 import { FacilityList, GuestList } from "../../config/facilities/index";
 import DatePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
-import "moment-timezone"
+import "moment-timezone";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useFacility } from "../../zustand/facilityService/facility";
@@ -40,7 +40,7 @@ const Facility = () => {
   const [showStartTime, setShowStartTime] = useState(false);
   const [showEndTime, setShowEndTime] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isEndTimeTouched, setisEndTimeTouched] = useState(false)
+  const [isEndTimeTouched, setisEndTimeTouched] = useState(false);
 
   const validationSchema = Yup.object().shape({
     facilityId: Yup.string().required("Date is required"),
@@ -63,12 +63,11 @@ const Facility = () => {
         endDate: formik.values.endDate.toISOString(),
         numOfGuest: formik.values.numofGuest,
       });
-      if(response.success){
+      if (response.success) {
         formik.resetForm();
-        router.push("/facilityHistory")
-      }
-      else{
-        Alert.alert(response.msg)
+        router.push("/facilityHistory");
+      } else {
+        Alert.alert(response.msg);
       }
       setIsSubmitting(false);
     },
@@ -80,7 +79,7 @@ const Facility = () => {
     formik.setFieldValue("facilityId", facilityId);
   }, [facilityId]);
 
-  const onDatePickerChange = (event, selectedDate) => {
+  const onDatePickerChange = (event, selectedDate: Date) => {
     formik.handleBlur("startDate");
     if (event.type === "dismissed") {
       setShowCalendar(false);
@@ -144,7 +143,7 @@ const Facility = () => {
               }}
               title={
                 formik.values.startDate
-                  ? formik.values.startDate.toDateString()
+                  ? moment(formik.values.startDate).tz("Asia/Kuala_Lumpur").format("DD MMM YYYY")
                   : "-"
               }
               textStyles="text-sm text-white"
@@ -154,29 +153,36 @@ const Facility = () => {
                 {Platform.OS === "ios" ? (
                   <DatePicker
                     mode="date"
+                    timeZoneName="Asia/Kuala_Lumpur"
                     value={
                       formik.values.startDate
                         ? formik.values.startDate
-                        : moment().tz('Asia/Kuala_Lumpur').toDate()
+                        : new Date()
                     }
                     display="spinner"
-                    minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-                    maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, "week").toDate()}
+                    minimumDate={moment().tz("Asia/Kuala_Lumpur").toDate()}
+                    maximumDate={moment()
+                      .tz("Asia/Kuala_Lumpur")
+                      .add(2, "week")
+                      .toDate()}
                     onChange={onDatePickerChange}
                   />
                 ) : (
                   <DatePicker
                     mode="date"
+                    timeZoneName="Asia/Kuala_Lumpur"
                     value={
                       formik.values.startDate
                         ? formik.values.startDate
-                        : moment().tz('Asia/Kuala_Lumpur').toDate()
+                        : new Date()
                     }
                     display="calendar"
-                    minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-                    maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, "week").toDate()}
+                    minimumDate={moment().tz("Asia/Kuala_Lumpur").toDate()}
+                    maximumDate={moment()
+                      .tz("Asia/Kuala_Lumpur")
+                      .add(2, "week")
+                      .toDate()}
                     onChange={onDatePickerChange}
-                    
                   />
                 )}
               </>
@@ -192,7 +198,9 @@ const Facility = () => {
                 }}
                 title={
                   formik.values.startDate
-                    ? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format("HH:mm")
+                    ? moment(formik.values.startDate)
+                        .tz("Asia/Kuala_Lumpur")
+                        .format("HH:mm")
                     : "-"
                 }
                 textStyles="text-sm text-white"
@@ -201,6 +209,7 @@ const Facility = () => {
                 <>
                   {Platform.OS === "ios" ? (
                     <DatePicker
+                      timeZoneName="Asia/Kuala_Lumpur"
                       mode="time"
                       value={
                         formik.values.startDate
@@ -213,6 +222,7 @@ const Facility = () => {
                     />
                   ) : (
                     <DatePicker
+                      timeZoneName="Asia/Kuala_Lumpur"
                       mode="time"
                       value={
                         formik.values.startDate
@@ -236,7 +246,9 @@ const Facility = () => {
                 }}
                 title={
                   formik.values.endDate
-                    ? moment(formik.values.endDate).tz('Asia/Kuala_Lumpur').format("HH:mm")
+                    ? moment(formik.values.endDate)
+                        .tz("Asia/Kuala_Lumpur")
+                        .format("HH:mm")
                     : "-"
                 }
                 textStyles="text-sm text-white"
@@ -245,11 +257,12 @@ const Facility = () => {
                 <>
                   {Platform.OS === "ios" ? (
                     <DatePicker
+                      timeZoneName="Asia/Kuala_Lumpur"
                       mode="time"
                       value={
                         formik.values.endDate
                           ? formik.values.endDate
-                          : moment().tz('Asia/Kuala_Lumpur').toDate()
+                          : new Date()
                       }
                       display="spinner"
                       is24Hour={true}
@@ -257,11 +270,12 @@ const Facility = () => {
                     />
                   ) : (
                     <DatePicker
+                      timeZoneName="Asia/Kuala_Lumpur"
                       mode="time"
                       value={
                         formik.values.endDate
                           ? formik.values.endDate
-                          : moment().tz('Asia/Kuala_Lumpur').toDate()
+                          : new Date()
                       }
                       display="spinner"
                       is24Hour={true}
@@ -298,9 +312,7 @@ const Facility = () => {
           </View>
           <CustomButton
             title="Submit"
-            handlePress={
-              formik.handleSubmit
-            }
+            handlePress={formik.handleSubmit}
             containerStyles="border-primary border bg-white p-3 w-full mt-2 flex flex-row self-center"
             isLoading={isSubmitting}
             textStyles="text-sm text-primary"

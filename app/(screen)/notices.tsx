@@ -38,7 +38,7 @@ const Notices = () => {
             />
           </View>
           <Text className="text-3xl text-black mt-6">Notice</Text>
-          {notice.length > 0 &&
+          {notice && notice.length > 0 &&
             notice.map((x, index) => (
               <View
                 className="bg-white mt-5 p-4 rounded-lg flex flex-row justify-between"
@@ -49,7 +49,9 @@ const Notices = () => {
                   <Text>{x.description}</Text>
                 </View>
                 <View>
-                  <Text className="font-bold">{moment(x.startDate).fromNow()}</Text>
+                  <Text className="font-bold">
+                    {moment(x.startDate).fromNow()}
+                  </Text>
                 </View>
               </View>
             ))}
