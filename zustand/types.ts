@@ -26,11 +26,13 @@ export interface FacilityBookingForm {
 }
 
 export interface getBookingHistory {
+    bookingId: string;
     facilityId: number;
     startDate: string;
     endDate: string;
     numOfGuest: number;
     userGUID: string;
+    isCancelled: boolean
 }
 
 export interface getNotice {

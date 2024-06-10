@@ -54,3 +54,30 @@ export const getBookingHistory = async (isPast: boolean): Promise<any> => {
         return result;
     }
 }
+
+export const cancelBooking = async (bookingId: string): Promise<any> => {
+    try {
+        const token = await AsyncStorage.getItem("token")
+        const [success, data] = await GlobalHandler({
+            path: listUrl.facility.cancelBooking.path,
+            type: listUrl.facility.cancelBooking.type,
+            data: {
+                bookingId: bookingId
+            },
+            _token: token
+        })
+        const result : IResponse<any> = {
+            success,
+            msg: success ? 'success': data?.message,
+            data: success ? data?.data.data : undefined
+        }
+        return result;
+    } catch (error) {
+        const result : IResponse<any> = {
+            success: false,
+            msg: error,
+            data: null
+        }
+        return result;
+    }
+}

@@ -23,6 +23,10 @@ export const listUrl = {
         getBookingHistory: {
             path: "facility",
             type: IType.get
+        },
+        cancelBooking: {
+            path: "facility/cancel",
+            type: IType.put
         }
     },
     notice: {

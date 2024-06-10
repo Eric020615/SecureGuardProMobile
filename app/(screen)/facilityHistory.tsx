@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import CustomButton from "../../components/CustomButton";
 import { router } from "expo-router";
@@ -12,6 +12,7 @@ import "moment-timezone";
 
 const facilityHistory = () => {
   const getBookingHistory = useFacility((state) => state.getBookingHistory);
+  const cancelBooking = useFacility((state) => state.cancelBooking);
   const [isPast, setIsPast] = useState(true);
   const [bookingHistory, setBookingHistory] = useState<getBookingHistory[]>([]);
 
@@ -28,6 +29,16 @@ const facilityHistory = () => {
     setBookingHistory(response.data);
   };
 
+  const cancel = async (bookingId: string) => {
+    console.log(bookingId)
+    const response = await cancelBooking(bookingId);
+    if (response.success) {
+      router.push("/facilityHistory");
+    } else {
+      Alert.alert(response.msg);
+    }
+  }
+ 
   return (
     <SafeAreaView className="bg-slate-100 h-full">
       <ScrollView>
@@ -98,21 +109,25 @@ const facilityHistory = () => {
                 </View>
                 <View>
                   <Text className="font-bold">{x.numOfGuest} Guests(s)</Text>
-                  {moment(x.startDate).tz("Asia/Kuala_Lumpur") >
-                    moment().tz("Asia/Kuala_Lumpur") && (
-                    <CustomButton
-                      containerStyles="flex flex-row self-end h-fit mt-1"
-                      handlePress={() => {
-                        router.push("/facility");
-                      }}
-                      reactNativeIcons={
-                        <Iconicons
-                          name="close-circle"
-                          color={"#ff0000"}
-                          size={16}
-                        />
-                      }
-                    />
+                  {x.isCancelled ? (
+                    <Text className="bg-red-500 text-xs text-white rounded-lg text-center mt-1">Cancelled</Text>
+                  ): (
+                    moment(x.startDate).tz("Asia/Kuala_Lumpur") >
+                      moment().tz("Asia/Kuala_Lumpur") && (
+                      <CustomButton
+                        containerStyles="flex flex-row self-end h-fit mt-1"
+                        handlePress={() => {
+                          cancel(x.bookingId);
+                        }}
+                        reactNativeIcons={
+                          <Iconicons
+                            name="close-circle"
+                            color={"#ff0000"}
+                            size={16}
+                          />
+                        }
+                      />
+                    )
                   )}
                 </View>
               </View>
