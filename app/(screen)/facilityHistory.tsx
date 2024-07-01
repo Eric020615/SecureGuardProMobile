@@ -5,16 +5,16 @@ import { router } from "expo-router";
 import Iconicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useFacility } from "../../zustand/facilityService/facility";
-import { getBookingHistory } from "../../zustand/types";
+import { getFacilityBookingHistoryDto } from "../../zustand/types";
 import { FacilityName } from "../../config/facilities";
 import moment from "moment";
 import "moment-timezone";
 
 const facilityHistory = () => {
-  const getBookingHistory = useFacility((state) => state.getBookingHistory);
+  const getBookingHistory = useFacility((state) => state.getFacilityBookingHistory);
   const cancelBooking = useFacility((state) => state.cancelBooking);
   const [isPast, setIsPast] = useState(true);
-  const [bookingHistory, setBookingHistory] = useState<getBookingHistory[]>([]);
+  const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([]);
 
   useEffect(() => {
     getData(isPast);
@@ -30,7 +30,6 @@ const facilityHistory = () => {
   };
 
   const cancel = async (bookingId: string) => {
-    console.log(bookingId)
     const response = await cancelBooking(bookingId);
     if (response.success) {
       router.push("/facilityHistory");

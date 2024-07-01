@@ -1,14 +1,14 @@
-import { FacilityBookingForm } from "../../zustand/types"
+import { FacilityBookingFormDto, getFacilityBookingHistoryDto } from "../../zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const submitBooking = async (IBooking: FacilityBookingForm) : Promise<any> => {
+export const submitBooking = async (IBooking: FacilityBookingFormDto) : Promise<any> => {
     try {
         const token = await AsyncStorage.getItem("token")
         const [success, data] = await GlobalHandler({
-            path: listUrl.facility.book.path,
-            type: listUrl.facility.book.type,
+            path: listUrl.facility.facilityBooking.path,
+            type: listUrl.facility.facilityBooking.type,
             data: IBooking,
             _token: token
         })
@@ -28,21 +28,21 @@ export const submitBooking = async (IBooking: FacilityBookingForm) : Promise<any
     }
 }
 
-export const getBookingHistory = async (isPast: boolean): Promise<any> => {
+export const getFacilityBookingHistory = async (isPast: boolean): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
     try {
         const token = await AsyncStorage.getItem("token")
-        const [success, data] = await GlobalHandler({
-            path: listUrl.facility.getBookingHistory.path,
-            type: listUrl.facility.getBookingHistory.type,
+        const [success, response] = await GlobalHandler({
+            path: listUrl.facility.getFacilityBookingHistory.path,
+            type: listUrl.facility.getFacilityBookingHistory.type,
             data: {
                 isPast: isPast
             },
             _token: token
         })
-        const result : IResponse<any> = {
+        const result : IResponse<getFacilityBookingHistoryDto[]> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error) {
@@ -59,17 +59,15 @@ export const cancelBooking = async (bookingId: string): Promise<any> => {
     try {
         const token = await AsyncStorage.getItem("token")
         const [success, data] = await GlobalHandler({
-            path: listUrl.facility.cancelBooking.path,
-            type: listUrl.facility.cancelBooking.type,
-            data: {
-                bookingId: bookingId
-            },
+            path: listUrl.facility.cancelFacilityBooking.path,
+            type: listUrl.facility.cancelFacilityBooking.type,
+            data: { bookingId },
             _token: token
         })
         const result : IResponse<any> = {
             success,
             msg: success ? 'success': data?.message,
-            data: success ? data?.data.data : undefined
+            data: success ? data?.data : undefined
         }
         return result;
     } catch (error) {

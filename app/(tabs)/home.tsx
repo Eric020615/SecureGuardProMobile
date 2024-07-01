@@ -1,11 +1,21 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '../../components/CustomButton'
 import { Link, router } from 'expo-router'
 import { images, icons } from "../../assets/index"
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const Home = () => {
+useEffect(() => {
+  test()
+}, [])
+
+const test = async () => {
+  const token = await AsyncStorage.getItem("token")
+  console.log(token)
+}
+
   return (
     <SafeAreaView className="bg-slate-100 h-full w-full">
       <ScrollView>

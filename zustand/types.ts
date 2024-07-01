@@ -1,4 +1,4 @@
-export interface UserInformationForm {
+export interface UserInformationFormDto {
     firstName: string;
     lastName: string;
     phoneNumber: string;
@@ -7,35 +7,45 @@ export interface UserInformationForm {
     gender: string;
 }
 
-export interface UserSignUpForm {
+export interface UserSignUpFormDto {
     email: string;
     password: string;
     confirmPassword: string;
 }
 
-export interface SignInForm {
+export interface SignInFormDto {
     email: string;
     password: string;
 }
 
-export interface FacilityBookingForm {
+export interface FacilityBookingFormDto {
     facilityId: string;
     startDate: string;
     endDate: string;
     numOfGuest: number;
 }
 
-export interface getBookingHistory {
-    bookingId: string;
-    facilityId: number;
-    startDate: string;
-    endDate: string;
-    numOfGuest: number;
-    userGUID: string;
+export interface getFacilityBookingHistoryDto {
+    bookingId: string
+    startDate: string
+    facilityId: string
+    facilityName: string
+    endDate: string
+    bookedBy: string
+    numOfGuest: number
     isCancelled: boolean
+    cancelRemark: string
+    createdBy: string;
+    createdDateTime: string;
+    updatedBy: string;
+    updatedDateTime: string;
 }
 
-export interface getNotice {
+export interface cancelFacilityBookingDto {
+    cancelRemark: string
+}
+
+export interface getNoticeDto {
     title: string;
     description: string;
     startDate: string;

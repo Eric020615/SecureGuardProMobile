@@ -17,8 +17,14 @@ export interface IResponse<T> {
   data: T;
 }
 
-const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
-  const _handler = async (payload: IHandler): Promise<[boolean, any]> => {
+export interface IServerResponse{
+  message: string;
+  status: string;
+  data: any;
+}
+
+const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerResponse]> => {
+  const _handler = async (payload: IHandler): Promise<[boolean, IServerResponse]> => {
     try {
       const { path, type, data, isBloob } = payload;
       const token = payload._token;
@@ -41,7 +47,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                   "Content-Type": "application/json",
                   ...(token != null
                     ? {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `${token}`,
                       }
                     : {}),
                 },
@@ -57,17 +63,11 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                       : payload.isUrlencoded
                       ? "application/x-www-form-urlencoded"
                       : "application/json",
-                    // ...(token != null
-                    //     ? {
-                    //           Authorization: `Bearer ${token}`,
-                    //       }
-                    //     : {}),
-                    // ...otpToken,
-                    // ...(localStorage.getItem('supplier')
-                    //     ? supplierHeader(
-                    //           localStorage.getItem('supplier')
-                    //       )
-                    //     : {}),
+                    ...(token != null
+                        ? {
+                              Authorization: `${token}`,
+                          }
+                        : {})
                   },
                 }
               );
@@ -82,17 +82,11 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                       : payload.isUrlencoded
                       ? "application/x-www-form-urlencoded"
                       : "application/json",
-                    // ...(token != null
-                    //     ? {
-                    //           Authorization: `Bearer ${token}`,
-                    //       }
-                    //     : {}),
-                    // ...otpToken,
-                    // ...(localStorage.getItem('supplier')
-                    //     ? supplierHeader(
-                    //           localStorage.getItem('supplier')
-                    //       )
-                    //     : {}),
+                    ...(token != null
+                        ? {
+                              Authorization: `${token}`,
+                          }
+                        : {})
                   },
                 }
               );
@@ -104,15 +98,11 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : payload.isUrlencoded
                     ? "application/x-www-form-urlencoded"
                     : "application/json",
-                  // ...(token != null
-                  //     ? {
-                  //           Authorization: `Bearer ${token}`,
-                  //       }
-                  //     : {}),
-                  // ...otpToken,
-                  // ...(localStorage.getItem('supplier')
-                  //     ? supplierHeader(localStorage.getItem('supplier'))
-                  //     : {}),
+                  ...(token != null
+                      ? {
+                            Authorization: `${token}`,
+                        }
+                      : {})
                 },
                 data: data,
               });
@@ -126,7 +116,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
                     : "application/json",
                   ...(token != null
                     ? {
-                        Authorization: `Bearer ${token}`,
+                        Authorization: `${token}`,
                       }
                     : {}),
                 },
@@ -141,7 +131,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, any]> => {
         if (!success) {
           console.log("All attempts to perform request failed");
         }
-        return response;
+        return response.data;
       };
       const response = await performRequest();
       return [success, response];

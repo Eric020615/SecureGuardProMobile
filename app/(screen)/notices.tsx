@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNotice } from "../../zustand/noticeService/notice";
-import { getNotice } from "../../zustand/types";
+import { getNoticeDto } from "../../zustand/types";
 import moment from "moment";
 import "moment-timezone";
 import CustomButton from "../../components/CustomButton";
@@ -11,7 +11,7 @@ import Iconicons from "react-native-vector-icons/Ionicons";
 
 const Notices = () => {
   const getNotice = useNotice((state) => state.getNotice);
-  const [notice, setNotice] = useState<getNotice[]>([]);
+  const [notice, setNotice] = useState<getNoticeDto[]>([]);
 
   useEffect(() => {
     getData();
@@ -38,7 +38,8 @@ const Notices = () => {
             />
           </View>
           <Text className="text-3xl text-black mt-6">Notice</Text>
-          {notice && notice.length > 0 &&
+          {notice &&
+            notice.length > 0 &&
             notice.map((x, index) => (
               <View
                 className="bg-white mt-5 p-4 rounded-lg flex flex-row justify-between"

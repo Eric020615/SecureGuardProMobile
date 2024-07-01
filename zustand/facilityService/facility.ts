@@ -1,9 +1,9 @@
 import { create } from "zustand"
-import { FacilityBookingForm } from "../types"
-import { cancelBooking, getBookingHistory, submitBooking } from "../../api/facilityService/facilityService"
+import { FacilityBookingFormDto } from "../types"
+import { cancelBooking, getFacilityBookingHistory, submitBooking } from "../../api/facilityService/facilityService"
 
 const application = (set, get) => ({
-    submitBooking: async (facilityBookingForm: FacilityBookingForm) => {
+    submitBooking: async (facilityBookingForm: FacilityBookingFormDto) => {
         try {
             const response = await submitBooking(facilityBookingForm);
             return response;
@@ -11,9 +11,9 @@ const application = (set, get) => ({
             console.log(error);
         }
     },
-    getBookingHistory: async (isPast: boolean) => {
+    getFacilityBookingHistory: async (isPast: boolean) => {
         try {
-            const response = await getBookingHistory(isPast);
+            const response = await getFacilityBookingHistory(isPast);
             return response;
         } catch (error) {
             console.log(error);
