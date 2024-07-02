@@ -8,7 +8,7 @@ import CustomButton from "../../components/CustomButton";
 import { Link, router } from "expo-router";
 import { signInformDataJson } from "../../config/auth/index";
 import { useAuth } from "../../zustand/authService/auth";
-import { SignInForm } from "../../zustand/types";
+import { SignInFormDto } from "../../zustand/types";
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -17,7 +17,7 @@ const SignIn = () => {
     password: Yup.string().required("Password is required"),
   });
 
-  const formik = useFormik<SignInForm>({
+  const formik = useFormik<SignInFormDto>({
     enableReinitialize: true,
     validateOnBlur: false,
     initialValues: signInformDataJson,

@@ -1,9 +1,9 @@
 import { create } from "zustand"
-import { SignInForm, UserSignUpForm } from "../types"
+import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, signIn, signUp } from "../../api/authService/authService"
 
 const application = (set, get) => ({
-    signUp: async (userSignUpForm: UserSignUpForm) => {
+    signUp: async (userSignUpForm: UserSignUpFormDto) => {
         try {
             const response = await signUp(userSignUpForm);
             return response;
@@ -11,7 +11,7 @@ const application = (set, get) => ({
             console.log(error);
         }
     },
-    signIn: async (userSignInForm: SignInForm) => {
+    signIn: async (userSignInForm: SignInFormDto) => {
         try {
             const response = await signIn(userSignInForm);
             return response;
