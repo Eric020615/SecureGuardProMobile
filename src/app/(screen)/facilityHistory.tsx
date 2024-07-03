@@ -1,12 +1,12 @@
 import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "@components/CustomButton";
 import { router } from "expo-router";
 import Iconicons from "react-native-vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useFacility } from "../../zustand/facilityService/facility";
-import { getFacilityBookingHistoryDto } from "../../zustand/types";
-import { FacilityName } from "../../config/facilities";
+import { useFacility } from "@zustand/facilityService/facility";
+import { getFacilityBookingHistoryDto } from "@zustand/types";
+import { FacilityName } from "@config/facilities";
 import moment from "moment";
 import "moment-timezone";
 

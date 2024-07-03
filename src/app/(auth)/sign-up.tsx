@@ -1,14 +1,14 @@
 import { View, Text, ScrollView, Button, Alert } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomFormField from "../../components/CustomFormField";
-import CustomButton from "../../components/CustomButton";
+import CustomFormField from "@components/CustomFormField";
+import CustomButton from "@components/CustomButton";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { Link, router } from "expo-router";
-import { signUpformDataJson } from "../../config/auth/index";
-import { useAuth } from "../../zustand/authService/auth";
-import { useApplication } from "../../zustand/index";
+import { signUpformDataJson } from "@config/auth/index";
+import { useAuth } from "@zustand/authService/auth";
+import { useApplication } from "@zustand/index";
 
 interface UserSignUpForm {
   email: string;

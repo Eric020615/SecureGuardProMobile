@@ -1,4 +1,4 @@
-import { getNoticeDto } from "../../zustand/types";
+import { getNoticeDto } from "@zustand/types";
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage";

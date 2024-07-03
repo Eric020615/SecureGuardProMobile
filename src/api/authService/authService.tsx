@@ -1,6 +1,6 @@
 import GlobalHandler, { IResponse } from "../globalHandler";
 import { listUrl } from "../listUrl";
-import { SignInFormDto, UserSignUpFormDto } from "../../zustand/types";
+import { SignInFormDto, UserSignUpFormDto } from "@zustand/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {

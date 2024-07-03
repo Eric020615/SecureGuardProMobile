@@ -1,11 +1,11 @@
 import { View, Text, ScrollView } from "react-native";
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useNotice } from "../../zustand/noticeService/notice";
-import { getNoticeDto } from "../../zustand/types";
+import { useNotice } from "@zustand/noticeService/notice";
+import { getNoticeDto } from "@zustand/types";
 import moment from "moment";
 import "moment-timezone";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "@components/CustomButton";
 import { router } from "expo-router";
 import Iconicons from "react-native-vector-icons/Ionicons";
 

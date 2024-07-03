@@ -8,16 +8,16 @@ import {
 import React, { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import Iconicons from "react-native-vector-icons/Ionicons";
-import CustomButton from "../../components/CustomButton";
-import CustomSwiper from "../../components/CustomSwiper";
+import CustomButton from "@components/CustomButton";
+import CustomSwiper from "@components/CustomSwiper";
 import { router } from "expo-router";
-import { FacilityList, GuestList } from "../../config/facilities/index";
+import { FacilityList, GuestList } from "@config/facilities/index";
 import DatePicker from "@react-native-community/datetimepicker";
 import moment from "moment";
 import "moment-timezone";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import { useFacility } from "../../zustand/facilityService/facility";
+import { useFacility } from "@zustand/facilityService/facility";
 import { Picker } from "@react-native-picker/picker";
 
 interface FacilityBooking {

@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
-import { checkAuth, signIn, signUp } from "../../api/authService/authService"
+import { checkAuth, signIn, signUp } from "@api/authService/authService"
 
 interface authenticationState {
     isLoading: boolean;

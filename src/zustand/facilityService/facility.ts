@@ -1,6 +1,6 @@
 import { create } from "zustand"
 import { FacilityBookingFormDto } from "../types"
-import { cancelBooking, getFacilityBookingHistory, submitBooking } from "../../api/facilityService/facilityService"
+import { cancelBooking, getFacilityBookingHistory, submitBooking } from "@api/facilityService/facilityService"
 
 interface facilityState {
     isLoading: boolean;

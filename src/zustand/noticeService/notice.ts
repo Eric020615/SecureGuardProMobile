@@ -1,5 +1,5 @@
 import { create } from "zustand"
-import { getNotices } from "../../api/noticeService/noticeService";
+import { getNotices } from "@api/noticeService/noticeService";
 
 interface noticeState {
     isLoading: boolean;

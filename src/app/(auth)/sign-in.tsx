@@ -1,14 +1,14 @@
 import { View, Text, ScrollView, Alert } from "react-native";
 import React, { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomFormField from "../../components/CustomFormField";
+import CustomFormField from "@components/CustomFormField";
 import { useFormik } from "formik";
 import * as Yup from "yup";
-import CustomButton from "../../components/CustomButton";
+import CustomButton from "@components/CustomButton";
 import { Link, router } from "expo-router";
-import { signInformDataJson } from "../../config/auth/index";
-import { useAuth } from "../../zustand/authService/auth";
-import { SignInFormDto } from "../../zustand/types";
+import { signInformDataJson } from "@config/auth/index";
+import { useAuth } from "@zustand/authService/auth";
+import { SignInFormDto } from "@zustand/types";
 
 const SignIn = () => {
   const [isSubmitting, setIsSubmitting] = useState(false)

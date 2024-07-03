@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { View, Text, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Images from "../assets/images"
-import CustomButton from "../components/CustomButton"
+import CustomButton from "@components/CustomButton"
 import { router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from "../zustand/authService/auth";
