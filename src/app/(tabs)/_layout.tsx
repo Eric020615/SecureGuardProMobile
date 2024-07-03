@@ -77,7 +77,7 @@ const TabsLayout = () => {
             title: "Scan",
             headerShown: false,
             tabBarLabel: "",
-            tabBarIcon: ({ color }) => (
+            tabBarIcon: () => (
               <View className="absolute bottom-5 h-[68] w-[68] rounded-full justify-center items-center bg-[#418371]">
                 <MaterialCommunityIcons
                   name="qrcode"

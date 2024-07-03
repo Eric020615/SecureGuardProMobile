@@ -1,12 +1,11 @@
 import { create } from "zustand"
 
-const application = (set, get) => ({
-    isLoading: Boolean,
-    setIsLoading: (isLoading) => {
-        set((state) => ({
-            isLoading: isLoading
-        }))
-    }
-})
+interface ApplicationState {
+    isLoading: boolean;
+    setIsLoading: (isLoading: boolean) => void;
+}
 
-export const useApplication = create(application)
+export const useApplication = create<ApplicationState>((set) => ({
+    isLoading: false,
+    setIsLoading: (isLoading: boolean) => set({isLoading})
+}));
