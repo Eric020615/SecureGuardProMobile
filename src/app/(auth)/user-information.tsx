@@ -1,13 +1,12 @@
 import { View, Text, ScrollView } from "react-native";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
 import CustomFormField from "@components/CustomFormField";
 import { userInforformDataJson } from "@config/auth";
-import { Link } from "expo-router";
 import CustomButton from "@components/CustomButton";
-import { useUser } from "@zustand/userService/user";
+// import { useUser } from "@zustand/userService/user";
 
 interface UserInformationForm {
   firstName: string;
@@ -35,8 +34,6 @@ const UserInformation = () => {
     validationSchema: validationSchema,
     onSubmit: (values) => {},
   });
-
-  const userInformation = useUser();
 
   return (
     <SafeAreaView className="bg-white h-full">

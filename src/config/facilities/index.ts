@@ -1,4 +1,4 @@
-import { images } from "../../assets/index"
+import { images } from "@assets/index"
 
 export const FacilityList = [
     {

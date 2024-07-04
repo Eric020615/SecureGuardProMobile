@@ -7,7 +7,7 @@ interface IHandler {
   data?: any;
   _token?: string;
   isFormData?: boolean;
-  isUrlencoded?: Boolean;
+  isUrlencoded?: boolean;
   isBloob?: boolean;
 }
 

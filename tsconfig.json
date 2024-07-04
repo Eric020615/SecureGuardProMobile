@@ -6,7 +6,8 @@
       "@/*": ["./*"],
       "@zustand/*": ["./src/zustand/*"],
       "@config/*": ["./src/config/*"],
-      "@api/*": ["./src/api/*"]
+      "@api/*": ["./src/api/*"],
+      "@type/*": ["./src/types/*"]
     }
   },
   "extends": "expo/tsconfig.base",
