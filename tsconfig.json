@@ -3,11 +3,11 @@
     "paths": {
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
-      "@/*": ["./*"],
+      // "@/*": ["./*"],
       "@zustand/*": ["./src/zustand/*"],
       "@config/*": ["./src/config/*"],
       "@api/*": ["./src/api/*"],
-      "@type/*": ["./src/types/*"]
+      "@pages/*": ["./src/pages/*"]
     }
   },
   "extends": "expo/tsconfig.base",

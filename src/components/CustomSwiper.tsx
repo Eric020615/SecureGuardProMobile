@@ -27,7 +27,6 @@ interface CustomSwiperProps {
 }
 
 const CustomSwiper = ({ item, onChangeIndex }: CustomSwiperProps) => {
-  const id = useId()
   return (
     <SafeAreaView>
       <Swiper 
