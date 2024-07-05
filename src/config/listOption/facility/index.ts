@@ -18,12 +18,6 @@ export const FacilityList = [
     },
 ]
 
-export const FacilityName = {
-    "BC": "Badminton Court",
-    "BBC": "Basketball Court",
-    "GR": "Gym Room"    
-}
-
 export const GuestList = [
     {
         id: 1,

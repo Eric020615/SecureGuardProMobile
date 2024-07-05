@@ -6,7 +6,7 @@ import CustomButton from '@components/CustomButton'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
-import { signUpformDataJson } from '@config/auth/index'
+import { signUpformDataJson } from '@config/constant/auth/index'
 import { useAuth } from '@zustand/authService/auth'
 import { UserSignUpFormDto } from '@zustand/types'
 

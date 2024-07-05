@@ -5,7 +5,7 @@ import Iconicons from 'react-native-vector-icons/Ionicons'
 import CustomButton from '@components/CustomButton'
 import CustomSwiper from '@components/CustomSwiper'
 import { router } from 'expo-router'
-import { FacilityList, GuestList } from '@config/facilities/index'
+import { FacilityList, GuestList } from '@config/listOption/facility'
 import DatePicker from '@react-native-community/datetimepicker'
 import moment from 'moment'
 import 'moment-timezone'
@@ -13,6 +13,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useFacility } from '@zustand/facilityService/facility'
 import { Picker } from '@react-native-picker/picker'
+import { facilityBookingConst } from '@config/constant/facilities'
 
 interface FacilityBooking {
 	facilityId: string
@@ -23,12 +24,6 @@ interface FacilityBooking {
 
 const CreateFacilityBookingPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
-	const [facilityBooking, setFacilityBooking] = useState<FacilityBooking>({
-		facilityId: facilityId,
-		startDate: new Date(),
-		endDate: null,
-		numofGuest: 1,
-	})
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showStartTime, setShowStartTime] = useState(false)
 	const [showEndTime, setShowEndTime] = useState(false)
@@ -47,7 +42,7 @@ const CreateFacilityBookingPage = () => {
 	const formik = useFormik<FacilityBooking>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: facilityBooking,
+		initialValues: facilityBookingConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			const response = await submitBooking({
@@ -121,10 +116,11 @@ const CreateFacilityBookingPage = () => {
 							}}
 							title="View history"
 							textStyles="text-sm text-gray-500"
-						/>
+						/> 
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Facilities</Text>
 					<CustomSwiper item={FacilityList} onChangeIndex={setFacilityId} />
+					{/* form */}
 					<View>
 						<Text className="text-base font-bold">Select Date</Text>
 						<CustomButton

@@ -6,7 +6,7 @@ import Iconicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFacility } from '@zustand/facilityService/facility'
 import { getFacilityBookingHistoryDto } from '@zustand/types'
-import { FacilityName } from '@config/facilities'
+import { FacilityConst } from '@config/constant/facilities'
 import moment from 'moment'
 import 'moment-timezone'
 
@@ -77,7 +77,7 @@ const FacilityBookingHistoryPage = () => {
 								key={index}
 							>
 								<View>
-									<Text className="font-bold">{FacilityName[x.facilityId]}</Text>
+									<Text className="font-bold">{FacilityConst[x.facilityId]}</Text>
 									<View className="flex flex-row gap-1">
 										<Text className="">
 											{moment(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
