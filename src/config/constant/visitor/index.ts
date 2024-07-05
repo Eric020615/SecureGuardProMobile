@@ -3,7 +3,8 @@ export const createVisitorConst = {
     visitTime: null,
     visitorCategory: "",
     visitorName: "",
-    visitorContactNumber: ""
+    visitorCountryCode: 60,
+    visitorContactNumber: 0,
 }
 
 export const VisitorConst = {

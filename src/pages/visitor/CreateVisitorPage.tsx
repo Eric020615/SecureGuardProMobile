@@ -13,7 +13,7 @@ import DatePicker from '@react-native-community/datetimepicker'
 import { useFacility } from '@zustand/facilityService/facility'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
-import PhoneInput from 'react-native-phone-input'
+import PhoneInput from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
 
 interface CreateVisitor {
@@ -21,7 +21,8 @@ interface CreateVisitor {
 	visitTime: Date
 	visitorCategory: string
 	visitorName: string
-	visitorContactNumber: string
+	visitorContactNumber: any
+	visitorCountryCode: any
 }
 
 const CreateVisitorPage = () => {
@@ -80,6 +81,8 @@ const CreateVisitorPage = () => {
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
 	}
+	const [selectedCountry, setSelectedCountry] = useState(null);
+	const [inputValue, setInputValue] = useState('');
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -98,17 +101,19 @@ const CreateVisitorPage = () => {
 					{/* Register Visitor Form */}
 					<View>
 						<View>
-							<CustomFormField 
+							<CustomFormField
 								handleChangeText={(e) => {
 									formik.setFieldValue('visitorName', e)
 								}}
-								title='Visitor Name'
-								textStyle='text-base font-bold mt-4'
+								title="Visitor Name"
+								textStyle="text-base font-bold mt-4"
 								value={formik.values.visitorName}
 								placeholder={formik.values.visitorName}
-								errorMessage={formik.touched.visitorName && formik.errors.visitorName && (
-									formik.errors.visitorName as string
-								)}
+								errorMessage={
+									formik.touched.visitorName &&
+									formik.errors.visitorName &&
+									(formik.errors.visitorName as string)
+								}
 							/>
 						</View>
 						<View>
@@ -129,22 +134,28 @@ const CreateVisitorPage = () => {
 							)}
 						</View>
 						<View>
-							<Text className="text-base font-bold mt-4">Contact Number</Text>
-							<View className='border bg-primary rounded-xl border-gray-100 p-[10px] mb-5'>
+							<Text className="text-base font-bold">Contact Number</Text>
+							<View className="border bg-primary rounded-xl border-gray-100 p-[10px] mt-3">
 								<PhoneInput
-									initialCountry="my"
-									allowZeroAfterCountryCode={true}
+									selectedCountry={formik.values.visitorCountryCode}
+									onChangeSelectedCountry={(e) => {
+										console.log(e); 
+										formik.setFieldValue('visitorCountryCode',e)
+									}}
 									onChangePhoneNumber={(phoneNumber) => {
+										console.log(phoneNumber)
 										formik.setFieldValue('visitorContactNumber', phoneNumber)
 									}}
-									textProps={{
-										placeholder: 'Contact Number',
-										value: `${formik.values.visitorContactNumber}`,
-										keyboardType: 'phone-pad',
-									}}
-									textStyle={{
-										color: "#FFFFFF"
-									}}
+									value={formik.values.visitorContactNumber}
+									// text={{
+									// 	style: {
+									// 		color: 'white'
+									// 	},
+									// 	placeholder: 'Contact Number',
+									// 	placeholderTextColor: "#FFFFFF",
+									// 	value: `${formik.values.visitorContactNumber}`,
+									// 	keyboardType: 'phone-pad',
+									// }}
 								/>
 							</View>
 							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
@@ -191,7 +202,7 @@ const CreateVisitorPage = () => {
 								</>
 							)}
 						</View>
-						<View className="flex flex-row gap-3 mt-4">
+						<View className="flex flex-row mt-4">
 							<View className="flex-1">
 								<Text className="text-base font-bold">Visit Time</Text>
 								<CustomButton
