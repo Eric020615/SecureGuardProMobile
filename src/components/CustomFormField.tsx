@@ -31,7 +31,7 @@ const CustomFormField = ({
     <View className={`space-y-2 ${containerStyle}`}>
       {title && <Text className={`text-base text-black ${textStyle}`}>{title}</Text>}
       <View
-        className={`border-2 w-full h-[50px] px-4 
+        className={`w-full h-[50px] px-4 
       bg-white rounded-2xl focus:border-secondary items-center 
       flex-row`}
       >

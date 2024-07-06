@@ -15,6 +15,7 @@ import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import PhoneInput from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
+import Ionicons from 'react-native-vector-icons'
 
 interface CreateVisitor {
 	visitDate: Date
@@ -81,8 +82,8 @@ const CreateVisitorPage = () => {
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
 	}
-	const [selectedCountry, setSelectedCountry] = useState(null);
-	const [inputValue, setInputValue] = useState('');
+	const [selectedCountry, setSelectedCountry] = useState(null)
+	const [inputValue, setInputValue] = useState('')
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -116,97 +117,105 @@ const CreateVisitorPage = () => {
 								}
 							/>
 						</View>
-						<View>
+						<View className="">
 							<Text className="text-base font-bold mt-4">Visitor Category</Text>
-							<Picker
-								selectedValue={formik.values.visitorCategory}
-								onValueChange={(itemValue, itemIndex) => {
-									formik.setFieldValue('visitorCategory', itemValue)
-								}}
-								onBlur={formik.handleBlur('visitorCategory')}
-							>
-								{VisitorCategoryList.map((x) => (
-									<Picker.Item key={x.id} label={x.name} value={x.value} />
-								))}
-							</Picker>
+							<View className="bg-white rounded-xl mt-2">
+								<Picker
+									selectedValue={formik.values.visitorCategory}
+									onValueChange={(itemValue, itemIndex) => {
+										formik.setFieldValue('visitorCategory', itemValue)
+									}}
+									onBlur={formik.handleBlur('visitorCategory')}
+								>
+									{VisitorCategoryList.map((x) => (
+										<Picker.Item key={x.id} label={x.name} value={x.value} />
+									))}
+								</Picker>
+							</View>
 							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
-								<Text className="text-red-700">{formik.errors.visitorCategory as string}</Text>
+								<Text className="text-red-700 mt-2">{formik.errors.visitorCategory as string}</Text>
 							)}
 						</View>
-						<View>
+						<View className="mt-4">
 							<Text className="text-base font-bold">Contact Number</Text>
-							<View className="border bg-primary rounded-xl border-gray-100 p-[10px] mt-3">
+							<View className="mt-3 bg-white p-1 rounded-xl">
 								<PhoneInput
+									phoneInputStyles={{
+										container: {
+											borderWidth: 0,
+											backgroundColor: 'transparent',
+										},
+										flagContainer: {
+											backgroundColor: 'transparent',
+										},
+									}}
 									selectedCountry={formik.values.visitorCountryCode}
 									onChangeSelectedCountry={(e) => {
-										console.log(e); 
-										formik.setFieldValue('visitorCountryCode',e)
+										console.log(e)
+										formik.setFieldValue('visitorCountryCode', e)
 									}}
 									onChangePhoneNumber={(phoneNumber) => {
 										console.log(phoneNumber)
 										formik.setFieldValue('visitorContactNumber', phoneNumber)
 									}}
 									value={formik.values.visitorContactNumber}
-									// text={{
-									// 	style: {
-									// 		color: 'white'
-									// 	},
-									// 	placeholder: 'Contact Number',
-									// 	placeholderTextColor: "#FFFFFF",
-									// 	value: `${formik.values.visitorContactNumber}`,
-									// 	keyboardType: 'phone-pad',
-									// }}
+									keyboardType="phone-pad"
 								/>
 							</View>
 							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
 								<Text className="text-red-700">{formik.errors.visitorCategory as string}</Text>
 							)}
 						</View>
-						<View>
-							<Text className="text-base font-bold mt-4">Select Date</Text>
-							<CustomButton
-								containerStyles="items-center h-fit bg-primary p-3 w-full mt-3"
-								handlePress={() => {
-									setShowCalendar(true)
-								}}
-								title={
-									formik.values.visitDate
-										? moment(formik.values.visitDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY')
-										: '-'
-								}
-								textStyles="text-sm text-white"
-							/>
-							{showCalendar && (
-								<>
-									{Platform.OS === 'ios' ? (
-										<DatePicker
-											mode="date"
-											timeZoneName="Asia/Kuala_Lumpur"
-											value={formik.values.visitDate ? formik.values.visitDate : moment().toDate()}
-											display="spinner"
-											minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-											maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-											onChange={onDatePickerChange}
-										/>
-									) : (
-										<DatePicker
-											mode="date"
-											timeZoneName="Asia/Kuala_Lumpur"
-											value={formik.values.visitDate ? formik.values.visitDate : new Date()}
-											display="calendar"
-											minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-											maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-											onChange={onDatePickerChange}
-										/>
-									)}
-								</>
-							)}
-						</View>
-						<View className="flex flex-row mt-4">
+						<View className="flex flex-row gap-4 mt-1">
+							<View className="flex-1">
+								<Text className="text-base font-bold">Visit Date</Text>
+								<CustomButton
+									containerStyles="items-center flex-row justify-between h-fit bg-white p-4 mt-3"
+									handlePress={() => {
+										setShowCalendar(true)
+									}}
+									title={
+										formik.values.visitDate
+											? moment(formik.values.visitDate)
+													.tz('Asia/Kuala_Lumpur')
+													.format('DD MMM YYYY')
+											: '-'
+									}
+									reactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
+									textStyles="text-sm text-black"
+								/>
+								{showCalendar && (
+									<>
+										{Platform.OS === 'ios' ? (
+											<DatePicker
+												mode="date"
+												timeZoneName="Asia/Kuala_Lumpur"
+												value={
+													formik.values.visitDate ? formik.values.visitDate : moment().toDate()
+												}
+												display="spinner"
+												minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+												maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+												onChange={onDatePickerChange}
+											/>
+										) : (
+											<DatePicker
+												mode="date"
+												timeZoneName="Asia/Kuala_Lumpur"
+												value={formik.values.visitDate ? formik.values.visitDate : new Date()}
+												display="calendar"
+												minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+												maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+												onChange={onDatePickerChange}
+											/>
+										)}
+									</>
+								)}
+							</View>
 							<View className="flex-1">
 								<Text className="text-base font-bold">Visit Time</Text>
 								<CustomButton
-									containerStyles="items-center h-fit bg-primary p-3 mt-3"
+									containerStyles="items-center flex-row justify-between h-fit bg-white p-4 mt-3"
 									handlePress={() => {
 										setShowTime(true)
 									}}
@@ -215,7 +224,8 @@ const CreateVisitorPage = () => {
 											? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
 											: '-'
 									}
-									textStyles="text-sm text-white"
+									reactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
+									textStyles="text-sm text-black"
 								/>
 								{showTime && (
 									<>
@@ -252,9 +262,9 @@ const CreateVisitorPage = () => {
 						<CustomButton
 							title="Submit"
 							handlePress={formik.handleSubmit}
-							containerStyles="border-primary border bg-white p-3 w-full mt-4 flex flex-row self-center"
+							containerStyles="bg-primary p-4 w-full mt-8 self-center"
 							isLoading={isSubmitting}
-							textStyles="text-sm text-primary"
+							textStyles="text-sm text-white"
 						/>
 					</View>
 				</View>

@@ -26,8 +26,7 @@ const CustomButton = ({
       items-center ${containerStyles} ${isLoading ? "opacity-50" : ""}`}
       disabled={isLoading}
     >
-      {reactNativeIcons ? reactNativeIcons : null}
-      {title && (
+       {title && (
         <Text
           className={`text-white font-psemibold text-lg 
         ${textStyles}`}
@@ -35,6 +34,7 @@ const CustomButton = ({
           {title}
         </Text>
       )}
+      {reactNativeIcons ? reactNativeIcons : null}
     </TouchableOpacity>
   );
 };
