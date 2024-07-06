@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomFormField from "@components/CustomFormField";
+import CustomFormField, { CustomTextInputProps } from "@components/CustomFormField";
 import { userInforformDataJson } from "@config/constant/auth";
 import CustomButton from "@components/CustomButton";
 // import { useUser } from "@zustand/userService/user";
@@ -47,20 +47,30 @@ const UserInformation = () => {
             <CustomFormField
                 title="Firstname"
                 containerStyle="flex-1 mr-2"
-                value={formik.values.firstName}
-                handleChangeText={(e) => {
-                formik.setFieldValue("firstName", e);
-                }}
+                inputProps={
+                  {
+                    type: "Text",
+                    textValue: formik.values.firstName,
+                    onChangeText: (e) => {
+                        formik.setFieldValue("firstName", e);
+                    }
+                  } as CustomTextInputProps
+                }
                 onBlur={formik.handleBlur("firstName")}
                 errorMessage={formik.errors.firstName}
             />
             <CustomFormField
                 title="Lastname"
                 containerStyle="flex-1"
-                value={formik.values.lastName}
-                handleChangeText={(e) => {
-                formik.setFieldValue("lastName", e);
-                }}
+                inputProps={
+                  {
+                    type: "Text",
+                    textValue: formik.values.lastName,
+                    onChangeText: (e) => {
+                        formik.setFieldValue("lastName", e);
+                    }
+                  } as CustomTextInputProps
+                }
                 onBlur={formik.handleBlur("lastName")}
                 errorMessage={formik.errors.lastName}
             />
@@ -68,40 +78,60 @@ const UserInformation = () => {
           <CustomFormField
             title="Phone No."
             containerStyle="mb-3"
-            value={formik.values.phoneNumber}
-            handleChangeText={(e) => {
-              formik.setFieldValue("phoneNumber", e);
-            }}
+            inputProps={
+              {
+                type: "Text",
+                textValue: formik.values.phoneNumber,
+                onChangeText: (e) => {
+                    formik.setFieldValue("phoneNumber", e);
+                }
+              } as CustomTextInputProps
+            }
             onBlur={formik.handleBlur("phoneNumber")}
             errorMessage={formik.errors.phoneNumber}
           />
           <CustomFormField
             title="Choose your unit no."
             containerStyle="mb-3"
-            value={formik.values.unitNumber}
-            handleChangeText={(e) => {
-              formik.setFieldValue("unitNumber", e);
-            }}
+            inputProps={
+              {
+                type: "Text",
+                textValue: formik.values.unitNumber,
+                onChangeText: (e) => {
+                    formik.setFieldValue("unitNumber", e);
+                }
+              } as CustomTextInputProps
+            }
             onBlur={formik.handleBlur("unitNumber")}
             errorMessage={formik.errors.unitNumber}
           />
           <CustomFormField
-            title="BirthDay"
-            value={formik.values.birthDay}
+            title="Birthday"
             containerStyle="mb-3"
-            handleChangeText={(e) => {
-              formik.setFieldValue("birthDay", e);
-            }}
+            inputProps={
+              {
+                type: "Text",
+                textValue: formik.values.birthDay,
+                onChangeText: (e) => {
+                    formik.setFieldValue("birthDay", e);
+                }
+              } as CustomTextInputProps
+            }
             onBlur={formik.handleBlur("birthDay")}
             errorMessage={formik.errors.birthDay}
           />
           <CustomFormField
             title="Gender"
-            value={formik.values.gender}
             containerStyle="mb-3"
-            handleChangeText={(e) => {
-              formik.setFieldValue("gender", e);
-            }}
+            inputProps={
+              {
+                type: "Text",
+                textValue: formik.values.gender,
+                onChangeText: (e) => {
+                    formik.setFieldValue("gender", e);
+                }
+              } as CustomTextInputProps
+            }
             onBlur={formik.handleBlur("gender")}
             errorMessage={formik.errors.gender}
           />

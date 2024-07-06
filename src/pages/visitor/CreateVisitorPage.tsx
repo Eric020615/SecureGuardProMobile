@@ -14,7 +14,7 @@ import { useFacility } from '@zustand/facilityService/facility'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import PhoneInput from 'react-native-international-phone-number'
-import CustomFormField from '@components/CustomFormField'
+import CustomFormField, { CustomTextInputProps } from '@components/CustomFormField'
 import Ionicons from 'react-native-vector-icons'
 
 interface CreateVisitor {
@@ -103,12 +103,17 @@ const CreateVisitorPage = () => {
 					<View>
 						<View>
 							<CustomFormField
-								handleChangeText={(e) => {
-									formik.setFieldValue('visitorName', e)
-								}}
 								title="Visitor Name"
 								textStyle="text-base font-bold mt-4"
-								value={formik.values.visitorName}
+								inputProps={
+									{
+										type: "Text",
+										textValue: formik.values.visitorName,
+										onChangeText: (e) => {
+											formik.setFieldValue("visitorName", e);
+										},
+									  } as CustomTextInputProps
+								}
 								placeholder={formik.values.visitorName}
 								errorMessage={
 									formik.touched.visitorName &&

@@ -1,14 +1,14 @@
-import { View, Text, ScrollView, Alert } from "react-native";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
-import CustomFormField from "@components/CustomFormField";
-import { useFormik } from "formik";
-import * as Yup from "yup";
-import CustomButton from "@components/CustomButton";
-import { Link, router } from "expo-router";
-import { signInformDataJson } from "@config/constant/auth/index";
-import { useAuth } from "@zustand/authService/auth";
-import { SignInFormDto } from "@zustand/types";
+import { View, Text, ScrollView, Alert } from 'react-native'
+import React, { useState } from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import CustomFormField, { CustomTextInputProps } from '@components/CustomFormField'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import CustomButton from '@components/CustomButton'
+import { Link, router } from 'expo-router'
+import { signInformDataJson } from '@config/constant/auth/index'
+import { useAuth } from '@zustand/authService/auth'
+import { SignInFormDto } from '@zustand/types'
 
 const SignInPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,21 +51,31 @@ const SignInPage = () => {
 					<Text className="text-7xl w-full font-bold text-primary">Log in</Text>
 					<CustomFormField
 						title="Email"
-						value={formik.values.email}
-						handleChangeText={(e) => {
-							formik.setFieldValue('email', e)
-						}}
+						inputProps={
+							{
+								type: 'Text',
+								textValue: formik.values.email,
+								onChangeText: (e) => {
+									formik.setFieldValue('email', e)
+								},
+							} as CustomTextInputProps
+						}
 						errorMessage={formik.errors.email}
 					/>
 					<CustomFormField
 						title="Password"
 						containerStyle="mt-3"
-						value={formik.values.password}
-						handleChangeText={(e) => {
-							formik.setFieldValue('password', e)
-						}}
+						inputProps={
+							{
+								type: 'Text',
+								textValue: formik.values.password,
+								onChangeText: (e) => {
+									formik.setFieldValue('password', e)
+								},
+								isSecureTextEntry: true,
+							} as CustomTextInputProps
+						}
 						errorMessage={formik.errors.password}
-						isSecureTextEntry={true}
 					/>
 					<CustomButton
 						title="Log In"

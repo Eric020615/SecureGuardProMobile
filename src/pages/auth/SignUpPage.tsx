@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomFormField from '@components/CustomFormField'
+import CustomFormField, { CustomTextInputProps } from '@components/CustomFormField'
 import CustomButton from '@components/CustomButton'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -56,34 +56,49 @@ const SignUpPage = () => {
 					<Text className="text-7xl w-full font-bold text-primary">Sign Up</Text>
 					<CustomFormField
 						title="Email"
-						value={formik.values.email}
-						handleChangeText={(e) => {
-							formik.setFieldValue('email', e)
-						}}
+						inputProps={
+							{
+								type: "Text",
+								textValue: formik.values.email,
+								onChangeText: (e) => {
+									formik.setFieldValue("email", e);
+								}
+							  } as CustomTextInputProps
+						}
 						onBlur={formik.handleBlur('email')}
 						errorMessage={formik.errors.email}
 					/>
 					<CustomFormField
 						title="Password"
-						value={formik.values.password}
-						handleChangeText={(e) => {
-							formik.setFieldValue('password', e)
-						}}
+						inputProps={
+							{
+								type: "Text",
+								textValue: formik.values.password,
+								onChangeText: (e) => {
+									formik.setFieldValue("password", e);
+								},
+								isSecureTextEntry: true
+							  } as CustomTextInputProps
+						}
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('password')}
 						errorMessage={formik.errors.password}
-						isSecureTextEntry={true}
 					/>
 					<CustomFormField
 						title="Confirm Password"
-						value={formik.values.confirmPassword}
-						handleChangeText={(e) => {
-							formik.setFieldValue('confirmPassword', e)
-						}}
+						inputProps={
+							{
+								type: "Text",
+								textValue: formik.values.confirmPassword,
+								onChangeText: (e) => {
+									formik.setFieldValue("confirmPassword", e);
+								},
+								isSecureTextEntry: true
+							  } as CustomTextInputProps
+						}
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('confirmPassword')}
 						errorMessage={formik.errors.confirmPassword}
-						isSecureTextEntry={true}
 					/>
 					<CustomButton
 						title="Sign Up"
