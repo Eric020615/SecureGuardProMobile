@@ -1,7 +1,7 @@
 import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomFormField, { CustomTextInputProps } from '@components/CustomFormField'
+import CustomFormField from '@components/CustomFormField'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CustomButton from '@components/CustomButton'
@@ -44,37 +44,29 @@ const SignInPage = () => {
 		}
 	}
 	return (
-		<SafeAreaView className="bg-white h-full">
+		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Log in</Text>
 					<CustomFormField
 						title="Email"
-						inputProps={
-							{
-								type: 'Text',
-								textValue: formik.values.email,
-								onChangeText: (e) => {
-									formik.setFieldValue('email', e)
-								},
-							} as CustomTextInputProps
-						}
+						type="Text"
+						textValue={formik.values.email}
+						onChangeText={(e) => {
+							formik.setFieldValue('email', e)
+						}}
 						errorMessage={formik.errors.email}
 					/>
 					<CustomFormField
 						title="Password"
 						containerStyle="mt-3"
-						inputProps={
-							{
-								type: 'Text',
-								textValue: formik.values.password,
-								onChangeText: (e) => {
-									formik.setFieldValue('password', e)
-								},
-								isSecureTextEntry: true,
-							} as CustomTextInputProps
-						}
+						type="Text"
+						textValue={formik.values.password}
+						onChangeText={(e) => {
+							formik.setFieldValue('password', e)
+						}}
+						isSecureTextEntry={true}
 						errorMessage={formik.errors.password}
 					/>
 					<CustomButton

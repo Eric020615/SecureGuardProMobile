@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform, Alert } from 'react-native'
+import { View, Text, ScrollView, Platform } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -13,17 +13,17 @@ import DatePicker from '@react-native-community/datetimepicker'
 import { useFacility } from '@zustand/facilityService/facility'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
-import PhoneInput from 'react-native-international-phone-number'
-import CustomFormField, { CustomTextInputProps } from '@components/CustomFormField'
-import Ionicons from 'react-native-vector-icons'
+import { ICountry } from 'react-native-international-phone-number'
+import CustomFormField from '@components/CustomFormField'
+// import Ionicons from 'react-native-vector-icons'
 
 interface CreateVisitor {
 	visitDate: Date
 	visitTime: Date
 	visitorCategory: string
 	visitorName: string
-	visitorContactNumber: any
-	visitorCountryCode: any
+	visitorPhoneNumber: string
+	visitorCountryCode: ICountry
 }
 
 const CreateVisitorPage = () => {
@@ -37,7 +37,7 @@ const CreateVisitorPage = () => {
 		visitTime: Yup.date().required('Visit time is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
-		visitorContactNumber: Yup.string().min(1).required('Visitor contact number is required'),
+		visitorPhoneNumber: Yup.string().min(1).required('Visitor phone number is required'),
 	})
 
 	const formik = useFormik<CreateVisitor>({
@@ -62,7 +62,6 @@ const CreateVisitorPage = () => {
 			// setIsSubmitting(false)
 		},
 	})
-	console.log(formik.errors.visitDate)
 	const submitBooking = useFacility((state) => state.submitBooking)
 	const onDatePickerChange = (event, selectedDate: Date) => {
 		formik.handleBlur('visitDate')
@@ -105,15 +104,11 @@ const CreateVisitorPage = () => {
 							<CustomFormField
 								title="Visitor Name"
 								textStyle="text-base font-bold mt-4"
-								inputProps={
-									{
-										type: "Text",
-										textValue: formik.values.visitorName,
-										onChangeText: (e) => {
-											formik.setFieldValue("visitorName", e);
-										},
-									  } as CustomTextInputProps
-								}
+								type="Text"
+								textValue={formik.values.visitorName}
+								onChangeText={(e) => {
+									formik.setFieldValue('visitorName', e)
+								}}
 								placeholder={formik.values.visitorName}
 								errorMessage={
 									formik.touched.visitorName &&
@@ -142,34 +137,24 @@ const CreateVisitorPage = () => {
 							)}
 						</View>
 						<View className="mt-4">
-							<Text className="text-base font-bold">Contact Number</Text>
-							<View className="mt-3 bg-white p-1 rounded-xl">
-								<PhoneInput
-									phoneInputStyles={{
-										container: {
-											borderWidth: 0,
-											backgroundColor: 'transparent',
-										},
-										flagContainer: {
-											backgroundColor: 'transparent',
-										},
-									}}
-									selectedCountry={formik.values.visitorCountryCode}
-									onChangeSelectedCountry={(e) => {
-										console.log(e)
-										formik.setFieldValue('visitorCountryCode', e)
-									}}
-									onChangePhoneNumber={(phoneNumber) => {
-										console.log(phoneNumber)
-										formik.setFieldValue('visitorContactNumber', phoneNumber)
-									}}
-									value={formik.values.visitorContactNumber}
-									keyboardType="phone-pad"
-								/>
-							</View>
-							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
-								<Text className="text-red-700">{formik.errors.visitorCategory as string}</Text>
-							)}
+							<CustomFormField
+								title="Contact Number"
+								textStyle="text-base font-bold mt-4"
+								type="Phone"
+								selectedCountryCode={formik.values.visitorCountryCode}
+								setSelectedCountryCode={(e) => {
+									formik.setFieldValue('visitorCountryCode', e)
+								}}
+								phoneNumber={formik.values.visitorPhoneNumber}
+								setPhoneNumber={(e) => {
+									formik.setFieldValue('visitorPhoneNumber', e)
+								}}
+								errorMessage={
+									formik.touched.visitorPhoneNumber &&
+									formik.errors.visitorPhoneNumber &&
+									(formik.errors.visitorPhoneNumber as string)
+								}
+							/>
 						</View>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
