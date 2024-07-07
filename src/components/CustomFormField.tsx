@@ -2,9 +2,12 @@ import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { useState } from 'react'
 import { icons } from '@assets/index'
 import PhoneInput from 'react-native-international-phone-number'
+import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import CustomButton from '@components/CustomButton'
+import Iconicons from 'react-native-vector-icons/Ionicons'
 
 export interface CustomPhoneInputProps extends CustomFormFieldProps {
-	type: "Phone"
+	type: 'Phone'
 	selectedCountryCode: any
 	setSelectedCountryCode: (e: any) => void
 	phoneNumber: any
@@ -12,10 +15,41 @@ export interface CustomPhoneInputProps extends CustomFormFieldProps {
 }
 
 export interface CustomTextInputProps extends CustomFormFieldProps {
-	type: "Text"
+	type: 'Text'
 	textValue: string
 	isSecureTextEntry?: boolean
 	onChangeText: (e: any) => void
+}
+
+type IOSMode = 'date' | 'time' | 'datetime' | 'countdown'
+type AndroidMode = 'date' | 'time'
+type Display = 'spinner' | 'default' | 'clock' | 'calendar'
+type IOSDisplay = 'default' | 'compact' | 'inline' | 'spinner'
+// type MinuteInterval = 1 | 2 | 3 | 4 | 5 | 6 | 10 | 12 | 15 | 20 | 30
+// type DAY_OF_WEEK = 0 | 1 | 2 | 3 | 4 | 5 | 6
+
+export interface CustomAndroidDateInputProps extends CustomDateInputProps {
+	platform: 'android'
+	mode: AndroidMode
+	display: Display
+}
+
+export interface CustomIOSDateInputProps extends CustomDateInputProps {
+	platform: 'ios'
+	mode: IOSMode
+	display: IOSDisplay
+}
+
+export interface CustomDateInputProps extends CustomFormFieldProps {
+	type: 'Date'
+	buttonContainerStyles?: string
+	buttonTextStyles?: string
+	buttonTitle: string
+	timeZoneName: string
+	minimumDate: Date
+	maximumDate: Date
+	onChange: (event: DateTimePickerEvent, date?: Date) => void
+	selectedDate: Date
 }
 
 interface CustomFormFieldProps {
@@ -27,7 +61,13 @@ interface CustomFormFieldProps {
 	errorMessage?: any
 }
 
-const CustomFormField = (props: CustomPhoneInputProps | CustomTextInputProps ) => {
+const CustomFormField = (
+	props:
+		| CustomPhoneInputProps
+		| CustomTextInputProps
+		| CustomAndroidDateInputProps
+		| CustomIOSDateInputProps,
+) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const renderInput = () => {
 		switch (props.type) {
@@ -80,12 +120,60 @@ const CustomFormField = (props: CustomPhoneInputProps | CustomTextInputProps ) =
 						/>
 					</View>
 				)
+			case 'Date':
+				const [showDate, setShowDate] = useState(false)
+				const defineCalendar = () => {
+					switch (props.platform) {
+						case 'android':
+							return (
+								<DatePicker
+									mode={props.mode}
+									timeZoneName={props.timeZoneName}
+									value={props.selectedDate}
+									display={props.display}
+									minimumDate={props.minimumDate}
+									maximumDate={props.maximumDate}
+									onChange={props.onChange}
+								/>
+							)
+						case 'ios':
+							return (
+								<DatePicker
+									mode={props.mode}
+									timeZoneName={props.timeZoneName}
+									value={props.selectedDate}
+									display={props.display}
+									minimumDate={props.minimumDate}
+									maximumDate={props.maximumDate}
+									onChange={props.onChange}
+								/>
+							)
+					}
+				}
+				return (
+					<>
+						<View>
+							<CustomButton
+								containerStyles={`items-center flex-row justify-between h-fit bg-white p-4 mt-3 ${props.buttonContainerStyles}`}
+								handlePress={() => {
+									setShowDate(true)
+								}}
+								title={props.buttonTitle}
+								reactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
+								textStyles={`text-sm text-black ${props.buttonTextStyles}`}
+							/>
+							{showDate && defineCalendar()}
+						</View>
+					</>
+				)
 		}
 	}
 
 	return (
 		<View className={`space-y-2 ${props.containerStyle}`}>
-			{props.title && <Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>}
+			{props.title && (
+				<Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>
+			)}
 			{renderInput()}
 			{props.errorMessage && <Text className="text-red-700">{props.errorMessage}</Text>}
 		</View>

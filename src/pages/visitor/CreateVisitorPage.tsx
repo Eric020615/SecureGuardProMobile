@@ -15,7 +15,7 @@ import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
-// import Ionicons from 'react-native-vector-icons'
+import Ionicons from 'react-native-vector-icons'
 
 interface CreateVisitor {
 	visitDate: Date
@@ -158,48 +158,62 @@ const CreateVisitorPage = () => {
 						</View>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
-								<Text className="text-base font-bold">Visit Date</Text>
-								<CustomButton
-									containerStyles="items-center flex-row justify-between h-fit bg-white p-4 mt-3"
-									handlePress={() => {
-										setShowCalendar(true)
-									}}
-									title={
-										formik.values.visitDate
-											? moment(formik.values.visitDate)
-													.tz('Asia/Kuala_Lumpur')
-													.format('DD MMM YYYY')
-											: '-'
-									}
-									reactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
-									textStyles="text-sm text-black"
-								/>
-								{showCalendar && (
-									<>
-										{Platform.OS === 'ios' ? (
-											<DatePicker
-												mode="date"
-												timeZoneName="Asia/Kuala_Lumpur"
-												value={
-													formik.values.visitDate ? formik.values.visitDate : moment().toDate()
-												}
-												display="spinner"
-												minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-												maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-												onChange={onDatePickerChange}
-											/>
-										) : (
-											<DatePicker
-												mode="date"
-												timeZoneName="Asia/Kuala_Lumpur"
-												value={formik.values.visitDate ? formik.values.visitDate : new Date()}
-												display="calendar"
-												minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-												maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-												onChange={onDatePickerChange}
-											/>
-										)}
-									</>
+								{Platform.OS === 'ios' ? (
+									<CustomFormField
+										title="Visit Date"
+										textStyle="text-base font-bold"
+										type="Date"
+										platform="ios"
+										selectedDate={
+											formik.values.visitDate ? formik.values.visitDate : moment().toDate()
+										}
+										onChange={onDatePickerChange}
+										buttonTitle={
+											formik.values.visitDate
+												? moment(formik.values.visitDate)
+														.tz('Asia/Kuala_Lumpur')
+														.format('DD MMM YYYY')
+												: '-'
+										}
+										display="spinner"
+										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+										mode="date"
+										errorMessage={
+											formik.touched.visitorPhoneNumber &&
+											formik.errors.visitorPhoneNumber &&
+											(formik.errors.visitorPhoneNumber as string)
+										}
+										timeZoneName="Asia/Kuala_Lumpur"
+									/>
+								) : (
+									<CustomFormField
+										title="Visit Date"
+										textStyle="text-base font-bold"
+										type="Date"
+										platform="android"
+										selectedDate={
+											formik.values.visitDate ? formik.values.visitDate : moment().toDate()
+										}
+										onChange={onDatePickerChange}
+										buttonTitle={
+											formik.values.visitDate
+												? moment(formik.values.visitDate)
+														.tz('Asia/Kuala_Lumpur')
+														.format('DD MMM YYYY')
+												: '-'
+										}
+										display="calendar"
+										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+										mode="date"
+										errorMessage={
+											formik.touched.visitorPhoneNumber &&
+											formik.errors.visitorPhoneNumber &&
+											(formik.errors.visitorPhoneNumber as string)
+										}
+										timeZoneName="Asia/Kuala_Lumpur"
+									/>
 								)}
 							</View>
 							<View className="flex-1">
