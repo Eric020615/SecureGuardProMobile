@@ -1,4 +1,6 @@
-export const VisitorCategoryList = [
+import { listOptions } from "..";
+
+export const VisitorCategoryList : listOptions[] = [
     {
         key: 0,
         label: "Family Members",

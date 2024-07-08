@@ -1,18 +1,19 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { icons } from '@assets/index'
-import PhoneInput from 'react-native-international-phone-number'
+import PhoneInput, { ICountry } from 'react-native-international-phone-number'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import CustomButton from '@components/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { Picker } from '@react-native-picker/picker'
+import { listOptions } from '@config/listOption'
 
 export interface CustomPhoneInputProps extends CustomFormFieldProps {
 	type: 'Phone'
-	selectedCountryCode: any
-	setSelectedCountryCode: (e: any) => void
-	phoneNumber: any
-	setPhoneNumber: (e: any) => void
+	selectedCountryCode: ICountry
+	setSelectedCountryCode: (e: ICountry) => void
+	phoneNumber: string
+	setPhoneNumber: (e: string) => void
 }
 
 export interface CustomTextInputProps extends CustomFormFieldProps {
@@ -59,8 +60,8 @@ export interface CustomDateInputProps extends CustomFormFieldProps {
 export interface CustomPickerInputProps extends CustomFormFieldProps {
 	type: 'Picker'
 	selectedValue: any
-	onValueChange: (e) => void
-	items: any[]
+	onValueChange: (e: any) => void
+	items: listOptions[]
 }
 
 interface CustomFormFieldProps {
@@ -129,6 +130,8 @@ const CustomFormField = (
 							onChangePhoneNumber={props.setPhoneNumber}
 							value={props.phoneNumber}
 							keyboardType="phone-pad"
+							maxLength={25}
+							onChangeText={props.setPhoneNumber}
 						/>
 					</View>
 				)
@@ -192,6 +195,11 @@ const CustomFormField = (
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
 						>
+							{
+								!props.selectedValue && (
+									<Picker.Item label="Please select ..." value=""/>
+								)
+							}
 							{props.items.map((x) => (
 								<Picker.Item key={x.key} label={x.label} value={x.value} />
 							))}
@@ -207,7 +215,7 @@ const CustomFormField = (
 				<Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>
 			)}
 			{renderInput()}
-			{props.errorMessage && <Text className="text-red-700">{props.errorMessage}</Text>}
+			{props.errorMessage && <Text className="text-red-700 mx-2">{props.errorMessage}</Text>}
 		</View>
 	)
 }

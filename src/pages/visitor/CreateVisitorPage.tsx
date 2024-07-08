@@ -8,36 +8,39 @@ import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Picker } from '@react-native-picker/picker'
-import DatePicker from '@react-native-community/datetimepicker'
 import { useFacility } from '@zustand/facilityService/facility'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
-import Ionicons from 'react-native-vector-icons'
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 
 interface CreateVisitor {
 	visitDate: Date
 	visitTime: Date
 	visitorCategory: string
 	visitorName: string
-	visitorPhoneNumber: string
 	visitorCountryCode: ICountry
+	visitorPhoneNumber: string
 }
 
 const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [CreateVisitor, setCreateVisitor] = useState({})
 
 	const validationSchema = Yup.object().shape({
 		visitDate: Yup.date().required('Visit date is required'),
 		visitTime: Yup.date().required('Visit time is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
-		visitorPhoneNumber: Yup.string().min(1).required('Visitor phone number is required'),
+		visitorPhoneNumber: Yup.string()
+			.required('Visitor phone number is required')
+			.test('is-valid-phone', 'Phone number is not valid', value => {
+				if(!value) return false
+				const phone = parsePhoneNumberFromString(value, formik.values.visitorCountryCode.cca2 as CountryCode)
+				return phone ? phone.isValid() : false
+			}),
 	})
 
 	const formik = useFormik<CreateVisitor>({
@@ -64,7 +67,6 @@ const CreateVisitorPage = () => {
 	})
 	const submitBooking = useFacility((state) => state.submitBooking)
 	const onDatePickerChange = (event, selectedDate: Date) => {
-		formik.handleBlur('visitDate')
 		if (event.type === 'dismissed') {
 			setShowCalendar(false)
 			return
@@ -81,8 +83,6 @@ const CreateVisitorPage = () => {
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
 	}
-	const [selectedCountry, setSelectedCountry] = useState(null)
-	const [inputValue, setInputValue] = useState('')
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -100,23 +100,22 @@ const CreateVisitorPage = () => {
 					<Text className="text-3xl text-black font-bold mt-6">Register Visitor</Text>
 					{/* Register Visitor Form */}
 					<View>
-						<View>
-							<CustomFormField
-								title="Visitor Name"
-								textStyle="text-base font-bold mt-4"
-								type="Text"
-								textValue={formik.values.visitorName}
-								onChangeText={(e) => {
-									formik.setFieldValue('visitorName', e)
-								}}
-								placeholder={formik.values.visitorName}
-								errorMessage={
-									formik.touched.visitorName &&
-									formik.errors.visitorName &&
-									(formik.errors.visitorName as string)
-								}
-							/>
-						</View>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Visitor Name"
+							textStyle="text-base font-bold"
+							type="Text"
+							textValue={formik.values.visitorName}
+							onChangeText={(e) => {
+								formik.setFieldValue('visitorName', e)
+							}}
+							placeholder={formik.values.visitorName}
+							errorMessage={
+								formik.touched.visitorName &&
+								formik.errors.visitorName &&
+								(formik.errors.visitorName as string)
+							}
+						/>
 						<CustomFormField
 							containerStyle="mt-4"
 							title="Visitor Category"
@@ -133,26 +132,25 @@ const CreateVisitorPage = () => {
 								(formik.errors.visitorCategory as string)
 							}
 						/>
-						<View className="mt-4">
-							<CustomFormField
-								title="Contact Number"
-								textStyle="text-base font-bold"
-								type="Phone"
-								selectedCountryCode={formik.values.visitorCountryCode}
-								setSelectedCountryCode={(e) => {
-									formik.setFieldValue('visitorCountryCode', e)
-								}}
-								phoneNumber={formik.values.visitorPhoneNumber}
-								setPhoneNumber={(e) => {
-									formik.setFieldValue('visitorPhoneNumber', e)
-								}}
-								errorMessage={
-									formik.touched.visitorPhoneNumber &&
-									formik.errors.visitorPhoneNumber &&
-									(formik.errors.visitorPhoneNumber as string)
-								}
-							/>
-						</View>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Contact Number"
+							textStyle="text-base font-bold"
+							type="Phone"
+							selectedCountryCode={formik.values.visitorCountryCode}
+							setSelectedCountryCode={(e) => {
+								formik.setFieldValue('visitorCountryCode', e)
+							}}
+							setPhoneNumber={(e) => {
+								formik.setFieldValue('visitorPhoneNumber', e)
+							}}
+							phoneNumber={`${formik.values.visitorPhoneNumber}`}
+							errorMessage={
+								formik.touched.visitorPhoneNumber &&
+								formik.errors.visitorPhoneNumber &&
+								(formik.errors.visitorPhoneNumber as string)
+							}
+						/>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
 								{Platform.OS === 'ios' ? (

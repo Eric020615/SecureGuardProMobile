@@ -1,4 +1,5 @@
 import { images } from "@assets/index"
+import { listOptions } from ".."
 
 export const FacilityList = [
     {
@@ -18,7 +19,7 @@ export const FacilityList = [
     },
 ]
 
-export const GuestList = [
+export const GuestList : listOptions[] = [
     {
         key: 1,
         value: 1,

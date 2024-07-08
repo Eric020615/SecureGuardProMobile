@@ -8,5 +8,5 @@ export const facilityBookingConst = {
     facilityId: "",
     startDate: null,
     endDate: null,
-    numofGuest: 0,
+    numofGuest: null,
 }
