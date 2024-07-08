@@ -256,23 +256,22 @@ const CreateFacilityBookingPage = () => {
 							)}
 						</View>
 					</View>
-					<View>
-						<Text className="text-base font-bold mt-4">Number of Guests</Text>
-						<Picker
-							selectedValue={formik.values.numofGuest}
-							onValueChange={(itemValue, itemIndex) => {
-								formik.setFieldValue('numofGuest', itemValue)
-							}}
-							onBlur={formik.handleBlur('numofGuest')}
-						>
-							{GuestList.map((x) => (
-								<Picker.Item key={x.num} label={x.title} value={x.num} />
-							))}
-						</Picker>
-						{formik.touched.numofGuest && formik.errors.numofGuest && (
-							<Text className="text-red-700">{formik.errors.numofGuest as string}</Text>
-						)}
-					</View>
+					<CustomFormField
+						containerStyle="my-4"
+						title="Number of Guests"
+						textStyle="text-base font-bold"
+						type="Picker"
+						selectedValue={formik.values.numofGuest}
+						onValueChange={(e) => {
+							formik.setFieldValue('numofGuest', e)
+						}}
+						items={GuestList}
+						errorMessage={
+							formik.touched.numofGuest &&
+							formik.errors.numofGuest &&
+							(formik.errors.numofGuest as string)
+						}
+					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}

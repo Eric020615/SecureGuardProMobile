@@ -117,25 +117,22 @@ const CreateVisitorPage = () => {
 								}
 							/>
 						</View>
-						<View className="">
-							<Text className="text-base font-bold mt-4">Visitor Category</Text>
-							<View className="bg-white rounded-xl mt-2">
-								<Picker
-									selectedValue={formik.values.visitorCategory}
-									onValueChange={(itemValue, itemIndex) => {
-										formik.setFieldValue('visitorCategory', itemValue)
-									}}
-									onBlur={formik.handleBlur('visitorCategory')}
-								>
-									{VisitorCategoryList.map((x) => (
-										<Picker.Item key={x.id} label={x.name} value={x.value} />
-									))}
-								</Picker>
-							</View>
-							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
-								<Text className="text-red-700 mt-2">{formik.errors.visitorCategory as string}</Text>
-							)}
-						</View>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Visitor Category"
+							textStyle="text-base font-bold"
+							type="Picker"
+							selectedValue={formik.values.visitorCategory}
+							onValueChange={(e) => {
+								formik.setFieldValue('visitorCategory', e)
+							}}
+							items={VisitorCategoryList}
+							errorMessage={
+								formik.touched.visitorCategory &&
+								formik.errors.visitorCategory &&
+								(formik.errors.visitorCategory as string)
+							}
+						/>
 						<View className="mt-4">
 							<CustomFormField
 								title="Contact Number"
@@ -228,15 +225,13 @@ const CreateVisitorPage = () => {
 										type="DateTime"
 										platform="ios"
 										selectedDate={
-											formik.values.visitTime 
-											? formik.values.visitTime : 
-											moment().toDate()
+											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
 										}
 										onChange={onTimePickerChange}
 										buttonTitle={
 											formik.values.visitTime
-											? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-											: '-'
+												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
+												: '-'
 										}
 										display="spinner"
 										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
@@ -258,14 +253,13 @@ const CreateVisitorPage = () => {
 										type="DateTime"
 										platform="android"
 										selectedDate={
-											formik.values.visitTime 
-											? formik.values.visitTime : moment().toDate()
+											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
 										}
 										onChange={onTimePickerChange}
 										buttonTitle={
 											formik.values.visitTime
-											? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-											: '-'
+												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
+												: '-'
 										}
 										display="spinner"
 										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}

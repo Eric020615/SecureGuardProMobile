@@ -5,6 +5,7 @@ import PhoneInput from 'react-native-international-phone-number'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import CustomButton from '@components/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
+import { Picker } from '@react-native-picker/picker'
 
 export interface CustomPhoneInputProps extends CustomFormFieldProps {
 	type: 'Phone'
@@ -55,6 +56,13 @@ export interface CustomDateInputProps extends CustomFormFieldProps {
 	onChange: (event: DateTimePickerEvent, date?: Date) => void
 }
 
+export interface CustomPickerInputProps extends CustomFormFieldProps {
+	type: 'Picker'
+	selectedValue: any
+	onValueChange: (e) => void
+	items: any[]
+}
+
 interface CustomFormFieldProps {
 	title?: string
 	placeholder?: any
@@ -69,7 +77,8 @@ const CustomFormField = (
 		| CustomPhoneInputProps
 		| CustomTextInputProps
 		| CustomAndroidDateTimeInputProps
-		| CustomIOSDateTimeInputProps,
+		| CustomIOSDateTimeInputProps
+		| CustomPickerInputProps,
 ) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const renderInput = () => {
@@ -142,7 +151,7 @@ const CustomFormField = (
 						case 'ios':
 							return (
 								<DatePicker
-								className='justify-between ml-auto'
+									className="justify-between ml-auto"
 									mode={props.mode}
 									timeZoneName={props.timeZoneName}
 									value={props.selectedDate}
@@ -150,7 +159,6 @@ const CustomFormField = (
 									minimumDate={props.minimumDate}
 									maximumDate={props.maximumDate}
 									onChange={props.onChange}
-									
 								/>
 							)
 					}
@@ -165,17 +173,31 @@ const CustomFormField = (
 								}}
 								title={props.buttonTitle}
 								reactNativeIcons={
-									<Iconicons 
-										name="caret-down" color={'#000000'} size={14} style={{}}
-								/>}
+									<Iconicons name="caret-down" color={'#000000'} size={14} style={{}} />
+								}
 								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
-								iconStyles=''
+								iconStyles=""
 							/>
 							{props.showDateTime && defineCalendar()}
 						</View>
 					</>
 				)
-			
+			case 'Picker':
+				return (
+					<View
+						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary`}
+					>
+						<Picker
+							selectedValue={props.selectedValue}
+							onValueChange={props.onValueChange}
+							onBlur={props.onBlur}
+						>
+							{props.items.map((x) => (
+								<Picker.Item key={x.key} label={x.label} value={x.value} />
+							))}
+						</Picker>
+					</View>
+				)
 		}
 	}
 

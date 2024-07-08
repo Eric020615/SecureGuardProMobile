@@ -1,17 +1,17 @@
 export const VisitorCategoryList = [
     {
-        id: 0,
-        name: "Family Members",
+        key: 0,
+        label: "Family Members",
         value: "FM",
     },
     {
-        id: 1,
-        name: "Friends",
+        key: 1,
+        label: "Friends",
         value: "FR",
     },
     {
-        id: 2,
-        name: "Relative",
+        key: 2,
+        label: "Relative",
         value: "RL"
     }
 ]
