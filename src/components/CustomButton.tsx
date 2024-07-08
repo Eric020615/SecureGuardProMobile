@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text, view, View } from "react-native";
+import { TouchableOpacity, Text, View } from "react-native";
 import React, { ReactElement } from "react";
 
 interface ButtonProps {
