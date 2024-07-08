@@ -1,5 +1,5 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
-import React, { useState } from 'react'
+import React, { Dispatch, SetStateAction, useState } from 'react'
 import { icons } from '@assets/index'
 import PhoneInput from 'react-native-international-phone-number'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
@@ -28,28 +28,31 @@ type IOSDisplay = 'default' | 'compact' | 'inline' | 'spinner'
 // type MinuteInterval = 1 | 2 | 3 | 4 | 5 | 6 | 10 | 12 | 15 | 20 | 30
 // type DAY_OF_WEEK = 0 | 1 | 2 | 3 | 4 | 5 | 6
 
-export interface CustomAndroidDateInputProps extends CustomDateInputProps {
+export interface CustomAndroidDateTimeInputProps extends CustomDateInputProps {
 	platform: 'android'
 	mode: AndroidMode
 	display: Display
+	is24Hour?: boolean
 }
 
-export interface CustomIOSDateInputProps extends CustomDateInputProps {
+export interface CustomIOSDateTimeInputProps extends CustomDateInputProps {
 	platform: 'ios'
 	mode: IOSMode
 	display: IOSDisplay
 }
 
 export interface CustomDateInputProps extends CustomFormFieldProps {
-	type: 'Date'
+	type: 'DateTime'
 	buttonContainerStyles?: string
 	buttonTextStyles?: string
 	buttonTitle: string
 	timeZoneName: string
 	minimumDate: Date
 	maximumDate: Date
-	onChange: (event: DateTimePickerEvent, date?: Date) => void
 	selectedDate: Date
+	showDateTime: boolean
+	setShowDateTime: Dispatch<SetStateAction<boolean>>
+	onChange: (event: DateTimePickerEvent, date?: Date) => void
 }
 
 interface CustomFormFieldProps {
@@ -65,8 +68,8 @@ const CustomFormField = (
 	props:
 		| CustomPhoneInputProps
 		| CustomTextInputProps
-		| CustomAndroidDateInputProps
-		| CustomIOSDateInputProps,
+		| CustomAndroidDateTimeInputProps
+		| CustomIOSDateTimeInputProps,
 ) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const renderInput = () => {
@@ -78,7 +81,7 @@ const CustomFormField = (
 					>
 						<TextInput
 							className="flex-1 text-black text-base"
-							value={String()}
+							value={String(props.textValue)}
 							placeholder={props.placeholder}
 							placeholderTextColor="#7b7b8b"
 							onChangeText={props.onChangeText}
@@ -120,8 +123,7 @@ const CustomFormField = (
 						/>
 					</View>
 				)
-			case 'Date':
-				const [showDate, setShowDate] = useState(false)
+			case 'DateTime':
 				const defineCalendar = () => {
 					switch (props.platform) {
 						case 'android':
@@ -134,11 +136,13 @@ const CustomFormField = (
 									minimumDate={props.minimumDate}
 									maximumDate={props.maximumDate}
 									onChange={props.onChange}
+									is24Hour={props.is24Hour}
 								/>
 							)
 						case 'ios':
 							return (
 								<DatePicker
+								className='justify-between ml-auto'
 									mode={props.mode}
 									timeZoneName={props.timeZoneName}
 									value={props.selectedDate}
@@ -146,6 +150,7 @@ const CustomFormField = (
 									minimumDate={props.minimumDate}
 									maximumDate={props.maximumDate}
 									onChange={props.onChange}
+									
 								/>
 							)
 					}
@@ -156,13 +161,17 @@ const CustomFormField = (
 							<CustomButton
 								containerStyles={`items-center flex-row justify-between h-fit bg-white p-4 mt-3 ${props.buttonContainerStyles}`}
 								handlePress={() => {
-									setShowDate(true)
+									props.setShowDateTime(!props.showDateTime)
 								}}
 								title={props.buttonTitle}
-								reactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
-								textStyles={`text-sm text-black ${props.buttonTextStyles}`}
+								reactNativeIcons={
+									<Iconicons 
+										name="caret-down" color={'#000000'} size={14} style={{}}
+								/>}
+								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
+								iconStyles=''
 							/>
-							{showDate && defineCalendar()}
+							{props.showDateTime && defineCalendar()}
 						</View>
 					</>
 				)

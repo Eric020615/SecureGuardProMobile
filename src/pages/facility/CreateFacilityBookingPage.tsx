@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 import { useFacility } from '@zustand/facilityService/facility'
 import { Picker } from '@react-native-picker/picker'
 import { facilityBookingConst } from '@config/constant/facilities'
+import CustomFormField from '@components/CustomFormField'
 
 interface FacilityBooking {
 	facilityId: string
@@ -98,7 +99,7 @@ const CreateFacilityBookingPage = () => {
 	}
 
 	return (
-		<SafeAreaView className="bg-white h-full">
+		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center justify-between">
@@ -116,51 +117,64 @@ const CreateFacilityBookingPage = () => {
 							}}
 							title="View history"
 							textStyles="text-sm text-gray-500"
-						/> 
+						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Facilities</Text>
 					<CustomSwiper item={FacilityList} onChangeIndex={setFacilityId} />
 					{/* form */}
-					<View>
-						<Text className="text-base font-bold">Select Date</Text>
-						<CustomButton
-							containerStyles="items-center h-fit bg-primary p-3 w-full mt-3"
-							handlePress={() => {
-								setShowCalendar(true)
-							}}
-							title={
+					{Platform.OS === 'ios' ? (
+						<CustomFormField
+							title="Booking Date"
+							textStyle="text-base font-bold"
+							type="DateTime"
+							platform="ios"
+							selectedDate={formik.values.startDate ? formik.values.startDate : moment().toDate()}
+							onChange={onDatePickerChange}
+							buttonTitle={
 								formik.values.startDate
 									? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY')
 									: '-'
 							}
-							textStyles="text-sm text-white"
+							display="spinner"
+							minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+							maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+							mode="date"
+							errorMessage={
+								formik.touched.startDate &&
+								formik.errors.startDate &&
+								(formik.errors.startDate as string)
+							}
+							timeZoneName="Asia/Kuala_Lumpur"
+							setShowDateTime={setShowCalendar}
+							showDateTime={showCalendar}
 						/>
-						{showCalendar && (
-							<>
-								{Platform.OS === 'ios' ? (
-									<DatePicker
-										mode="date"
-										timeZoneName="Asia/Kuala_Lumpur"
-										value={formik.values.startDate ? formik.values.startDate : new Date()}
-										display="spinner"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										onChange={onDatePickerChange}
-									/>
-								) : (
-									<DatePicker
-										mode="date"
-										timeZoneName="Asia/Kuala_Lumpur"
-										value={formik.values.startDate ? formik.values.startDate : new Date()}
-										display="calendar"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										onChange={onDatePickerChange}
-									/>
-								)}
-							</>
-						)}
-					</View>
+					) : (
+						<CustomFormField
+							title="Booking Date"
+							textStyle="text-base font-bold"
+							type="DateTime"
+							platform="android"
+							selectedDate={formik.values.startDate ? formik.values.startDate : moment().toDate()}
+							onChange={onDatePickerChange}
+							buttonTitle={
+								formik.values.startDate
+									? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY')
+									: '-'
+							}
+							display="calendar"
+							minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+							maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+							mode="date"
+							errorMessage={
+								formik.touched.startDate &&
+								formik.errors.startDate &&
+								(formik.errors.startDate as string)
+							}
+							timeZoneName="Asia/Kuala_Lumpur"
+							setShowDateTime={setShowCalendar}
+							showDateTime={showCalendar}
+						/>
+					)}
 					<View className="flex flex-row gap-3 mt-1">
 						<View className="flex-1">
 							<Text className="text-base font-bold">Start Time</Text>

@@ -1,4 +1,4 @@
-import { TouchableOpacity, Text } from "react-native";
+import { TouchableOpacity, Text, view, View } from "react-native";
 import React, { ReactElement } from "react";
 
 interface ButtonProps {
@@ -6,6 +6,7 @@ interface ButtonProps {
   handlePress: () => void;
   containerStyles?: string;
   textStyles?: string;
+  iconStyles?: string;
   isLoading?: boolean;
   reactNativeIcons?: ReactElement;
 }
@@ -15,6 +16,7 @@ const CustomButton = ({
   handlePress,
   containerStyles,
   textStyles,
+  iconStyles,
   isLoading,
   reactNativeIcons,
 }: ButtonProps) => {
@@ -28,13 +30,16 @@ const CustomButton = ({
     >
        {title && (
         <Text
-          className={`text-white font-psemibold text-lg 
+          className={`text-white font-psemibold text-lg self-center
         ${textStyles}`}
         >
           {title}
         </Text>
       )}
-      {reactNativeIcons ? reactNativeIcons : null}
+      {reactNativeIcons ? 
+        <View className={`${iconStyles}`}>
+          {reactNativeIcons}
+        </View> : null}
     </TouchableOpacity>
   );
 };
