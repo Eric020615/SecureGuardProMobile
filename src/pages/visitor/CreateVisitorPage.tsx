@@ -139,7 +139,7 @@ const CreateVisitorPage = () => {
 						<View className="mt-4">
 							<CustomFormField
 								title="Contact Number"
-								textStyle="text-base font-bold mt-4"
+								textStyle="text-base font-bold"
 								type="Phone"
 								selectedCountryCode={formik.values.visitorCountryCode}
 								setSelectedCountryCode={(e) => {
