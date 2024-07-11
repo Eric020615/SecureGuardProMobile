@@ -34,5 +34,11 @@ export const listUrl = {
             path: "notice/",
             type: IType.get
         }
+    },
+    visitor: {
+        createVisitor: {
+            path: "visitor/create/",
+            type: IType.post
+        }
     }
 }

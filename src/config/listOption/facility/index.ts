@@ -1,4 +1,5 @@
 import { images } from "@assets/index"
+import { listOptions } from ".."
 
 export const FacilityList = [
     {
@@ -18,55 +19,55 @@ export const FacilityList = [
     },
 ]
 
-export const GuestList = [
+export const GuestList : listOptions[] = [
     {
-        id: 1,
-        num: 1,
-        title: "1 Guest"
+        key: 1,
+        value: 1,
+        label: "1 Guest"
     },
     {
-        id: 2,
-        num: 2,
-        title: "2 Guests"
+        key: 2,
+        value: 2,
+        label: "2 Guests"
     },
     {
-        id: 3,
-        num: 3,
-        title: "3 Guests"
+        key: 3,
+        value: 3,
+        label: "3 Guests"
     },
     {
-        id: 4,
-        num: 4,
-        title: "4 Guests"
+        key: 4,
+        value: 4,
+        label: "4 Guests"
     },
     {
-        id: 5,
-        num: 5,
-        title: "5 Guests"
+        key: 5,
+        value: 5,
+        label: "5 Guests"
     },
     {
-        id: 6,
-        num: 6,
-        title: "6 Guests"
+        key: 6,
+        value: 6,
+        label: "6 Guests"
     },
     {
-        id: 7,
-        num: 7,
-        title: "7 Guests"
+        key: 7,
+        value: 7,
+        label: "7 Guests"
     },
     {
-        id: 8,
-        num: 8,
-        title: "8 Guests"
+        key: 8,
+        value: 8,
+        label: "8 Guests"
     },
     {
-        id: 9,
-        num: 9,
-        title: "9 Guests"
+        key: 9,
+        value: 9,
+        label: "9 Guests"
     },
     {
-        id: 10,
-        num: 10,
-        title: "10 Guests"
+        key: 10,
+        value: 10,
+        label: "10 Guests"
     },
 ]

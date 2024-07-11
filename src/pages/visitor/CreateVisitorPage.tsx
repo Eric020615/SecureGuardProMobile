@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView, Platform, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -8,36 +8,39 @@ import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { Picker } from '@react-native-picker/picker'
-import DatePicker from '@react-native-community/datetimepicker'
-import { useFacility } from '@zustand/facilityService/facility'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
-import Ionicons from 'react-native-vector-icons'
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
+import { useVisitor } from '@zustand/visitorService/visitor'
 
 interface CreateVisitor {
 	visitDate: Date
 	visitTime: Date
 	visitorCategory: string
 	visitorName: string
-	visitorPhoneNumber: string
 	visitorCountryCode: ICountry
+	visitorPhoneNumber: string
 }
 
 const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const [CreateVisitor, setCreateVisitor] = useState({})
 
 	const validationSchema = Yup.object().shape({
 		visitDate: Yup.date().required('Visit date is required'),
 		visitTime: Yup.date().required('Visit time is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
-		visitorPhoneNumber: Yup.string().min(1).required('Visitor phone number is required'),
+		visitorPhoneNumber: Yup.string()
+			.required('Visitor phone number is required')
+			.test('is-valid-phone', 'Phone number is not valid', value => {
+				if(!value) return false
+				const phone = parsePhoneNumberFromString(value, formik.values.visitorCountryCode.cca2 as CountryCode)
+				return phone ? phone.isValid() : false
+			}),
 	})
 
 	const formik = useFormik<CreateVisitor>({
@@ -46,25 +49,24 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			console.log(values)
-			// const response = await submitBooking({
-			// 	facilityId: formik.values.facilityId,
-			// 	startDate: formik.values.startDate.toISOString(),
-			// 	endDate: formik.values.endDate.toISOString(),
-			// 	numOfGuest: formik.values.numofGuest,
-			// })
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/facilityHistory')
-			// } else {
-			// 	Alert.alert(response.msg)
-			// }
-			// setIsSubmitting(false)
+			console.log(values.visitDate.toDateString())
+			const response = await createVisitor({
+				visitorName: values.visitorName,
+				visitorCategory: values.visitorCategory,
+				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
+				visitDateTime: moment(values.visitDate).format("YYYY-MM-DD ") + moment(values.visitTime).format("HH:mm")
+			})
+			if (response.success) {
+				formik.resetForm()
+				router.push('/home')
+			} else {
+				Alert.alert(response.msg)
+			}
+			setIsSubmitting(false)
 		},
 	})
-	const submitBooking = useFacility((state) => state.submitBooking)
+	const createVisitor = useVisitor((state) => state.createVisitor)
 	const onDatePickerChange = (event, selectedDate: Date) => {
-		formik.handleBlur('visitDate')
 		if (event.type === 'dismissed') {
 			setShowCalendar(false)
 			return
@@ -81,8 +83,6 @@ const CreateVisitorPage = () => {
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
 	}
-	const [selectedCountry, setSelectedCountry] = useState(null)
-	const [inputValue, setInputValue] = useState('')
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -100,62 +100,57 @@ const CreateVisitorPage = () => {
 					<Text className="text-3xl text-black font-bold mt-6">Register Visitor</Text>
 					{/* Register Visitor Form */}
 					<View>
-						<View>
-							<CustomFormField
-								title="Visitor Name"
-								textStyle="text-base font-bold mt-4"
-								type="Text"
-								textValue={formik.values.visitorName}
-								onChangeText={(e) => {
-									formik.setFieldValue('visitorName', e)
-								}}
-								placeholder={formik.values.visitorName}
-								errorMessage={
-									formik.touched.visitorName &&
-									formik.errors.visitorName &&
-									(formik.errors.visitorName as string)
-								}
-							/>
-						</View>
-						<View className="">
-							<Text className="text-base font-bold mt-4">Visitor Category</Text>
-							<View className="bg-white rounded-xl mt-2">
-								<Picker
-									selectedValue={formik.values.visitorCategory}
-									onValueChange={(itemValue, itemIndex) => {
-										formik.setFieldValue('visitorCategory', itemValue)
-									}}
-									onBlur={formik.handleBlur('visitorCategory')}
-								>
-									{VisitorCategoryList.map((x) => (
-										<Picker.Item key={x.id} label={x.name} value={x.value} />
-									))}
-								</Picker>
-							</View>
-							{formik.touched.visitorCategory && formik.errors.visitorCategory && (
-								<Text className="text-red-700 mt-2">{formik.errors.visitorCategory as string}</Text>
-							)}
-						</View>
-						<View className="mt-4">
-							<CustomFormField
-								title="Contact Number"
-								textStyle="text-base font-bold mt-4"
-								type="Phone"
-								selectedCountryCode={formik.values.visitorCountryCode}
-								setSelectedCountryCode={(e) => {
-									formik.setFieldValue('visitorCountryCode', e)
-								}}
-								phoneNumber={formik.values.visitorPhoneNumber}
-								setPhoneNumber={(e) => {
-									formik.setFieldValue('visitorPhoneNumber', e)
-								}}
-								errorMessage={
-									formik.touched.visitorPhoneNumber &&
-									formik.errors.visitorPhoneNumber &&
-									(formik.errors.visitorPhoneNumber as string)
-								}
-							/>
-						</View>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Visitor Name"
+							textStyle="text-base font-bold"
+							type="Text"
+							textValue={formik.values.visitorName}
+							onChangeText={(e) => {
+								formik.setFieldValue('visitorName', e)
+							}}
+							placeholder={formik.values.visitorName}
+							errorMessage={
+								formik.touched.visitorName &&
+								formik.errors.visitorName &&
+								(formik.errors.visitorName as string)
+							}
+						/>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Visitor Category"
+							textStyle="text-base font-bold"
+							type="Picker"
+							selectedValue={formik.values.visitorCategory}
+							onValueChange={(e) => {
+								formik.setFieldValue('visitorCategory', e)
+							}}
+							items={VisitorCategoryList}
+							errorMessage={
+								formik.touched.visitorCategory &&
+								formik.errors.visitorCategory &&
+								(formik.errors.visitorCategory as string)
+							}
+						/>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Contact Number"
+							textStyle="text-base font-bold"
+							type="Phone"
+							selectedCountryCode={formik.values.visitorCountryCode}
+							setSelectedCountryCode={(e) => {
+								formik.setFieldValue('visitorCountryCode', e)
+							}}
+							setPhoneNumber={(e) => {
+								formik.setFieldValue('visitorPhoneNumber', e)
+							}}
+							phoneNumber={`${formik.values.visitorPhoneNumber}`}
+							errorMessage={
+								formik.touched.visitorPhoneNumber &&
+								formik.errors.visitorPhoneNumber &&
+								(formik.errors.visitorPhoneNumber as string)
+							}
+						/>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
 								{Platform.OS === 'ios' ? (
@@ -228,15 +223,13 @@ const CreateVisitorPage = () => {
 										type="DateTime"
 										platform="ios"
 										selectedDate={
-											formik.values.visitTime 
-											? formik.values.visitTime : 
-											moment().toDate()
+											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
 										}
 										onChange={onTimePickerChange}
 										buttonTitle={
 											formik.values.visitTime
-											? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-											: '-'
+												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
+												: '-'
 										}
 										display="spinner"
 										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
@@ -258,14 +251,13 @@ const CreateVisitorPage = () => {
 										type="DateTime"
 										platform="android"
 										selectedDate={
-											formik.values.visitTime 
-											? formik.values.visitTime : moment().toDate()
+											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
 										}
 										onChange={onTimePickerChange}
 										buttonTitle={
 											formik.values.visitTime
-											? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-											: '-'
+												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
+												: '-'
 										}
 										display="spinner"
 										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}

@@ -1,7 +1,7 @@
 export const createVisitorConst = {
     visitDate: null,
     visitTime: null,
-    visitorCategory: "",
+    visitorCategory: null,
     visitorName: "",
     visitorCountryCode: null,
     visitorPhoneNumber: "",

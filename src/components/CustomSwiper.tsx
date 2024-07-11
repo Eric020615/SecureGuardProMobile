@@ -1,7 +1,7 @@
 import { View, Image, SafeAreaView } from "react-native";
-import React, { Dispatch, SetStateAction, useId, useState } from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import Swiper from "react-native-swiper-flatlist";
-import { FacilityList } from "../config/constant/facilities";
+import { FacilityList } from "@config/listOption/facility";
 
 // const zoomIn = {
 //   0: {

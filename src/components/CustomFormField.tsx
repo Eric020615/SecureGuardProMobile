@@ -1,17 +1,19 @@
 import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { icons } from '@assets/index'
-import PhoneInput from 'react-native-international-phone-number'
+import PhoneInput, { ICountry } from 'react-native-international-phone-number'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
 import CustomButton from '@components/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
+import { Picker } from '@react-native-picker/picker'
+import { listOptions } from '@config/listOption'
 
 export interface CustomPhoneInputProps extends CustomFormFieldProps {
 	type: 'Phone'
-	selectedCountryCode: any
-	setSelectedCountryCode: (e: any) => void
-	phoneNumber: any
-	setPhoneNumber: (e: any) => void
+	selectedCountryCode: ICountry
+	setSelectedCountryCode: (e: ICountry) => void
+	phoneNumber: string
+	setPhoneNumber: (e: string) => void
 }
 
 export interface CustomTextInputProps extends CustomFormFieldProps {
@@ -55,6 +57,13 @@ export interface CustomDateInputProps extends CustomFormFieldProps {
 	onChange: (event: DateTimePickerEvent, date?: Date) => void
 }
 
+export interface CustomPickerInputProps extends CustomFormFieldProps {
+	type: 'Picker'
+	selectedValue: any
+	onValueChange: (e: any) => void
+	items: listOptions[]
+}
+
 interface CustomFormFieldProps {
 	title?: string
 	placeholder?: any
@@ -69,7 +78,8 @@ const CustomFormField = (
 		| CustomPhoneInputProps
 		| CustomTextInputProps
 		| CustomAndroidDateTimeInputProps
-		| CustomIOSDateTimeInputProps,
+		| CustomIOSDateTimeInputProps
+		| CustomPickerInputProps,
 ) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const renderInput = () => {
@@ -115,11 +125,14 @@ const CustomFormField = (
 									backgroundColor: 'transparent',
 								},
 							}}
+							defaultCountry="MY"
 							selectedCountry={props.selectedCountryCode ? props.selectedCountryCode : null}
 							onChangeSelectedCountry={props.setSelectedCountryCode}
 							onChangePhoneNumber={props.setPhoneNumber}
 							value={props.phoneNumber}
 							keyboardType="phone-pad"
+							maxLength={25}
+							onChangeText={props.setPhoneNumber}
 						/>
 					</View>
 				)
@@ -142,7 +155,7 @@ const CustomFormField = (
 						case 'ios':
 							return (
 								<DatePicker
-								className='justify-between ml-auto'
+									className="justify-between ml-auto"
 									mode={props.mode}
 									timeZoneName={props.timeZoneName}
 									value={props.selectedDate}
@@ -150,7 +163,6 @@ const CustomFormField = (
 									minimumDate={props.minimumDate}
 									maximumDate={props.maximumDate}
 									onChange={props.onChange}
-									
 								/>
 							)
 					}
@@ -165,15 +177,35 @@ const CustomFormField = (
 								}}
 								title={props.buttonTitle}
 								reactNativeIcons={
-									<Iconicons 
-										name="caret-down" color={'#000000'} size={14} style={{}}
-								/>}
+									<Iconicons name="caret-down" color={'#000000'} size={14} style={{}} />
+								}
 								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
-								iconStyles=''
+								iconStyles=""
 							/>
 							{props.showDateTime && defineCalendar()}
 						</View>
 					</>
+				)
+			case 'Picker':
+				return (
+					<View
+						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary`}
+					>
+						<Picker
+							selectedValue={props.selectedValue}
+							onValueChange={props.onValueChange}
+							onBlur={props.onBlur}
+						>
+							{
+								!props.selectedValue && (
+									<Picker.Item label="Please select ..." value=""/>
+								)
+							}
+							{props.items.map((x) => (
+								<Picker.Item key={x.key} label={x.label} value={x.value} />
+							))}
+						</Picker>
+					</View>
 				)
 		}
 	}
@@ -184,7 +216,7 @@ const CustomFormField = (
 				<Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>
 			)}
 			{renderInput()}
-			{props.errorMessage && <Text className="text-red-700">{props.errorMessage}</Text>}
+			{props.errorMessage && <Text className="text-red-700 mx-2">{props.errorMessage}</Text>}
 		</View>
 	)
 }
