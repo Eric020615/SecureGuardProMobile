@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView, Platform, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -14,6 +14,7 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
+import { useVisitor } from '@zustand/visitorService/visitor'
 
 interface CreateVisitor {
 	visitDate: Date
@@ -49,23 +50,23 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			console.log(values)
-			// const response = await submitBooking({
-			// 	facilityId: formik.values.facilityId,
-			// 	startDate: formik.values.startDate.toISOString(),
-			// 	endDate: formik.values.endDate.toISOString(),
-			// 	numOfGuest: formik.values.numofGuest,
-			// })
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/facilityHistory')
-			// } else {
-			// 	Alert.alert(response.msg)
-			// }
-			// setIsSubmitting(false)
+			console.log(values.visitDate.toDateString())
+			const response = await createVisitor({
+				visitorName: values.visitorName,
+				visitorCategory: values.visitorCategory,
+				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
+				visitDateTime: moment(values.visitDate).format("YYYY-MM-DD ") + moment(values.visitTime).format("HH:mm")
+			})
+			if (response.success) {
+				formik.resetForm()
+				router.push('/home')
+			} else {
+				Alert.alert(response.msg)
+			}
+			setIsSubmitting(false)
 		},
 	})
-	const submitBooking = useFacility((state) => state.submitBooking)
+	const createVisitor = useVisitor((state) => state.createVisitor)
 	const onDatePickerChange = (event, selectedDate: Date) => {
 		if (event.type === 'dismissed') {
 			setShowCalendar(false)

@@ -125,6 +125,7 @@ const CustomFormField = (
 									backgroundColor: 'transparent',
 								},
 							}}
+							defaultCountry="MY"
 							selectedCountry={props.selectedCountryCode ? props.selectedCountryCode : null}
 							onChangeSelectedCountry={props.setSelectedCountryCode}
 							onChangePhoneNumber={props.setPhoneNumber}

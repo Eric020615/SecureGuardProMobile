@@ -47,10 +47,10 @@ const CreateFacilityBookingPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			const response = await submitBooking({
-				facilityId: formik.values.facilityId,
-				startDate: formik.values.startDate.toISOString(),
-				endDate: formik.values.endDate.toISOString(),
-				numOfGuest: formik.values.numofGuest,
+				facilityId: values.facilityId,
+				startDate: values.startDate.toISOString(),
+				endDate: values.endDate.toISOString(),
+				numOfGuest: values.numofGuest,
 			})
 			if (response.success) {
 				formik.resetForm()
