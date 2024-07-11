@@ -12,7 +12,6 @@ import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useFacility } from '@zustand/facilityService/facility'
-import { Picker } from '@react-native-picker/picker'
 import { facilityBookingConst } from '@config/constant/facilities'
 import CustomFormField from '@components/CustomFormField'
 
