@@ -5,7 +5,7 @@ import { useNotice } from '@zustand/noticeService/notice'
 import { getNoticeDto } from '@zustand/types'
 import moment from 'moment'
 import 'moment-timezone'
-import CustomButton from '@components/CustomButton'
+import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 

@@ -3,9 +3,9 @@ import React, { useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomFormField from "@components/CustomFormField";
+import CustomFormField from "@components/form/CustomFormField";
 import { userInforformDataJson } from "@config/constant/auth";
-import CustomButton from "@components/CustomButton";
+import CustomButton from "@components/buttons/CustomButton";
 import { ICountry } from "react-native-international-phone-number";
 // import { useUser } from "@zustand/userService/user";
 

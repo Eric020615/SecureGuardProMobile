@@ -1,6 +1,6 @@
 import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
-import CustomButton from '@components/CustomButton'
+import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
