@@ -7,10 +7,11 @@ export const signUpformDataJson = {
 export const userInforformDataJson = {
     firstName: '',
     lastName: '',
+    countryCode: null,
     phoneNumber: '',
-    unitNumber: '',
-    birthDay: '',
-    gender: ''
+    gender: '',
+    floor: '',
+    unitNumber: ''
 }
 
 export const signInformDataJson = {

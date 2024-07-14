@@ -14,6 +14,7 @@ import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
 import { useVisitor } from '@zustand/visitorService/visitor'
+import DocumentPicker from "react-native-document-picker"
 
 interface CreateVisitor {
 	visitDate: Date
@@ -82,6 +83,21 @@ const CreateVisitorPage = () => {
 		}
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
+	}
+	const onFileChanged : () => Promise<void> = async () => {
+		try {
+			const pickerFile = await DocumentPicker.pick({
+				type: [DocumentPicker.types.allFiles]
+			})
+			console.log(pickerFile);
+		} catch (error) {
+			if (DocumentPicker.isCancel(error)) {
+				console.log(error);
+			  } else {
+				console.log(error);
+				throw error;
+			  }
+		}
 	}
 
 	return (
@@ -246,7 +262,7 @@ const CreateVisitorPage = () => {
 									/>
 								) : (
 									<CustomFormField
-										title="Visit Time"
+										title="Visit Times"
 										textStyle="text-base font-bold"
 										type="DateTime"
 										platform="android"
@@ -275,6 +291,19 @@ const CreateVisitorPage = () => {
 								)}
 							</View>
 						</View>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Upload your supported document"
+							textStyle="text-base font-bold"
+							type="FilePicker"
+							selectedFile={[]}
+							onFileChanged={onFileChanged}
+							errorMessage={
+								formik.touched.visitorPhoneNumber &&
+								formik.errors.visitorPhoneNumber &&
+								(formik.errors.visitorPhoneNumber as string)
+							}
+						/>
 						<CustomButton
 							title="Submit"
 							handlePress={formik.handleSubmit}

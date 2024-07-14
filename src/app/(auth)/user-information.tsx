@@ -6,15 +6,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import CustomFormField from "@components/CustomFormField";
 import { userInforformDataJson } from "@config/constant/auth";
 import CustomButton from "@components/CustomButton";
+import { ICountry } from "react-native-international-phone-number";
 // import { useUser } from "@zustand/userService/user";
 
 interface UserInformationForm {
   firstName: string;
   lastName: string;
+  countryCode: ICountry;
   phoneNumber: string;
-  unitNumber: string;
-  birthDay: string;
   gender: string;
+  floor: string;
+  unitNumber: string;
 }
 
 const UserInformation = () => {
@@ -98,17 +100,17 @@ const UserInformation = () => {
             onBlur={formik.handleBlur("unitNumber")}
             errorMessage={formik.errors.unitNumber}
           />
-          <CustomFormField
+          {/* <CustomFormField
             title="Birthday"
             containerStyle="mb-3"
             type="Text"
-            textValue={formik.values.birthDay}
+            textValue={formik.values.}
             onChangeText={(e) => {
               formik.setFieldValue('birthDay', e)
             }}
             onBlur={formik.handleBlur("birthDay")}
             errorMessage={formik.errors.birthDay}
-          />
+          /> */}
           <CustomFormField
             title="Gender"
             containerStyle="mb-3"
