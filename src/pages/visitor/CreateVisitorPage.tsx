@@ -13,7 +13,7 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { useVisitor } from '@zustand/visitorService/visitor'
+import { useVisitor } from '@zustand/visitor/useVisitor'
 import DocumentPicker from 'react-native-document-picker'
 import CustomModal from '@components/modals/CustomModal'
 
@@ -112,7 +112,7 @@ const CreateVisitorPage = () => {
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
-				<CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} />
+				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">
 						<CustomButton

@@ -7,7 +7,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/authService/auth'
+import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
 
 const SignUpPage = () => {

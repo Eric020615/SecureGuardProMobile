@@ -5,7 +5,7 @@ import Images from "../assets/images"
 import CustomButton from "@components/buttons/CustomButton"
 import { router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAuth } from "../zustand/authService/auth";
+import { useAuth } from "../zustand/auth/useAuth";
 
 const App = () => {
   const checkJwtAuth = useAuth((state) => state.checkJwtAuth);

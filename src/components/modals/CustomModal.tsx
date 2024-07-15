@@ -2,22 +2,17 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
 import Modal from 'react-native-modal'
 import CustomButton from '@components/buttons/CustomButton'
+import { useModal } from '@zustand/modal/useModal'
 
-interface CustomModalProps {
-	isVisible: boolean
-	onCloseModal: () => void
-	title?: string
-	subtitle?: string
-}
-
-const CustomModal = ({ isVisible, onCloseModal, title, subtitle }: CustomModalProps) => {
+const CustomModal = () => {
+	const {isOpen, toogleModal, content} = useModal()
 	return (
-		<Modal isVisible={isVisible} onBackdropPress={onCloseModal}>
+		<Modal isVisible={isOpen} onBackdropPress={toogleModal}>
 			<View className="bg-white p-5 rounded-lg items-center">
-				{title && <Text className="text-lg font-bold mb-4">{title}</Text>}
+				{content?.title && <Text className="text-lg font-bold mb-4">{content.title}</Text>}
 				<CustomButton
 					title="Close"
-					handlePress={onCloseModal}
+					handlePress={toogleModal}
 					containerStyles="bg-primary p-2 w-[50%] self-center"
 					textStyles="text-sm text-white"
 				/>

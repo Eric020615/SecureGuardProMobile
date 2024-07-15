@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNotice } from '@zustand/noticeService/notice'
+import { useNotice } from '@zustand/notice/useNotice'
 import { getNoticeDto } from '@zustand/types'
 import moment from 'moment'
 import 'moment-timezone'

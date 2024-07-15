@@ -7,8 +7,9 @@ import * as Yup from 'yup'
 import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
 import { signInformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/authService/auth'
+import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
+import { useModal } from '@zustand/modal/useModal'
 
 const SignInPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
@@ -16,6 +17,7 @@ const SignInPage = () => {
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
 	})
+	const { setCustomFailedModal } = useModal()
 
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
@@ -34,11 +36,12 @@ const SignInPage = () => {
 			const response = await authSelector(formik.values)
 			if (response.success) {
 				router.replace('/home')
-			} else {
-				Alert.alert(response.msg)
 			}
 		} catch (error) {
-			console.log(error)
+			setCustomFailedModal({
+				title: 'Log In Failed',
+				subtitle: error
+			})
 		} finally {
 			setIsSubmitting(false)
 		}

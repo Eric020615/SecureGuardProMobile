@@ -11,7 +11,7 @@ import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useFacility } from '@zustand/facilityService/facility'
+import { useFacility } from '@zustand/facility/useFacility'
 import { facilityBookingConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
 
