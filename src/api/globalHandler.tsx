@@ -28,7 +28,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
     try {
       const { path, type, data, isBloob } = payload;
       const token = payload._token;
-      const baseURL = `${process.env.BACKEND_API}${path}`;
+      const baseURL = `${process.env.EXPO_PUBLIC_BACKEND_API}${path}`;
       let success = false;
       const maxAttempt = 2;
       let attempt = 0;

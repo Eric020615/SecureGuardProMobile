@@ -31,6 +31,7 @@ const SignInPage = () => {
 	const authSelector = useAuth((state) => state.signIn)
 
 	const signIn = async () => {
+		console.log("hello")
 		setIsSubmitting(true)
 		try {
 			const response = await authSelector(formik.values)
@@ -38,10 +39,12 @@ const SignInPage = () => {
 				router.replace('/home')
 			}
 		} catch (error) {
+			console.log("helloooo")
 			setCustomFailedModal({
 				title: 'Log In Failed',
 				subtitle: error
 			})
+			console.log(error)
 		} finally {
 			setIsSubmitting(false)
 		}
