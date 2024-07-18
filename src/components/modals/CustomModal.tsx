@@ -7,7 +7,7 @@ import { useModal } from '@zustand/modal/useModal'
 const CustomModal = () => {
 	const {isOpen, toogleModal, content} = useModal()
 	return (
-		<Modal isVisible={isOpen} onBackdropPress={toogleModal}>
+		<Modal isVisible={isOpen} onBackdropPress={toogleModal} className='bg-transparent'>
 			<View className="bg-white p-5 rounded-lg items-center">
 				{content?.title && <Text className="text-lg font-bold mb-4">{content.title}</Text>}
 				<CustomButton

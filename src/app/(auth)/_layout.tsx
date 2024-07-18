@@ -10,6 +10,7 @@ const AuthLayout = () => {
           name="sign-in"
           options={{
             headerShown: false,
+            animationTypeForReplace: 'pop'
           }}
         />
         <Stack.Screen

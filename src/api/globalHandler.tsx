@@ -125,7 +125,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
             }
             success = true;
           } catch (error) {
-            response = error.response.data;
+            console.log(error)
           }
         }
         if (!success) {

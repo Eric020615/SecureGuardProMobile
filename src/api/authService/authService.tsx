@@ -17,6 +17,7 @@ export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
     };
     return result;
   } catch (error) {
+    console.log(error)
     const result: IResponse<any> = {
       success: false,
       msg: error,

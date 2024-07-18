@@ -10,9 +10,9 @@ import { signInformDataJson } from '@config/constant/auth/index'
 import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
 import { useModal } from '@zustand/modal/useModal'
+import CustomModal from '@components/modals/CustomModal'
 
 const SignInPage = () => {
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
@@ -25,33 +25,35 @@ const SignInPage = () => {
 		initialValues: signInformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			signIn()
+			signInWithPassword(values)
 		},
 	})
-	const authSelector = useAuth((state) => state.signIn)
+	const { signIn, isLoading } = useAuth(); 
 
-	const signIn = async () => {
-		console.log("hello")
-		setIsSubmitting(true)
+	const signInWithPassword = async (values: SignInFormDto) => {
 		try {
-			const response = await authSelector(formik.values)
+			const response = await signIn(values)
 			if (response.success) {
 				router.replace('/home')
 			}
+			else {
+				setCustomFailedModal({
+					title: 'Log In Failed',
+					subtitle: "Please Retry It Again"
+				})
+			}
 		} catch (error) {
-			console.log("helloooo")
 			setCustomFailedModal({
 				title: 'Log In Failed',
-				subtitle: error
+				subtitle: "Please Retry It Again"
 			})
 			console.log(error)
-		} finally {
-			setIsSubmitting(false)
 		}
 	}
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				<CustomModal />
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Log in</Text>
@@ -79,7 +81,7 @@ const SignInPage = () => {
 						title="Log In"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 					/>
 					<View className="justify-center pt-5 flex-row gap-2">
 						<Text className="text-sm font-pregular">Don't have account?</Text>

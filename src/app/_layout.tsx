@@ -1,7 +1,9 @@
 import { Stack, SplashScreen } from "expo-router";
 import { useFonts } from "expo-font";
 import { NativeWindStyleSheet } from "nativewind";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useAuth } from "@zustand/auth/useAuth";
 
 SplashScreen.preventAutoHideAsync();
 

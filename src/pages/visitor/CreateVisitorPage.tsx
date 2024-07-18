@@ -94,7 +94,6 @@ const CreateVisitorPage = () => {
 			const pickerFile = await DocumentPicker.pick({
 				type: [DocumentPicker.types.allFiles],
 			})
-			console.log(pickerFile)
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)

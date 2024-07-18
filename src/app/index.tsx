@@ -12,6 +12,10 @@ const App = () => {
   const checkToken = async () => {
     try {
       const value = await AsyncStorage.getItem("token");
+      if(!value){
+        router.push("/sign-in")
+        return
+      }
       const response = await checkJwtAuth(value)
       if(response.success){
         router.push("/home")
@@ -20,7 +24,6 @@ const App = () => {
         router.push("/sign-in")
       }
     } catch (error) {
-      console.log(error)
       router.push("/sign-in")
     }
   }
