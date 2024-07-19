@@ -1,4 +1,4 @@
-import CustomFloatingButton from '@components/CustomFloatingButton'
+import CustomFloatingButton from '@components/buttons/CustomFloatingButton'
 import HomePage from '@pages/home/HomePage'
 import { useRouter } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'

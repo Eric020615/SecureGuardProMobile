@@ -1,21 +1,23 @@
 import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomFormField from '@components/CustomFormField'
+import CustomFormField from '@components/form/CustomFormField'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import CustomButton from '@components/CustomButton'
+import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
 import { signInformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/authService/auth'
+import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
+import { useModal } from '@zustand/modal/useModal'
+import CustomModal from '@components/modals/CustomModal'
 
 const SignInPage = () => {
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
 	})
+	const { setCustomFailedModal } = useModal()
 
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
@@ -23,29 +25,35 @@ const SignInPage = () => {
 		initialValues: signInformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			signIn()
+			signInWithPassword(values)
 		},
 	})
-	const authSelector = useAuth((state) => state.signIn)
+	const { signIn, isLoading } = useAuth(); 
 
-	const signIn = async () => {
-		setIsSubmitting(true)
+	const signInWithPassword = async (values: SignInFormDto) => {
 		try {
-			const response = await authSelector(formik.values)
+			const response = await signIn(values)
 			if (response.success) {
 				router.replace('/home')
-			} else {
-				Alert.alert(response.msg)
+			}
+			else {
+				setCustomFailedModal({
+					title: 'Log In Failed',
+					subtitle: "Please Retry It Again"
+				})
 			}
 		} catch (error) {
+			setCustomFailedModal({
+				title: 'Log In Failed',
+				subtitle: "Please Retry It Again"
+			})
 			console.log(error)
-		} finally {
-			setIsSubmitting(false)
 		}
 	}
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				<CustomModal />
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Log in</Text>
@@ -73,7 +81,7 @@ const SignInPage = () => {
 						title="Log In"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 					/>
 					<View className="justify-center pt-5 flex-row gap-2">
 						<Text className="text-sm font-pregular">Don't have account?</Text>

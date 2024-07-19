@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction, useState } from 'react'
 import { icons } from '@assets/index'
 import PhoneInput, { ICountry } from 'react-native-international-phone-number'
 import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
-import CustomButton from '@components/CustomButton'
+import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { Picker } from '@react-native-picker/picker'
 import { listOptions } from '@config/listOption'
@@ -64,6 +64,12 @@ export interface CustomPickerInputProps extends CustomFormFieldProps {
 	items: listOptions[]
 }
 
+export interface CustomFilePickerInputProps extends CustomFormFieldProps {
+	type: 'FilePicker'
+	selectedFile: string[]
+	onFileChanged: () => Promise<void>
+}
+
 interface CustomFormFieldProps {
 	title?: string
 	placeholder?: any
@@ -79,7 +85,8 @@ const CustomFormField = (
 		| CustomTextInputProps
 		| CustomAndroidDateTimeInputProps
 		| CustomIOSDateTimeInputProps
-		| CustomPickerInputProps,
+		| CustomPickerInputProps
+		| CustomFilePickerInputProps,
 ) => {
 	const [showPassword, setShowPassword] = useState(false)
 	const renderInput = () => {
@@ -87,7 +94,7 @@ const CustomFormField = (
 			case 'Text':
 				return (
 					<View
-						className={`w-full h-[50px] px-4 bg-white rounded-2xl focus:border-secondary items-center flex-row`}
+						className={`w-full h-[50px] px-4 bg-white rounded-2xl focus:border-secondary items-center flex-row mt-4`}
 					>
 						<TextInput
 							className="flex-1 text-black text-base"
@@ -113,7 +120,7 @@ const CustomFormField = (
 			case 'Phone':
 				return (
 					<View
-						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary items-center flex-row`}
+						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary items-center flex-row mt-4`}
 					>
 						<PhoneInput
 							phoneInputStyles={{
@@ -133,6 +140,7 @@ const CustomFormField = (
 							keyboardType="phone-pad"
 							maxLength={25}
 							onChangeText={props.setPhoneNumber}
+							onBlur={props.onBlur}
 						/>
 					</View>
 				)
@@ -171,7 +179,7 @@ const CustomFormField = (
 					<>
 						<View>
 							<CustomButton
-								containerStyles={`items-center flex-row justify-between h-fit bg-white p-4 mt-3 ${props.buttonContainerStyles}`}
+								containerStyles={`items-center flex-row justify-between h-[50px] bg-white p-4 mt-2 ${props.buttonContainerStyles}`}
 								handlePress={() => {
 									props.setShowDateTime(!props.showDateTime)
 								}}
@@ -188,24 +196,35 @@ const CustomFormField = (
 				)
 			case 'Picker':
 				return (
-					<View
-						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary`}
-					>
+					<View className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary mt-2`}>
 						<Picker
 							selectedValue={props.selectedValue}
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
 						>
-							{
-								!props.selectedValue && (
-									<Picker.Item label="Please select ..." value=""/>
-								)
-							}
+							{!props.selectedValue && 
+								<Picker.Item label="Please select ..." value="" />}
 							{props.items.map((x) => (
 								<Picker.Item key={x.key} label={x.label} value={x.value} />
 							))}
 						</Picker>
 					</View>
+				)
+			case 'FilePicker':
+				return (
+					<>
+						<View
+							className={`w-full h-[50px] flex flex-row items-center bg-white rounded-2xl focus:border-secondary mt-2`}
+						>
+							<CustomButton
+								title="Choose File"
+								handlePress={props.onFileChanged}
+								textStyles="text-white text-sm"
+								containerStyles="bg-primary px-2 mx-5"
+							/>
+							{props.selectedFile.length > 0 ? <Text>File</Text> : <Text>No File Selected</Text>}
+						</View>
+					</>
 				)
 		}
 	}

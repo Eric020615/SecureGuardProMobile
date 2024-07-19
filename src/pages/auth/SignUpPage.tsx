@@ -1,13 +1,13 @@
 import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomFormField from '@components/CustomFormField'
-import CustomButton from '@components/CustomButton'
+import CustomFormField from '@components/form/CustomFormField'
+import CustomButton from '@components/buttons/CustomButton'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/authService/auth'
+import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
 
 const SignUpPage = () => {

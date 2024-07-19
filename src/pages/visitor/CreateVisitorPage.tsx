@@ -2,7 +2,7 @@ import { View, Text, ScrollView, Platform, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
-import CustomButton from '@components/CustomButton'
+import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import moment from 'moment'
 import 'moment-timezone'
@@ -11,9 +11,11 @@ import * as Yup from 'yup'
 import { createVisitorConst } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
-import CustomFormField from '@components/CustomFormField'
-import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js';
-import { useVisitor } from '@zustand/visitorService/visitor'
+import CustomFormField from '@components/form/CustomFormField'
+import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
+import { useVisitor } from '@zustand/visitor/useVisitor'
+import DocumentPicker from 'react-native-document-picker'
+import CustomModal from '@components/modals/CustomModal'
 
 interface CreateVisitor {
 	visitDate: Date
@@ -36,9 +38,12 @@ const CreateVisitorPage = () => {
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
 		visitorPhoneNumber: Yup.string()
 			.required('Visitor phone number is required')
-			.test('is-valid-phone', 'Phone number is not valid', value => {
-				if(!value) return false
-				const phone = parsePhoneNumberFromString(value, formik.values.visitorCountryCode.cca2 as CountryCode)
+			.test('is-valid-phone', 'Phone number is not valid', (value) => {
+				if (!value) return false
+				const phone = parsePhoneNumberFromString(
+					value,
+					formik.values.visitorCountryCode.cca2 as CountryCode,
+				)
 				return phone ? phone.isValid() : false
 			}),
 	})
@@ -54,7 +59,8 @@ const CreateVisitorPage = () => {
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-				visitDateTime: moment(values.visitDate).format("YYYY-MM-DD ") + moment(values.visitTime).format("HH:mm")
+				visitDateTime:
+					moment(values.visitDate).format('YYYY-MM-DD ') + moment(values.visitTime).format('HH:mm'),
 			})
 			if (response.success) {
 				formik.resetForm()
@@ -87,6 +93,7 @@ const CreateVisitorPage = () => {
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">
 						<CustomButton
@@ -246,7 +253,7 @@ const CreateVisitorPage = () => {
 									/>
 								) : (
 									<CustomFormField
-										title="Visit Time"
+										title="Visit Times"
 										textStyle="text-base font-bold"
 										type="DateTime"
 										platform="android"
