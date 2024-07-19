@@ -140,6 +140,7 @@ const CustomFormField = (
 							keyboardType="phone-pad"
 							maxLength={25}
 							onChangeText={props.setPhoneNumber}
+							onBlur={props.onBlur}
 						/>
 					</View>
 				)
@@ -178,7 +179,7 @@ const CustomFormField = (
 					<>
 						<View>
 							<CustomButton
-								containerStyles={`items-center flex-row justify-between h-fit bg-white p-4 mt-2 ${props.buttonContainerStyles}`}
+								containerStyles={`items-center flex-row justify-between h-[50px] bg-white p-4 mt-2 ${props.buttonContainerStyles}`}
 								handlePress={() => {
 									props.setShowDateTime(!props.showDateTime)
 								}}
@@ -201,7 +202,8 @@ const CustomFormField = (
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
 						>
-							{!props.selectedValue && <Picker.Item label="Please select ..." value="" />}
+							{!props.selectedValue && 
+								<Picker.Item label="Please select ..." value="" />}
 							{props.items.map((x) => (
 								<Picker.Item key={x.key} label={x.label} value={x.value} />
 							))}

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "expo-router/entry",
   "scripts": {
-    "start": "expo start -c",
+    "start": "expo start",
     "start:dev": "NODE_ENV=development yarn run start",
     "start:prod": "NODE_ENV=development yarn run start",
     "android": "expo run:android",
@@ -15,7 +15,6 @@
     "@react-native-async-storage/async-storage": "1.23.1",
     "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-picker/picker": "2.7.5",
-    "@react-navigation/native": "^6.1.18",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/react": "~18.2.45",
     "axios": "^1.7.2",

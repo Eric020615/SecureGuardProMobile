@@ -89,24 +89,6 @@ const CreateVisitorPage = () => {
 		formik.setFieldValue('visitTime', selectedTime)
 		setShowTime(false)
 	}
-	const onFileChanged: () => Promise<void> = async () => {
-		try {
-			const pickerFile = await DocumentPicker.pick({
-				type: [DocumentPicker.types.allFiles],
-			})
-		} catch (error) {
-			if (DocumentPicker.isCancel(error)) {
-				console.log(error)
-			} else {
-				console.log(error)
-				throw error
-			}
-		}
-	}
-	const [isModalVisible, setIsModalVisible] = useState(true)
-	const toggleModal = () => {
-		setIsModalVisible(!isModalVisible)
-	}
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -300,19 +282,6 @@ const CreateVisitorPage = () => {
 								)}
 							</View>
 						</View>
-						<CustomFormField
-							containerStyle="mt-4"
-							title="Upload your supported document"
-							textStyle="text-base font-bold"
-							type="FilePicker"
-							selectedFile={[]}
-							onFileChanged={onFileChanged}
-							errorMessage={
-								formik.touched.visitorPhoneNumber &&
-								formik.errors.visitorPhoneNumber &&
-								(formik.errors.visitorPhoneNumber as string)
-							}
-						/>
 						<CustomButton
 							title="Submit"
 							handlePress={formik.handleSubmit}
