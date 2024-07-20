@@ -12,8 +12,11 @@ import moment from 'moment'
 import 'moment-timezone'
 import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import DocumentPicker from 'react-native-document-picker'
+import DocumentPicker, {DocumentPickerResponse} from 'react-native-document-picker'
 import CustomModal from '@components/modals/CustomModal'
+import { useUser } from '@zustand/user/useUser'
+import { router } from 'expo-router'
+import RNFS from "react-native-fs"
 
 interface UserInformationForm {
 	firstName: string
@@ -28,6 +31,8 @@ interface UserInformationForm {
 }
 
 const UserInformationPage = () => {
+	const { createUserAction, isLoading, error } = useUser();
+	const [selectedFiles, setSelectedFiles] = useState<DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
@@ -58,7 +63,9 @@ const UserInformationPage = () => {
 		try {
 			const pickerFile = await DocumentPicker.pick({
 				type: [DocumentPicker.types.allFiles],
+				allowMultiSelection: true
 			})
+			setSelectedFiles(pickerFile)
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)
@@ -73,7 +80,23 @@ const UserInformationPage = () => {
 		validateOnBlur: false,
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
-		onSubmit: (values) => {},
+		onSubmit: async (values) => {
+			const response = await createUserAction({
+				firstName: values.firstName,
+				lastName: values.lastName,
+				userName: values.userName,
+				contactNumber: values.countryCode.callingCode + values.phoneNumber,
+				gender: values.gender,
+				floorNumber: values.floor,
+				unitNumber: values.unitNumber,
+				dateOfBirth: values.dateOfBirth.toUTCString()
+			})
+			if (response.success) {
+				formik.resetForm()
+			} else {
+				console.log(response)
+			}
+		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
@@ -83,6 +106,21 @@ const UserInformationPage = () => {
 						<Text className="text-5xl font-bold text-primary">Welcome</Text>
 						<Text className="text-xl font-pregular text-primary">We need something more</Text>
 					</View>
+					<CustomFormField
+						title="Username"
+						containerStyle="mb-3"
+						type="Text"
+						textValue={formik.values.userName}
+						onChangeText={(e) => {
+							formik.setFieldValue('userName', e)
+						}}
+						onBlur={formik.handleBlur('userName')}
+						errorMessage={
+							formik.touched.userName &&
+							formik.errors.userName &&
+							(formik.errors.userName as string)
+						}
+					/>
 					<CustomFormField
 						title="First Name"
 						containerStyle="mb-3"
@@ -114,7 +152,7 @@ const UserInformationPage = () => {
 						}
 					/>
 					<CustomFormField
-						title="Phone No."
+						title="Phone Number"
 						containerStyle="mb-3"
 						type="Phone"
 						phoneNumber={formik.values.phoneNumber}
@@ -246,14 +284,17 @@ const UserInformationPage = () => {
 						title="Supported Document"
 						textStyle="text-base"
 						type="FilePicker"
-						selectedFile={[]}
+						selectedFiles={selectedFiles}
 						onFileChanged={onFileChanged}
+						clearFile={() => {
+							setSelectedFiles([])
+						}}
 					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={false}
+						isLoading={isLoading}
 					/>
 				</View>
 			</ScrollView>

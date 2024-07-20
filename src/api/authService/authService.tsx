@@ -10,6 +10,9 @@ export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
       type: listUrl.auth.signUp.type,
       data: ISignUp,
     });
+    if(response.data){
+      await AsyncStorage.setItem("token", response?.data);
+    }
     const result: IResponse<any> = {
       success,
       msg: success ? "success" : response.message,

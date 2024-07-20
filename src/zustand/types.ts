@@ -1,10 +1,12 @@
 export interface UserInformationFormDto {
-    firstName: string;
-    lastName: string;
-    phoneNumber: string;
-    unitNumber: string;
-    birthDay: string;
-    gender: string;
+    firstName: string
+	lastName: string
+	userName: string
+	contactNumber: string
+	gender: string
+	floorNumber: string
+	unitNumber: string
+	dateOfBirth: string
 }
 
 export interface UserSignUpFormDto {

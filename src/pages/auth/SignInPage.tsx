@@ -46,7 +46,6 @@ const SignInPage = () => {
 				title: 'Log In Failed',
 				subtitle: 'Please Retry It Again',
 			})
-			console.log(error)
 		}
 	}
 	return (
