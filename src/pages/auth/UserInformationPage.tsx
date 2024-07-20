@@ -18,6 +18,7 @@ import CustomModal from '@components/modals/CustomModal'
 interface UserInformationForm {
 	firstName: string
 	lastName: string
+	userName: string
 	countryCode: ICountry
 	phoneNumber: string
 	gender: string
@@ -28,7 +29,6 @@ interface UserInformationForm {
 
 const UserInformationPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
 		lastName: Yup.string().required('Last Name is required'),
@@ -253,7 +253,7 @@ const UserInformationPage = () => {
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={isSubmitting}
+						isLoading={false}
 					/>
 				</View>
 			</ScrollView>
