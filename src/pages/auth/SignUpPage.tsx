@@ -9,9 +9,10 @@ import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
 import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
+import { useModal } from '@zustand/modal/useModal'
 
 const SignUpPage = () => {
-	const [isSubmitting, setIsSubmitting] = useState(false)
+	const { setCustomFailedModal } = useModal()
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string()
@@ -27,24 +28,27 @@ const SignUpPage = () => {
 		initialValues: signUpformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			signUp()
+			signUp(values)
 		},
 	})
-	const authSelector = useAuth((state) => state.signUp)
+	const {signUpAction, isLoading} = useAuth()
 
-	const signUp = async () => {
-		setIsSubmitting(true)
+	const signUp = async (values: UserSignUpFormDto) => {
 		try {
-			const response = await authSelector(formik.values)
+			const response = await signUpAction(values)
 			if (response.success) {
-				router.replace('/home')
+				router.replace('/user-information')
 			} else {
-				Alert.alert(response.msg)
+				setCustomFailedModal({
+					title: 'Account Created Failed',
+					subtitle: response.msg,
+				})
 			}
 		} catch (error) {
-			console.log(error)
-		} finally {
-			setIsSubmitting(false)
+			setCustomFailedModal({
+				title: 'Account Created Failed',
+				subtitle: "Please Retry It Again",
+			})
 		}
 	}
 
@@ -92,7 +96,7 @@ const SignUpPage = () => {
 						title="Sign Up"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 					/>
 
 					<View className="justify-center pt-5 flex-row gap-2">

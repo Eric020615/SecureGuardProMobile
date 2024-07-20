@@ -8,7 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from "../zustand/auth/useAuth";
 
 const App = () => {
-  const checkJwtAuth = useAuth((state) => state.checkJwtAuth);
+  const checkJwtAuth = useAuth((state) => state.checkJwtAuthAction);
   const checkToken = async () => {
     try {
       const value = await AsyncStorage.getItem("token");

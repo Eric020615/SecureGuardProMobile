@@ -28,24 +28,23 @@ const SignInPage = () => {
 			signInWithPassword(values)
 		},
 	})
-	const { signIn, isLoading } = useAuth(); 
+	const { signInAction, isLoading } = useAuth()
 
 	const signInWithPassword = async (values: SignInFormDto) => {
 		try {
-			const response = await signIn(values)
+			const response = await signInAction(values)
 			if (response.success) {
 				router.replace('/home')
-			}
-			else {
+			} else {
 				setCustomFailedModal({
 					title: 'Log In Failed',
-					subtitle: "Please Retry It Again"
+					subtitle: 'Please Retry It Again',
 				})
 			}
 		} catch (error) {
 			setCustomFailedModal({
 				title: 'Log In Failed',
-				subtitle: "Please Retry It Again"
+				subtitle: 'Please Retry It Again',
 			})
 			console.log(error)
 		}
