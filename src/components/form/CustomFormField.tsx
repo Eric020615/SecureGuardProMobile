@@ -7,6 +7,7 @@ import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { Picker } from '@react-native-picker/picker'
 import { listOptions } from '@config/listOption'
+import { DocumentPickerResponse } from 'react-native-document-picker'
 
 export interface CustomPhoneInputProps extends CustomFormFieldProps {
 	type: 'Phone'
@@ -66,8 +67,9 @@ export interface CustomPickerInputProps extends CustomFormFieldProps {
 
 export interface CustomFilePickerInputProps extends CustomFormFieldProps {
 	type: 'FilePicker'
-	selectedFile: string[]
+	selectedFiles: DocumentPickerResponse[]
 	onFileChanged: () => Promise<void>
+	clearFile: () => void
 }
 
 interface CustomFormFieldProps {
@@ -202,8 +204,7 @@ const CustomFormField = (
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
 						>
-							{!props.selectedValue && 
-								<Picker.Item label="Please select ..." value="" />}
+							{!props.selectedValue && <Picker.Item label="Please select ..." value="" />}
 							{props.items.map((x) => (
 								<Picker.Item key={x.key} label={x.label} value={x.value} />
 							))}
@@ -216,13 +217,32 @@ const CustomFormField = (
 						<View
 							className={`w-full h-[50px] flex flex-row items-center bg-white rounded-2xl focus:border-secondary mt-2`}
 						>
-							<CustomButton
-								title="Choose File"
-								handlePress={props.onFileChanged}
-								textStyles="text-white text-sm"
-								containerStyles="bg-primary px-2 mx-5"
-							/>
-							{props.selectedFile.length > 0 ? <Text>File</Text> : <Text>No File Selected</Text>}
+							{props.selectedFiles.length > 0 ? (
+								<>
+									<CustomButton
+										handlePress={props.clearFile}
+										containerStyles="mx-5"
+										reactNativeIcons={
+											<Iconicons name="close-circle" color={'#10312b'} size={30} />
+										}
+									/>
+									<View className="flex flex-col">
+										{props.selectedFiles.map((selectedFile, id) => (
+											<Text key={id}>{selectedFile.name}</Text>
+										))}
+									</View>
+								</>
+							) : (
+								<>
+									<CustomButton
+										title="Choose File"
+										handlePress={props.onFileChanged}
+										textStyles="text-white text-sm"
+										containerStyles="bg-primary px-2 mx-5"
+									/>
+									<Text>No File Selected</Text>
+								</>
+							)}
 						</View>
 					</>
 				)

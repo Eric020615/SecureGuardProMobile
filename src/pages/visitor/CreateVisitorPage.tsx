@@ -54,7 +54,6 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			console.log(values.visitDate.toDateString())
 			const response = await createVisitor({
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,

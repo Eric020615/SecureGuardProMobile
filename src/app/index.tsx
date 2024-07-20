@@ -1,37 +1,11 @@
 import React, { useEffect } from 'react'
 import { View, Text, ScrollView, Image } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Images from "../assets/images"
+import Images from "@assets/images"
 import CustomButton from "@components/buttons/CustomButton"
 import { router } from 'expo-router'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAuth } from "../zustand/auth/useAuth";
 
 const App = () => {
-  const checkJwtAuth = useAuth((state) => state.checkJwtAuth);
-  const checkToken = async () => {
-    try {
-      const value = await AsyncStorage.getItem("token");
-      if(!value){
-        router.push("/sign-in")
-        return
-      }
-      const response = await checkJwtAuth(value)
-      if(response.success){
-        router.push("/home")
-      }
-      else{
-        router.push("/sign-in")
-      }
-    } catch (error) {
-      router.push("/sign-in")
-    }
-  }
-
-  useEffect(() => {
-    checkToken()
-  }, [])
-
   return (
     <SafeAreaView className='bg-[#F5F5F5] h-full'>
       <ScrollView contentContainerStyle={{ height: '100%'}}>

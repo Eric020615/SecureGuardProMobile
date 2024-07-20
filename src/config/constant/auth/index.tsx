@@ -7,6 +7,7 @@ export const signUpformDataJson = {
 export const userInforformDataJson = {
     firstName: '',
     lastName: '',
+    userName: '',
     countryCode: null,
     phoneNumber: '',
     gender: '',

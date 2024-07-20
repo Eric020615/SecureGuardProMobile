@@ -1,14 +1,15 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, signIn, signUp } from "@api/authService/authService"
-import { IResponse } from "@api/globalHandler";
 
 interface authenticationState {
     isLoading: boolean;
     error: string | null;
-    signUp: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
-    signIn: (userSignInForm: SignInFormDto) => Promise<any>;
-    checkJwtAuth: (token: string) => Promise<any>;
+    isLogged: boolean;
+    setIsLogged: (value: boolean) => void;
+    signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
+    signInAction: (userSignInForm: SignInFormDto) => Promise<any>;
+    checkJwtAuthAction: (token: string) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
 }
@@ -18,19 +19,20 @@ export const useAuth = create<authenticationState>((set) => ({
     error: null,
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
-    signUp: async (userSignUpForm: UserSignUpFormDto) => {
+    isLogged: false,
+    setIsLogged: (isLogged) => set({ isLogged }),
+    signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
         try {
             set({ isLoading: true, error: null });
             const response = await signUp(userSignUpForm);
             return response;
         } catch (error) {
-            console.log(error);
             set({ error: error.msg });
         } finally {
             set({ isLoading: false })
         }
     },
-    signIn: async (userSignInForm: SignInFormDto) => {
+    signInAction: async (userSignInForm: SignInFormDto) => {
         try {
             set({ isLoading: true, error: null });
             const response = await signIn(userSignInForm);
@@ -42,9 +44,8 @@ export const useAuth = create<authenticationState>((set) => ({
             set({ isLoading: false })
         }
     },
-    checkJwtAuth: async (token: string) => {
+    checkJwtAuthAction: async (token: string) => {
         try {
-            set({ isLoading: true, error: null });
             const response = await checkAuth(token);
             return response;
         } catch (error) {

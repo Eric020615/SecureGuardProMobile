@@ -12,12 +12,17 @@ import moment from 'moment'
 import 'moment-timezone'
 import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import DocumentPicker from 'react-native-document-picker'
+import * as DocumentPicker from 'react-native-document-picker'
 import CustomModal from '@components/modals/CustomModal'
+import { useUser } from '@zustand/user/useUser'
+import { router } from 'expo-router'
+import { getFile } from '../../helpers/file'
+import { useModal } from '@zustand/modal/useModal'
 
 interface UserInformationForm {
 	firstName: string
 	lastName: string
+	userName: string
 	countryCode: ICountry
 	phoneNumber: string
 	gender: string
@@ -27,8 +32,10 @@ interface UserInformationForm {
 }
 
 const UserInformationPage = () => {
+	const { setCustomFailedModal } = useModal()
+	const { createUserAction, isLoading, error } = useUser();
+	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
 		lastName: Yup.string().required('Last Name is required'),
@@ -58,13 +65,18 @@ const UserInformationPage = () => {
 		try {
 			const pickerFile = await DocumentPicker.pick({
 				type: [DocumentPicker.types.allFiles],
+				allowMultiSelection: true,
+				copyTo: "cachesDirectory"
 			})
+			setSelectedFiles(pickerFile)
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)
 			} else {
-				console.log(error)
-				throw error
+				setCustomFailedModal({
+					title: 'File Selection Failed',
+					subtitle: "Please try again or contact support if the issue persists.",
+				})
 			}
 		}
 	}
@@ -73,16 +85,61 @@ const UserInformationPage = () => {
 		validateOnBlur: false,
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
-		onSubmit: (values) => {},
+		onSubmit: async (values) => {
+			const response = await createUserAction({
+				firstName: values.firstName,
+				lastName: values.lastName,
+				userName: values.userName,
+				contactNumber: values.countryCode.callingCode + values.phoneNumber,
+				gender: values.gender,
+				floorNumber: values.floor,
+				unitNumber: values.unitNumber,
+				dateOfBirth: values.dateOfBirth.toUTCString(),
+				supportedFiles: selectedFiles.length > 0 ? await Promise.all(selectedFiles.map(async (selectedFile) => {
+					const file = await getFile(selectedFile)
+					return file;
+				})): []
+			})
+			if (response.success) {
+				setCustomFailedModal({
+					title: 'Account updated successfully',
+					subtitle: "Please wait for system admin approval to log in",
+				})
+			} else {
+				setCustomFailedModal({
+					title: 'Account updated failed',
+					subtitle: "Please contact our support team for assistance",
+				})
+			}
+		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				<CustomModal customConfirmButtonPress={() => {
+					formik.resetForm()
+					router.push("/")
+				}}/>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-8">
 					<View className="items-center mb-7">
 						<Text className="text-5xl font-bold text-primary">Welcome</Text>
 						<Text className="text-xl font-pregular text-primary">We need something more</Text>
 					</View>
+					<CustomFormField
+						title="Username"
+						containerStyle="mb-3"
+						type="Text"
+						textValue={formik.values.userName}
+						onChangeText={(e) => {
+							formik.setFieldValue('userName', e)
+						}}
+						onBlur={formik.handleBlur('userName')}
+						errorMessage={
+							formik.touched.userName &&
+							formik.errors.userName &&
+							(formik.errors.userName as string)
+						}
+					/>
 					<CustomFormField
 						title="First Name"
 						containerStyle="mb-3"
@@ -114,7 +171,7 @@ const UserInformationPage = () => {
 						}
 					/>
 					<CustomFormField
-						title="Phone No."
+						title="Phone Number"
 						containerStyle="mb-3"
 						type="Phone"
 						phoneNumber={formik.values.phoneNumber}
@@ -246,14 +303,17 @@ const UserInformationPage = () => {
 						title="Supported Document"
 						textStyle="text-base"
 						type="FilePicker"
-						selectedFile={[]}
+						selectedFiles={selectedFiles}
 						onFileChanged={onFileChanged}
+						clearFile={() => {
+							setSelectedFiles([])
+						}}
 					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 					/>
 				</View>
 			</ScrollView>
