@@ -24,7 +24,6 @@ export const useAuth = create<authenticationState>((set) => ({
             const response = await signUp(userSignUpForm);
             return response;
         } catch (error) {
-            console.log(error);
             set({ error: error.msg });
         } finally {
             set({ isLoading: false })

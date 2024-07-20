@@ -9,8 +9,8 @@ const CustomModal = () => {
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={toogleModal} className='bg-transparent'>
 			<View className="bg-white p-5 rounded-lg items-center">
-				{content?.title && <Text className="text-xl font-bold mb-4">{content.title}</Text>}
-				{content?.subtitle && <Text className="text-sm mb-4">{content.subtitle}</Text>}
+				{content?.title && <Text className="text-xl font-bold mb-4 text-center">{content.title}</Text>}
+				{content?.subtitle && <Text className="text-sm mb-4 text-center">{content.subtitle}</Text>}
 				<CustomButton
 					title="Close"
 					handlePress={toogleModal}

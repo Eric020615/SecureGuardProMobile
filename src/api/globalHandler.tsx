@@ -1,4 +1,4 @@
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import queryString from "query-string";
 
 interface IHandler {
@@ -125,7 +125,10 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
             }
             success = true;
           } catch (error) {
-            console.log(error)
+            if(error instanceof AxiosError){
+              console.log(error.response.data)
+              response = error.response
+            }
           }
         }
         if (!success) {
