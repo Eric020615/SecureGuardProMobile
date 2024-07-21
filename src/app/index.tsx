@@ -51,7 +51,7 @@ const App = () => {
           <View className='items-center mx-5'>
             <CustomButton 
               title='Get Started' 
-              handlePress={() => { router.push("/user-information") }} 
+              handlePress={() => { router.push("/sign-up") }} 
               containerStyles='bg-primary p-3 w-full m-4'
               />
           </View>

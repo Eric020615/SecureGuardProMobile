@@ -10,6 +10,7 @@ import { signUpformDataJson } from '@config/constant/auth/index'
 import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
 import { useModal } from '@zustand/modal/useModal'
+import CustomModal from '@components/modals/CustomModal'
 
 const SignUpPage = () => {
 	const { setCustomFailedModal } = useModal()
@@ -55,6 +56,7 @@ const SignUpPage = () => {
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				<CustomModal />
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Sign Up</Text>

@@ -18,6 +18,7 @@ export const useUser = create<userState>((set) => ({
     createUserAction: async (IUserInformationFormDto: UserInformationFormDto) => {
         try {
             set({ isLoading: true, error: null });
+            console.log(IUserInformationFormDto)
             const response = await createUser(IUserInformationFormDto);
             return response;
         } catch (error) {

@@ -16,7 +16,7 @@ import DocumentPicker, {DocumentPickerResponse} from 'react-native-document-pick
 import CustomModal from '@components/modals/CustomModal'
 import { useUser } from '@zustand/user/useUser'
 import { router } from 'expo-router'
-import RNFS from "react-native-fs"
+import { convertFileToBase64 } from '../../helpers/file'
 
 interface UserInformationForm {
 	firstName: string
@@ -63,7 +63,8 @@ const UserInformationPage = () => {
 		try {
 			const pickerFile = await DocumentPicker.pick({
 				type: [DocumentPicker.types.allFiles],
-				allowMultiSelection: true
+				allowMultiSelection: true,
+				copyTo: "cachesDirectory"
 			})
 			setSelectedFiles(pickerFile)
 		} catch (error) {
@@ -89,7 +90,11 @@ const UserInformationPage = () => {
 				gender: values.gender,
 				floorNumber: values.floor,
 				unitNumber: values.unitNumber,
-				dateOfBirth: values.dateOfBirth.toUTCString()
+				dateOfBirth: values.dateOfBirth.toUTCString(),
+				supportedFiles: selectedFiles.length > 0 ? await Promise.all(selectedFiles.map(async (selectedFile) => {
+					const base64 = await convertFileToBase64(selectedFile.uri)
+					return base64;
+				})): []
 			})
 			if (response.success) {
 				formik.resetForm()
