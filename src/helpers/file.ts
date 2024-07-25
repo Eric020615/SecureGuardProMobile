@@ -1,15 +1,19 @@
-import {readAsStringAsync, EncodingType, cacheDirectory, copyAsync} from 'expo-file-system'
+import { GeneralFile } from '@zustand/types';
+import {readAsStringAsync, cacheDirectory, copyAsync} from 'expo-file-system'
+import { DocumentPickerResponse } from 'react-native-document-picker';
 
-export const convertFileToBase64 = async (uri: string) : Promise<string> => {
+export const getFile = async (document: DocumentPickerResponse) : Promise<GeneralFile> => {
     try {
-        const tempUri = cacheDirectory + 'temp_img';
-        await copyAsync({from: uri , to: tempUri})
-        console.log("hello22255")
-        console.log(tempUri)
+        const tempUri = cacheDirectory + document.name;
+        await copyAsync({from: document.uri , to: tempUri})
         const base64 = await readAsStringAsync(tempUri, 
             {encoding: "base64"}
         );
-        return base64
+        const file = {
+            fileName: document.name,
+            data: base64
+        } as GeneralFile
+        return file
     } catch (error) {
         console.log(error)
         throw new Error (

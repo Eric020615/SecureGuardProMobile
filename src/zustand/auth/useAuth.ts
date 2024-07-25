@@ -1,7 +1,6 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, signIn, signUp } from "@api/authService/authService"
-import { IResponse } from "@api/globalHandler";
 
 interface authenticationState {
     isLoading: boolean;
@@ -43,7 +42,6 @@ export const useAuth = create<authenticationState>((set) => ({
     },
     checkJwtAuthAction: async (token: string) => {
         try {
-            set({ isLoading: true, error: null });
             const response = await checkAuth(token);
             return response;
         } catch (error) {

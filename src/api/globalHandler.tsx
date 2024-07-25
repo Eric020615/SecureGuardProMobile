@@ -125,6 +125,8 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
             }
             success = true;
           } catch (error) {
+            console.log(error)
+            console.log(error.request)
             if(error instanceof AxiosError){
               console.log(error.response.data)
               response = error.response

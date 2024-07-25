@@ -12,11 +12,11 @@ import moment from 'moment'
 import 'moment-timezone'
 import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import DocumentPicker, {DocumentPickerResponse} from 'react-native-document-picker'
+import * as DocumentPicker from 'react-native-document-picker'
 import CustomModal from '@components/modals/CustomModal'
 import { useUser } from '@zustand/user/useUser'
 import { router } from 'expo-router'
-import { convertFileToBase64 } from '../../helpers/file'
+import { getFile } from '../../helpers/file'
 
 interface UserInformationForm {
 	firstName: string
@@ -32,7 +32,7 @@ interface UserInformationForm {
 
 const UserInformationPage = () => {
 	const { createUserAction, isLoading, error } = useUser();
-	const [selectedFiles, setSelectedFiles] = useState<DocumentPickerResponse[]>([])
+	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
@@ -92,12 +92,13 @@ const UserInformationPage = () => {
 				unitNumber: values.unitNumber,
 				dateOfBirth: values.dateOfBirth.toUTCString(),
 				supportedFiles: selectedFiles.length > 0 ? await Promise.all(selectedFiles.map(async (selectedFile) => {
-					const base64 = await convertFileToBase64(selectedFile.uri)
-					return base64;
+					const file = await getFile(selectedFile)
+					return file;
 				})): []
 			})
 			if (response.success) {
 				formik.resetForm()
+				router.push("/")
 			} else {
 				console.log(response)
 			}

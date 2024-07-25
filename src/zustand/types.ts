@@ -1,3 +1,8 @@
+export type GeneralFile = {
+	fileName: string;
+	data: string
+}
+
 export interface UserInformationFormDto {
 	firstName: string
 	lastName: string
@@ -7,7 +12,7 @@ export interface UserInformationFormDto {
 	floorNumber: string
 	unitNumber: string
 	dateOfBirth: string
-	supportedFiles: string[]
+	supportedFiles: GeneralFile[]
 }
 
 export interface UserSignUpFormDto {
