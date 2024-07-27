@@ -73,8 +73,10 @@ const UserInformationPage = () => {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)
 			} else {
-				console.log(error)
-				throw error
+				setCustomFailedModal({
+					title: 'File Selection Failed',
+					subtitle: "Please try again or contact support if the issue persists.",
+				})
 			}
 		}
 	}
