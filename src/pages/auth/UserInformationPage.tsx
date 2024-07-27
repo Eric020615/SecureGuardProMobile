@@ -17,6 +17,7 @@ import CustomModal from '@components/modals/CustomModal'
 import { useUser } from '@zustand/user/useUser'
 import { router } from 'expo-router'
 import { getFile } from '../../helpers/file'
+import { useModal } from '@zustand/modal/useModal'
 
 interface UserInformationForm {
 	firstName: string
@@ -31,6 +32,7 @@ interface UserInformationForm {
 }
 
 const UserInformationPage = () => {
+	const { setCustomFailedModal } = useModal()
 	const { createUserAction, isLoading, error } = useUser();
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
@@ -97,16 +99,25 @@ const UserInformationPage = () => {
 				})): []
 			})
 			if (response.success) {
-				formik.resetForm()
-				router.push("/")
+				setCustomFailedModal({
+					title: 'Account updated successfully',
+					subtitle: "Please wait for system admin approval to log in",
+				})
 			} else {
-				console.log(response)
+				setCustomFailedModal({
+					title: 'Account updated failed',
+					subtitle: "Please contact our support team for assistance",
+				})
 			}
 		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
+				<CustomModal customConfirmButtonPress={() => {
+					formik.resetForm()
+					router.push("/")
+				}}/>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-8">
 					<View className="items-center mb-7">
 						<Text className="text-5xl font-bold text-primary">Welcome</Text>

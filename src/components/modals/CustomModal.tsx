@@ -4,7 +4,11 @@ import Modal from 'react-native-modal'
 import CustomButton from '@components/buttons/CustomButton'
 import { useModal } from '@zustand/modal/useModal'
 
-const CustomModal = () => {
+interface CustomModalProps {
+	customConfirmButtonPress?: () => void
+}
+
+const CustomModal = ({customConfirmButtonPress}: CustomModalProps) => {
 	const {isOpen, toogleModal, content} = useModal()
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={toogleModal} className='bg-transparent'>
@@ -13,7 +17,10 @@ const CustomModal = () => {
 				{content?.subtitle && <Text className="text-sm mb-4 text-center">{content.subtitle}</Text>}
 				<CustomButton
 					title="Close"
-					handlePress={toogleModal}
+					handlePress={() => {
+						toogleModal();
+						customConfirmButtonPress();
+					}}
 					containerStyles="bg-primary p-2 w-[30%] self-center"
 					textStyles="text-sm text-white"
 				/>
