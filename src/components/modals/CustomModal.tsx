@@ -10,6 +10,7 @@ interface CustomModalProps {
 
 const CustomModal = ({customConfirmButtonPress}: CustomModalProps) => {
 	const {isOpen, toogleModal, content} = useModal()
+	customConfirmButtonPress = customConfirmButtonPress || (() => {})
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={toogleModal} className='bg-transparent'>
 			<View className="bg-white p-5 rounded-lg items-center">
@@ -19,7 +20,7 @@ const CustomModal = ({customConfirmButtonPress}: CustomModalProps) => {
 					title="Close"
 					handlePress={() => {
 						toogleModal();
-						customConfirmButtonPress();
+						customConfirmButtonPress()
 					}}
 					containerStyles="bg-primary p-2 w-[30%] self-center"
 					textStyles="text-sm text-white"

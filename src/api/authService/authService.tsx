@@ -2,6 +2,7 @@ import GlobalHandler, { IResponse } from "../globalHandler";
 import { listUrl } from "../listUrl";
 import { SignInFormDto, UserSignUpFormDto } from "@zustand/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { RoleEnum } from "@config/constant/user";
 
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
   try {
@@ -9,6 +10,7 @@ export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
       path: listUrl.auth.signUp.path,
       type: listUrl.auth.signUp.type,
       data: ISignUp,
+      params: { role: RoleEnum.RESIDENT }
     });
     if(response.data){
       await AsyncStorage.setItem("token", response?.data);
@@ -35,6 +37,7 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<any> => {
       path: listUrl.auth.logIn.path,
       type: listUrl.auth.logIn.type,
       data: ISignIn,
+      params: { role: RoleEnum.RESIDENT }
     });
     await AsyncStorage.setItem("token", response?.data);
     const result: IResponse<any> = {
