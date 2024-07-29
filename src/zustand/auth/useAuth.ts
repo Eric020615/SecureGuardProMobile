@@ -5,6 +5,8 @@ import { checkAuth, signIn, signUp } from "@api/authService/authService"
 interface authenticationState {
     isLoading: boolean;
     error: string | null;
+    isLogged: boolean;
+    setIsLogged: (value: boolean) => void;
     signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
     signInAction: (userSignInForm: SignInFormDto) => Promise<any>;
     checkJwtAuthAction: (token: string) => Promise<any>;
@@ -17,6 +19,8 @@ export const useAuth = create<authenticationState>((set) => ({
     error: null,
     setLoading: (isLoading) => set({ isLoading }),
     setError: (error) => set({ error }),
+    isLogged: false,
+    setIsLogged: (isLogged) => set({ isLogged }),
     signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
         try {
             set({ isLoading: true, error: null });
