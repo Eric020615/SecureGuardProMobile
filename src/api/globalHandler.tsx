@@ -1,10 +1,11 @@
-import Axios from "axios";
+import Axios, { AxiosError } from "axios";
 import queryString from "query-string";
 
 interface IHandler {
   path: string;
   type: string;
   data?: any;
+  params?: any;
   _token?: string;
   isFormData?: boolean;
   isUrlencoded?: boolean;
@@ -107,7 +108,7 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
                 data: data,
               });
             } else {
-              const requestOptions = {
+              response = await Axios.post(baseURL, data, {
                 headers: {
                   "Content-Type": payload.isFormData
                     ? "multipart/form-data"
@@ -120,12 +121,16 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
                       }
                     : {}),
                 },
-              };
-              response = await Axios.post(baseURL, data, requestOptions);
+                params: payload.params,
+                paramsSerializer: (params) => parseParams(params),
+              });
             }
             success = true;
           } catch (error) {
-            console.log(error)
+            if(error instanceof AxiosError){
+              console.log(error.response.data)
+              response = error.response
+            }
           }
         }
         if (!success) {
