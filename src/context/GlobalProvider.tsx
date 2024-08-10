@@ -11,19 +11,21 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 	const pathname = usePathname()
 	const params = useGlobalSearchParams()
 
-  const checkToken = async (redirectToHome = false) => {
+	const checkToken = async (redirectToHome = false) => {
 		try {
+			if (pathname == '/sign-up' || pathname == '/sign-in' || pathname == '/user-information') {
+				return
+			}
 			const value = await AsyncStorage.getItem('token')
 			if (!value) {
 				router.push('/sign-in')
-				return
 			}
 			const response = await checkJwtAuthAction(value)
 			if (response.success && redirectToHome) {
 				router.push('/home')
-        return
-			} 
-      if (!response.success) {
+				return
+			}
+			if (!response.success) {
 				router.push('/sign-in')
 			}
 		} catch (error) {
@@ -36,11 +38,10 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 		checkToken(true)
 	}, [])
 
-  	// Track the location in your analytics provider here.
+	// Track the location in your analytics provider here.
 	useEffect(() => {
-    checkToken();
+		checkToken()
 	}, [pathname, params])
-
 
 	return <GlobalContext.Provider value={null}>{children}</GlobalContext.Provider>
 }

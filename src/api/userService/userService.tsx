@@ -1,16 +1,15 @@
 import { UserInformationFormDto } from "@zustand/types"
 import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
-import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const createUser = async (IUserInformationDto: UserInformationFormDto) : Promise<any> => {
+export const createUser = async (IUserInformationDto: UserInformationFormDto, tempToken: string) : Promise<any> => {
     try {
-        const token = await AsyncStorage.getItem("token")
+        console.log(tempToken)
         const [success, response] = await GlobalHandler({
             path: listUrl.user.createUser.path,
             type: listUrl.user.createUser.type,
             data: IUserInformationDto,
-            _token: token
+            _token: tempToken
         })
         const result : IResponse<any> = {
             success,

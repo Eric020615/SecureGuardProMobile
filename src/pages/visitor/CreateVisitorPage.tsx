@@ -14,8 +14,6 @@ import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
-import DocumentPicker from 'react-native-document-picker'
-import CustomModal from '@components/modals/CustomModal'
 
 interface CreateVisitor {
 	visitDate: Date

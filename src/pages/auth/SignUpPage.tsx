@@ -32,12 +32,13 @@ const SignUpPage = () => {
 			signUp(values)
 		},
 	})
-	const {signUpAction, isLoading} = useAuth()
+	const {signUpAction, isLoading, setTempToken} = useAuth()
 
 	const signUp = async (values: UserSignUpFormDto) => {
 		try {
 			const response = await signUpAction(values)
 			if (response.success) {
+				setTempToken(response.data)
 				router.replace('/user-information')
 			} else {
 				setCustomFailedModal({
