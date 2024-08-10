@@ -36,6 +36,13 @@ const ScreenLayout = () => {
             headerShown: false,
           }}
         />
+         <Stack.Screen
+          name="visitorDetails/[id]"
+          options={{
+            headerShown: false,
+          }
+        }
+        />
       </Stack>
 
       <StatusBar backgroundColor="#10312B" style="light" />

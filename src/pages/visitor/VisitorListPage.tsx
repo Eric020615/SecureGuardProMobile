@@ -1,27 +1,30 @@
-import { View, Text, ScrollView } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import moment from 'moment'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
 import CustomButton from '@components/buttons/CustomButton'
+import { VisitorEnum } from '@config/constant/visitor'
+import { router } from 'expo-router'
+import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
-	const { getVisitorByIdAction } = useVisitor()
+	const { getVisitorsAction } = useVisitor()
 	const [visitor, setVisitor] = useState<GetVisitorDto[]>([])
 
 	useEffect(() => {
-		getVisitorById(isPast)
+		getVisitors(isPast)
 	}, [])
 
 	useEffect(() => {
-		getVisitorById(isPast)
+		getVisitors(isPast)
 	}, [isPast])
 
-	const getVisitorById = async (isPast: boolean) => {
+	const getVisitors = async (isPast: boolean) => {
 		try {
-			const response = await getVisitorByIdAction(isPast)
+			const response = await getVisitorsAction(isPast)
 			if (response.success) {
 				setVisitor(response.data)
 			}
@@ -56,18 +59,26 @@ const VisitorListPage = () => {
 					{visitor &&
 						visitor.length > 0 &&
 						visitor.map((x, index) => (
-							<View
+							<TouchableOpacity
 								className="bg-white mt-5 p-4 rounded-lg flex flex-row justify-between"
 								key={index}
+								onPress={() => {
+									router.replace(`/visitorDetails/${x.visitorId}`)
+								}}
 							>
-								<View>
-									<Text className="font-bold">{x.visitorName}</Text>
-									<Text>{x.visitorCategory}</Text>
+								<View className='grid gap-1'>
+									<Text className="font-bold text-lg">{x.visitorName}</Text>
+									<Text className="text-gray-500 font-semibold">
+										{VisitorEnum[x.visitorCategory] ? VisitorEnum[x.visitorCategory] : 'others'}
+									</Text>
+									<View className="flex flex-row gap-1 items-center">
+										<AntDesign name="clockcircle" color="#10312b" size={16} />
+										<Text className="font-bold">
+											{moment(x.visitDateTime).tz('Asia/Kuala_Lumpur').format('D/M/YYYY, HH:mm')}
+										</Text>
+									</View>
 								</View>
-								<View>
-									<Text className="font-bold">{moment(x.visitDateTime).fromNow()}</Text>
-								</View>
-							</View>
+							</TouchableOpacity>
 						))}
 				</View>
 			</ScrollView>

@@ -7,8 +7,8 @@ export const createVisitorConst = {
     visitorPhoneNumber: "",
 }
 
-export const VisitorConst = {
-    "FR": "Friend",
-    "FM": "Family Member",
-    "RL": "Relative"    
+export enum VisitorEnum {
+    FR = "Friend",
+    FM = "Family Member",
+    RL = "Relative"
 }

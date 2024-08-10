@@ -8,7 +8,7 @@ import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { createVisitorConst } from '@config/constant/visitor'
+import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
@@ -18,7 +18,7 @@ import { useVisitor } from '@zustand/visitor/useVisitor'
 interface CreateVisitor {
 	visitDate: Date
 	visitTime: Date
-	visitorCategory: string
+	visitorCategory: VisitorEnum
 	visitorName: string
 	visitorCountryCode: ICountry
 	visitorPhoneNumber: string
