@@ -15,6 +15,7 @@ import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
+import { GetVisitorDto } from '@zustand/types'
 
 interface VisitorDetails {
 	visitDate: Date
@@ -26,18 +27,26 @@ interface VisitorDetails {
 }
 
 const VisitorDetailsPage = () => {
-    console.log("hihi")
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
     const { getVisitorDetailsByIdAction } = useVisitor();
+    const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
     const {id} = useLocalSearchParams();
     useEffect(() => {
-        // getData(local.id as string);
-        console.log(id)
+        getData(id as string)
     }, [id])
+    useEffect(() => {
+        console.log(visitorDetails)
+    }, [visitorDetails])
     const getData = async (id: string) => {
-        await getVisitorDetailsByIdAction(id);
+        const response = await getVisitorDetailsByIdAction(id);
+        if(response.success){
+            seVisitorDetails(response.data)
+        }
+        else {
+            console.log(response.msg)
+        }
     }
 
 	const validationSchema = Yup.object().shape({
