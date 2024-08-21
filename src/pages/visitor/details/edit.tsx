@@ -26,16 +26,18 @@ interface VisitorDetails {
 	visitorPhoneNumber: string
 }
 
-const VisitorDetailsPage = () => {
+const VisitorDetailsEditPage = () => {
+	const [pageDetailMode, setPageDetailMode] = useState("");
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
     const { getVisitorDetailsByIdAction } = useVisitor();
     const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
-    const {id} = useLocalSearchParams();
+    const {id, pageMode} = useLocalSearchParams();
     useEffect(() => {
         getData(id as string)
-    }, [id])
+		console.log(pageMode)
+    }, [id, pageMode])
     useEffect(() => {
         console.log(visitorDetails)
     }, [visitorDetails])
@@ -309,4 +311,4 @@ const VisitorDetailsPage = () => {
 	)
 }
 
-export default VisitorDetailsPage
+export default VisitorDetailsEditPage

@@ -37,7 +37,7 @@ const ScreenLayout = () => {
           }}
         />
          <Stack.Screen
-          name="visitorDetails/[id]"
+          name="visitorDetails/[id]/[pageMode]"
           options={{
             headerShown: false,
           }
