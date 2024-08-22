@@ -1,30 +1,14 @@
-import { View, Text, ScrollView, Platform, Alert } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import 'moment-timezone'
 import { router, useLocalSearchParams } from 'expo-router'
-import moment from 'moment'
-import 'moment-timezone'
-import { useFormik } from 'formik'
-import * as Yup from 'yup'
-import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
-import { VisitorCategoryList } from '@config/listOption/visitor'
-import { ICountry } from 'react-native-international-phone-number'
-import CustomFormField from '@components/form/CustomFormField'
-import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
+import { VisitorEnum } from '@config/constant/visitor'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
-
-interface VisitorDetails {
-	visitDate: Date
-	visitTime: Date
-	visitorCategory: VisitorEnum
-	visitorName: string
-	visitorCountryCode: ICountry
-	visitorPhoneNumber: string
-}
+import moment from 'moment'
 
 const VisitorDetailsViewPage = () => {
 	const { getVisitorDetailsByIdAction } = useVisitor()
@@ -38,6 +22,7 @@ const VisitorDetailsViewPage = () => {
 	const getData = async (id: string) => {
 		const response = await getVisitorDetailsByIdAction(id)
 		if (response.success) {
+			console.log(response.data)
 			seVisitorDetails(response.data)
 		} else {
 			console.log(response.msg)
@@ -76,6 +61,12 @@ const VisitorDetailsViewPage = () => {
 								<Text className="text-lg text-black font-bold">Category</Text>
 								<Text className="text-base text-black">
 									{VisitorEnum[visitorDetails.visitorCategory]}
+								</Text>
+							</View>
+							<View className="mt-3">
+								<Text className="text-lg text-black font-bold">Visit Date</Text>
+								<Text className="text-base text-black">
+									{visitorDetails.visitDateTime ? moment(visitorDetails.visitDateTime).format("YYYY-MM-DD HH:MM") : ''}
 								</Text>
 							</View>
 						</>
