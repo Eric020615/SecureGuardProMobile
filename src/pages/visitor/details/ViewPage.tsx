@@ -9,23 +9,30 @@ import { VisitorEnum } from '@config/constant/visitor'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
 import moment from 'moment'
+import { useApplication } from '@zustand/index'
 
 const VisitorDetailsViewPage = () => {
 	const { getVisitorDetailsByIdAction } = useVisitor()
 	const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
 	const { id } = useLocalSearchParams()
+	const { setIsLoading } = useApplication()
 
 	useEffect(() => {
 		getData(id as string)
 	}, [id])
 
 	const getData = async (id: string) => {
-		const response = await getVisitorDetailsByIdAction(id)
-		if (response.success) {
-			console.log(response.data)
-			seVisitorDetails(response.data)
-		} else {
-			console.log(response.msg)
+		try {
+			setIsLoading(true)
+			const response = await getVisitorDetailsByIdAction(id)
+			if (response.success) {
+				seVisitorDetails(response.data)
+			} else {
+				console.log(response.msg)
+			}
+			setIsLoading(false)
+		} catch (error) {
+			setIsLoading(false)
 		}
 	}
 

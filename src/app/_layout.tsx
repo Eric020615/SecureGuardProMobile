@@ -3,10 +3,13 @@ import { useFonts } from 'expo-font'
 import { NativeWindStyleSheet } from 'nativewind'
 import { useEffect } from 'react'
 import GlobalProvider from '../context/GlobalProvider'
+import CustomLoader from '@components/loader/CustomLoader'
+import { useApplication } from '@zustand/index'
 
 SplashScreen.preventAutoHideAsync()
 
 const RootLayout = () => {
+	const { isLoading } = useApplication();
 	NativeWindStyleSheet.setOutput({
 		default: 'native',
 	})
@@ -36,6 +39,7 @@ const RootLayout = () => {
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 				<Stack.Screen name="(screen)" options={{ headerShown: false }} />
 			</Stack>
+			{isLoading && (<CustomLoader/>)}
 		</GlobalProvider>
 	)
 }

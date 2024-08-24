@@ -8,9 +8,11 @@ import 'moment-timezone'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
+import { useApplication } from '@zustand/index'
 
 const NoticeListPage = () => {
-	const getNotice = useNotice((state) => state.getNotice)
+	const { getNotice } = useNotice()
+	const { setIsLoading } = useApplication()
 	const [notice, setNotice] = useState<getNoticeDto[]>([])
 
 	useEffect(() => {
@@ -18,8 +20,16 @@ const NoticeListPage = () => {
 	}, [])
 
 	const getData = async () => {
-		const response = await getNotice()
-		setNotice(response.data)
+		try {
+			setIsLoading(true)
+			const response = await getNotice()
+			if (response.success) {
+				setNotice(response.data)			
+			}
+			setIsLoading(false)
+		} catch (error) {
+			setIsLoading(false)
+		}
 	}
 
 	return (

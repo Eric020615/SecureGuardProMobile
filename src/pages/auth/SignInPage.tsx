@@ -11,6 +11,7 @@ import { useAuth } from '@zustand/auth/useAuth'
 import { SignInFormDto } from '@zustand/types'
 import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
+import { useApplication } from '@zustand/index'
 
 const SignInPage = () => {
 	const validationSchema = Yup.object().shape({
@@ -18,7 +19,7 @@ const SignInPage = () => {
 		password: Yup.string().required('Password is required'),
 	})
 	const { setCustomFailedModal } = useModal()
-
+	const { setIsLoading } = useApplication()
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
 		validateOnBlur: false,
@@ -32,6 +33,7 @@ const SignInPage = () => {
 
 	const signInWithPassword = async (values: SignInFormDto) => {
 		try {
+			setIsLoading(true)
 			const response = await signInAction(values)
 			if (response.success) {
 				router.replace('/home')
@@ -41,11 +43,13 @@ const SignInPage = () => {
 					subtitle: 'Please Retry It Again',
 				})
 			}
+			setIsLoading(false)
 		} catch (error) {
 			setCustomFailedModal({
 				title: 'Log In Failed',
 				subtitle: 'Please Retry It Again',
 			})
+			setIsLoading(false)
 		}
 	}
 	return (

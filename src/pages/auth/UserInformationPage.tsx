@@ -19,6 +19,7 @@ import { router } from 'expo-router'
 import { getFile } from '../../helpers/file'
 import { useModal } from '@zustand/modal/useModal'
 import { useAuth } from '@zustand/auth/useAuth'
+import { useApplication } from '@zustand/index'
 
 interface UserInformationForm {
 	firstName: string
@@ -34,6 +35,7 @@ interface UserInformationForm {
 
 const UserInformationPage = () => {
 	const { setCustomFailedModal } = useModal()
+	const { setIsLoading } = useApplication()
 	const { createUserAction, isLoading, error } = useUser();
 	const { tempToken } = useAuth()
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
@@ -88,6 +90,7 @@ const UserInformationPage = () => {
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			setIsLoading(true)
 			const response = await createUserAction({
 				firstName: values.firstName,
 				lastName: values.lastName,
@@ -113,6 +116,7 @@ const UserInformationPage = () => {
 					subtitle: "Please contact our support team for assistance",
 				})
 			}
+			setIsLoading(true)
 		},
 	})
 	return (

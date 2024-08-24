@@ -14,6 +14,7 @@ import * as Yup from 'yup'
 import { useFacility } from '@zustand/facility/useFacility'
 import { facilityBookingConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
+import { useApplication } from '@zustand/index'
 
 interface FacilityBooking {
 	facilityId: string
@@ -27,9 +28,9 @@ const CreateFacilityBookingPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showStartTime, setShowStartTime] = useState(false)
 	const [showEndTime, setShowEndTime] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const [isEndTimeTouched, setisEndTimeTouched] = useState(false)
-
+	const { isLoading, setIsLoading } = useApplication()
+	const { submitBooking } = useFacility()
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Date is required'),
 		startDate: Yup.date().required('Start time is required'),
@@ -45,6 +46,7 @@ const CreateFacilityBookingPage = () => {
 		initialValues: facilityBookingConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			setIsLoading(true)
 			const response = await submitBooking({
 				facilityId: values.facilityId,
 				startDate: values.startDate.toISOString(),
@@ -57,11 +59,9 @@ const CreateFacilityBookingPage = () => {
 			} else {
 				Alert.alert(response.msg)
 			}
-			setIsSubmitting(false)
+			setIsLoading(false)
 		},
 	})
-
-	const submitBooking = useFacility((state) => state.submitBooking)
 
 	useEffect(() => {
 		formik.setFieldValue('facilityId', facilityId)
@@ -275,7 +275,7 @@ const CreateFacilityBookingPage = () => {
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="border-primary border bg-white p-3 w-full mt-2 flex flex-row self-center"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 						textStyles="text-sm text-primary"
 					/>
 				</View>

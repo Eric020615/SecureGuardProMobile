@@ -11,11 +11,17 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
-import { getAllCountries, getCountriesByCallingCode, getCountryByCca2, ICountry } from 'react-native-international-phone-number'
+import {
+	getAllCountries,
+	getCountriesByCallingCode,
+	getCountryByCca2,
+	ICountry,
+} from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
+import { useApplication } from '@zustand/index'
 
 interface VisitorDetails {
 	visitDate: Date
@@ -31,6 +37,7 @@ const VisitorDetailsEditPage = () => {
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
+	const { setIsLoading } = useApplication()
 	const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
 	const { id } = useLocalSearchParams()
 	const currentPath = usePathname()
@@ -38,11 +45,17 @@ const VisitorDetailsEditPage = () => {
 		getData(id as string)
 	}, [id])
 	const getData = async (id: string) => {
-		const response = await getVisitorDetailsByIdAction(id)
-		if (response.success) {
-			seVisitorDetails(response.data)
-		} else {
-			console.log(response.msg)
+		try {
+			setIsLoading(true)
+			const response = await getVisitorDetailsByIdAction(id)
+			if (response.success) {
+				seVisitorDetails(response.data)
+			} else {
+				console.log(response.msg)
+			}
+			setIsLoading(false)
+		} catch (error) {
+			setIsLoading(false)
 		}
 	}
 
@@ -76,7 +89,9 @@ const VisitorDetailsEditPage = () => {
 				visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
 			visitorName: visitorDetails?.visitorName ? visitorDetails?.visitorName : '',
 			visitorCountryCode: visitorDetails?.visitorContactNumber
-				? getCountriesByCallingCode(parsePhoneNumberFromString(visitorDetails.visitorContactNumber).countryCallingCode)[0]
+				? getCountriesByCallingCode(
+						parsePhoneNumberFromString(visitorDetails.visitorContactNumber).countryCallingCode,
+				  )[0]
 				: null,
 			visitorPhoneNumber: visitorDetails?.visitorContactNumber
 				? parsePhoneNumberFromString(visitorDetails.visitorContactNumber).nationalNumber

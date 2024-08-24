@@ -8,10 +8,12 @@ import CustomButton from '@components/buttons/CustomButton'
 import { VisitorEnum } from '@config/constant/visitor'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
+import { useApplication } from '@zustand/index'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
 	const { getVisitorsAction } = useVisitor()
+	const { setIsLoading } = useApplication()
 	const [visitor, setVisitor] = useState<GetVisitorDto[]>([])
 
 	useEffect(() => {
@@ -24,11 +26,14 @@ const VisitorListPage = () => {
 
 	const getVisitors = async (isPast: boolean) => {
 		try {
+			setIsLoading(true)
 			const response = await getVisitorsAction(isPast)
 			if (response.success) {
 				setVisitor(response.data)
 			}
+			setIsLoading(false)
 		} catch (error) {
+			setIsLoading(false)
 			console.log(error)
 		}
 	}
