@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import 'moment-timezone'
-import { router, useLocalSearchParams } from 'expo-router'
+import { router, useLocalSearchParams, usePathname } from 'expo-router'
 import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
@@ -30,15 +30,13 @@ const VisitorDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const { getVisitorDetailsByIdAction } = useVisitor()
+	const { getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
 	const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
 	const { id } = useLocalSearchParams()
+	const currentPath = usePathname()
 	useEffect(() => {
 		getData(id as string)
 	}, [id])
-	useEffect(() => {
-		console.log(visitorDetails)
-	}, [visitorDetails])
 	const getData = async (id: string) => {
 		const response = await getVisitorDetailsByIdAction(id)
 		if (response.success) {
@@ -86,20 +84,21 @@ const VisitorDetailsEditPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			// const response = await createVisitor({
-			// 	visitorName: values.visitorName,
-			// 	visitorCategory: values.visitorCategory,
-			// 	visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-			// 	visitDateTime:
-			// 		moment(values.visitDate).format('YYYY-MM-DD ') + moment(values.visitTime).format('HH:mm'),
-			// })
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/home')
-			// } else {
-			// 	Alert.alert(response.msg)
-			// }
-			// setIsSubmitting(false)
+			const response = await editVisitorByIdAction({
+				visitorId: id as string,
+				visitorName: values.visitorName,
+				visitorCategory: values.visitorCategory,
+				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
+				visitDateTime:
+					moment(values.visitDate).format('YYYY-MM-DD ') + moment(values.visitTime).format('HH:mm'),
+			})
+			if (response.success) {
+				formik.resetForm()
+				router.push(currentPath.replace('edit', 'view'))
+			} else {
+				Alert.alert(response.msg)
+			}
+			setIsSubmitting(false)
 		},
 	})
 	const onDatePickerChange = (event, selectedDate: Date) => {

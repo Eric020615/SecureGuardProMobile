@@ -4,7 +4,6 @@ import { listUrl } from "../listUrl"
 
 export const createUser = async (IUserInformationDto: UserInformationFormDto, tempToken: string) : Promise<any> => {
     try {
-        console.log(tempToken)
         const [success, response] = await GlobalHandler({
             path: listUrl.user.createUser.path,
             type: listUrl.user.createUser.type,

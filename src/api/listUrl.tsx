@@ -1,5 +1,4 @@
 import { IType } from "@config/constant"
-import { getVisitorDetailsById, getVisitors } from "./visitorService/visitorService"
 
 export const listUrl = {
     auth: {
@@ -46,6 +45,10 @@ export const listUrl = {
         createVisitor: {
             path: "visitor/create/",
             type: IType.post
+        },
+        editVisitorById: {
+            path: "visitor/edit/",
+            type: IType.put
         },
         getVisitors: {
             path: "visitor/",
