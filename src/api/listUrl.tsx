@@ -45,6 +45,18 @@ export const listUrl = {
         createVisitor: {
             path: "visitor/create/",
             type: IType.post
+        },
+        editVisitorById: {
+            path: "visitor/edit/",
+            type: IType.put
+        },
+        getVisitors: {
+            path: "visitor/",
+            type: IType.get
+        },
+        getVisitorDetailsById: {
+            path: "visitor/details",
+            type: IType.get
         }
     }
 }

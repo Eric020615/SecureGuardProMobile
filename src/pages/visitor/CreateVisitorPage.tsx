@@ -8,19 +8,18 @@ import moment from 'moment'
 import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { createVisitorConst } from '@config/constant/visitor'
+import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
-import DocumentPicker from 'react-native-document-picker'
-import CustomModal from '@components/modals/CustomModal'
+import { useApplication } from '@zustand/index'
 
 interface CreateVisitor {
 	visitDate: Date
 	visitTime: Date
-	visitorCategory: string
+	visitorCategory: VisitorEnum
 	visitorName: string
 	visitorCountryCode: ICountry
 	visitorPhoneNumber: string
@@ -30,6 +29,8 @@ const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [showTime, setShowTime] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
+	const { createVisitor } = useVisitor()
+	const { setIsLoading } = useApplication()
 
 	const validationSchema = Yup.object().shape({
 		visitDate: Yup.date().required('Visit date is required'),
@@ -54,6 +55,7 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			setIsLoading(true)
 			const response = await createVisitor({
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
@@ -67,10 +69,9 @@ const CreateVisitorPage = () => {
 			} else {
 				Alert.alert(response.msg)
 			}
-			setIsSubmitting(false)
+			setIsLoading(false)
 		},
 	})
-	const createVisitor = useVisitor((state) => state.createVisitor)
 	const onDatePickerChange = (event, selectedDate: Date) => {
 		if (event.type === 'dismissed') {
 			setShowCalendar(false)

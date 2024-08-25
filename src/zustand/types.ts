@@ -1,3 +1,5 @@
+import { VisitorEnum } from "@config/constant/visitor";
+
 export type GeneralFile = {
 	fileName: string;
 	data: string
@@ -62,15 +64,23 @@ export interface getNoticeDto {
 
 export interface CreateVisitorDto {
 	visitorName: string
-	visitorCategory: string
+	visitorCategory: VisitorEnum
 	visitorContactNumber: string
 	visitDateTime: string
+}
+
+export interface EditVisitorByIdDto {
+    visitorId: string;
+    visitorName: string;
+    visitorCategory: string;
+    visitorContactNumber: string;
+    visitDateTime: string;
 }
 
 export interface GetVisitorDto {
 	visitorId: string
 	visitorName: string
-	visitorCategory: string
+	visitorCategory: VisitorEnum | null
 	visitorContactNumber: string
 	visitDateTime: string
 	createdBy: string

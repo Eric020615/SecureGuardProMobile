@@ -1,12 +1,15 @@
 import { create } from "zustand"
 import { SignInFormDto, UserSignUpFormDto } from "../types"
 import { checkAuth, signIn, signUp } from "@api/authService/authService"
+import { useApplication } from "..";
 
 interface authenticationState {
     isLoading: boolean;
     error: string | null;
     isLogged: boolean;
+    tempToken: string | null;
     setIsLogged: (value: boolean) => void;
+    setTempToken: (value: string | null) => void;
     signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>;
     signInAction: (userSignInForm: SignInFormDto) => Promise<any>;
     checkJwtAuthAction: (token: string) => Promise<any>;
@@ -21,6 +24,8 @@ export const useAuth = create<authenticationState>((set) => ({
     setError: (error) => set({ error }),
     isLogged: false,
     setIsLogged: (isLogged) => set({ isLogged }),
+    tempToken: null,
+    setTempToken: (tempToken) => set({ tempToken }),
     signUpAction: async (userSignUpForm: UserSignUpFormDto) => {
         try {
             set({ isLoading: true, error: null });

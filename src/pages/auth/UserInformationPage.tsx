@@ -18,6 +18,8 @@ import { useUser } from '@zustand/user/useUser'
 import { router } from 'expo-router'
 import { getFile } from '../../helpers/file'
 import { useModal } from '@zustand/modal/useModal'
+import { useAuth } from '@zustand/auth/useAuth'
+import { useApplication } from '@zustand/index'
 
 interface UserInformationForm {
 	firstName: string
@@ -33,7 +35,9 @@ interface UserInformationForm {
 
 const UserInformationPage = () => {
 	const { setCustomFailedModal } = useModal()
+	const { setIsLoading } = useApplication()
 	const { createUserAction, isLoading, error } = useUser();
+	const { tempToken } = useAuth()
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
 	const validationSchema = Yup.object().shape({
@@ -86,6 +90,7 @@ const UserInformationPage = () => {
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			setIsLoading(true)
 			const response = await createUserAction({
 				firstName: values.firstName,
 				lastName: values.lastName,
@@ -99,7 +104,7 @@ const UserInformationPage = () => {
 					const file = await getFile(selectedFile)
 					return file;
 				})): []
-			})
+			}, tempToken)
 			if (response.success) {
 				setCustomFailedModal({
 					title: 'Account updated successfully',
@@ -111,6 +116,7 @@ const UserInformationPage = () => {
 					subtitle: "Please contact our support team for assistance",
 				})
 			}
+			setIsLoading(true)
 		},
 	})
 	return (
@@ -209,8 +215,8 @@ const UserInformationPage = () => {
 											: '-'
 									}
 									display="spinner"
-									minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-									maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
+									minimumDate={null}
+									maximumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
 									mode="date"
 									errorMessage={
 										formik.touched.dateOfBirth &&
@@ -239,7 +245,7 @@ const UserInformationPage = () => {
 											: '-'
 									}
 									display="calendar"
-									minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
+									minimumDate={null}
 									maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
 									mode="date"
 									errorMessage={

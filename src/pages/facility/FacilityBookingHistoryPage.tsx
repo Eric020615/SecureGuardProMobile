@@ -9,10 +9,12 @@ import { getFacilityBookingHistoryDto } from '@zustand/types'
 import { FacilityConst } from '@config/constant/facilities'
 import moment from 'moment'
 import 'moment-timezone'
+import { useApplication } from '@zustand/index'
 
 const FacilityBookingHistoryPage = () => {
-	const getBookingHistory = useFacility((state) => state.getFacilityBookingHistory)
-	const cancelBooking = useFacility((state) => state.cancelBooking)
+	const { getFacilityBookingHistory } = useFacility()
+	const { cancelBooking } = useFacility()
+	const { setIsLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
 	const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([])
 
@@ -25,16 +27,31 @@ const FacilityBookingHistoryPage = () => {
 	}, [isPast])
 
 	const getData = async (isPast: boolean) => {
-		const response = await getBookingHistory(isPast)
-		setBookingHistory(response.data)
+		try {
+			setIsLoading(true)
+			const response = await getFacilityBookingHistory(isPast)
+			if (response.success) {
+				setBookingHistory(response.data)
+				console.log(response.data)
+			}
+			setIsLoading(false)
+		} catch (error) {
+			setIsLoading(false)
+		}
 	}
 
 	const cancel = async (bookingId: string) => {
-		const response = await cancelBooking(bookingId)
-		if (response.success) {
-			router.push('/facilityHistory')
-		} else {
-			Alert.alert(response.msg)
+		try {
+			setIsLoading(true)
+			const response = await cancelBooking(bookingId)
+			if (response.success) {
+				router.push('/facilityHistory')
+			} else {
+				Alert.alert(response.msg)
+			}
+			setIsLoading(false)
+		} catch (error) {
+			setIsLoading(false)
 		}
 	}
 
@@ -80,11 +97,11 @@ const FacilityBookingHistoryPage = () => {
 									<Text className="font-bold">{FacilityConst[x.facilityId]}</Text>
 									<View className="flex flex-row gap-1">
 										<Text className="">
-											{moment(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
+											{moment.utc(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
 										</Text>
 										<Text>-</Text>
 										<Text className="">
-											{moment(x.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')}
+											{moment.utc(x.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')}
 										</Text>
 									</View>
 								</View>
@@ -95,7 +112,7 @@ const FacilityBookingHistoryPage = () => {
 											Cancelled
 										</Text>
 									) : (
-										moment(x.startDate).tz('Asia/Kuala_Lumpur') >
+										moment.utc(x.startDate).tz('Asia/Kuala_Lumpur') >
 											moment().tz('Asia/Kuala_Lumpur') && (
 											<CustomButton
 												containerStyles="flex flex-row self-end h-fit mt-1"

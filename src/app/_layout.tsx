@@ -1,14 +1,15 @@
-import { Stack, SplashScreen, useRouter, usePathname, useGlobalSearchParams } from 'expo-router'
+import { Stack, SplashScreen } from 'expo-router'
 import { useFonts } from 'expo-font'
 import { NativeWindStyleSheet } from 'nativewind'
-import { useEffect, useState } from 'react'
-import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useAuth } from '@zustand/auth/useAuth'
+import { useEffect } from 'react'
 import GlobalProvider from '../context/GlobalProvider'
+import CustomLoader from '@components/loader/CustomLoader'
+import { useApplication } from '@zustand/index'
 
 SplashScreen.preventAutoHideAsync()
 
 const RootLayout = () => {
+	const { isLoading } = useApplication();
 	NativeWindStyleSheet.setOutput({
 		default: 'native',
 	})
@@ -38,6 +39,7 @@ const RootLayout = () => {
 				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
 				<Stack.Screen name="(screen)" options={{ headerShown: false }} />
 			</Stack>
+			{isLoading && (<CustomLoader/>)}
 		</GlobalProvider>
 	)
 }

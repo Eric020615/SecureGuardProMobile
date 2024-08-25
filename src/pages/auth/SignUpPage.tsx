@@ -11,9 +11,11 @@ import { useAuth } from '@zustand/auth/useAuth'
 import { UserSignUpFormDto } from '@zustand/types'
 import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
+import { useApplication } from '@zustand/index'
 
 const SignUpPage = () => {
 	const { setCustomFailedModal } = useModal()
+	const { setIsLoading } = useApplication()
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string()
@@ -32,12 +34,14 @@ const SignUpPage = () => {
 			signUp(values)
 		},
 	})
-	const {signUpAction, isLoading} = useAuth()
+	const {signUpAction, isLoading, setTempToken} = useAuth()
 
 	const signUp = async (values: UserSignUpFormDto) => {
 		try {
+			setIsLoading(true)
 			const response = await signUpAction(values)
 			if (response.success) {
+				setTempToken(response.data)
 				router.replace('/user-information')
 			} else {
 				setCustomFailedModal({
@@ -45,7 +49,9 @@ const SignUpPage = () => {
 					subtitle: response.msg,
 				})
 			}
+			setIsLoading(false)
 		} catch (error) {
+			setIsLoading(false)
 			setCustomFailedModal({
 				title: 'Account Created Failed',
 				subtitle: "Please Retry It Again",
