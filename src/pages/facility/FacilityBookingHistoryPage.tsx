@@ -32,6 +32,7 @@ const FacilityBookingHistoryPage = () => {
 			const response = await getFacilityBookingHistory(isPast)
 			if (response.success) {
 				setBookingHistory(response.data)
+				console.log(response.data)
 			}
 			setIsLoading(false)
 		} catch (error) {
@@ -96,11 +97,11 @@ const FacilityBookingHistoryPage = () => {
 									<Text className="font-bold">{FacilityConst[x.facilityId]}</Text>
 									<View className="flex flex-row gap-1">
 										<Text className="">
-											{moment(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
+											{moment.utc(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
 										</Text>
 										<Text>-</Text>
 										<Text className="">
-											{moment(x.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')}
+											{moment.utc(x.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')}
 										</Text>
 									</View>
 								</View>
@@ -111,7 +112,7 @@ const FacilityBookingHistoryPage = () => {
 											Cancelled
 										</Text>
 									) : (
-										moment(x.startDate).tz('Asia/Kuala_Lumpur') >
+										moment.utc(x.startDate).tz('Asia/Kuala_Lumpur') >
 											moment().tz('Asia/Kuala_Lumpur') && (
 											<CustomButton
 												containerStyles="flex flex-row self-end h-fit mt-1"

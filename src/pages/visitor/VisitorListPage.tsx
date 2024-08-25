@@ -2,6 +2,7 @@ import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import moment from 'moment'
+import 'moment-timezone'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
 import CustomButton from '@components/buttons/CustomButton'
@@ -30,6 +31,7 @@ const VisitorListPage = () => {
 			const response = await getVisitorsAction(isPast)
 			if (response.success) {
 				setVisitor(response.data)
+				console.log(response.data)
 			}
 			setIsLoading(false)
 		} catch (error) {
@@ -79,7 +81,7 @@ const VisitorListPage = () => {
 									<View className="flex flex-row gap-1 items-center">
 										<AntDesign name="clockcircle" color="#10312b" size={16} />
 										<Text className="font-bold">
-											{moment(x.visitDateTime).tz('Asia/Kuala_Lumpur').format('D/M/YYYY, HH:mm')}
+											{moment.utc(x.visitDateTime).tz('Asia/Kuala_Lumpur').format('D/M/YYYY, HH:mm')}
 										</Text>
 									</View>
 								</View>

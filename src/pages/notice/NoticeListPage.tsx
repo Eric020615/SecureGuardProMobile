@@ -58,7 +58,7 @@ const NoticeListPage = () => {
 									<Text>{x.description}</Text>
 								</View>
 								<View>
-									<Text className="font-bold">{moment(x.startDate).fromNow()}</Text>
+									<Text className="font-bold">{moment.utc(x.startDate).fromNow()}</Text>
 								</View>
 							</View>
 						))}
