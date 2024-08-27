@@ -73,7 +73,7 @@ const VisitorDetailsViewPage = () => {
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Visit Date</Text>
 								<Text className="text-base text-black">
-									{visitorDetails.visitDateTime ? moment(visitorDetails.visitDateTime).format("YYYY-MM-DD HH:MM") : ''}
+									{visitorDetails.visitDateTime ? moment(visitorDetails.visitDateTime).tz('Asia/Kuala_Lumpur').format("YYYY-MM-DD HH:mm") : ''}
 								</Text>
 							</View>
 						</>

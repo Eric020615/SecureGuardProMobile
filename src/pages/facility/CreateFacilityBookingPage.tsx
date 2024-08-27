@@ -49,8 +49,8 @@ const CreateFacilityBookingPage = () => {
 			setIsLoading(true)
 			const response = await submitBooking({
 				facilityId: values.facilityId,
-				startDate: values.startDate.toISOString(),
-				endDate: values.endDate.toISOString(),
+				startDate: moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD HH:mm'),
+				endDate: moment(formik.values.endDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD HH:mm'),
 				numOfGuest: values.numofGuest,
 			})
 			if (response.success) {

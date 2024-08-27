@@ -105,7 +105,7 @@ const VisitorDetailsEditPage = () => {
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime:
-					moment(values.visitDate).format('YYYY-MM-DD ') + moment(values.visitTime).format('HH:mm'),
+					moment(values.visitDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD ') + moment(values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm'),
 			})
 			if (response.success) {
 				formik.resetForm()
