@@ -7,9 +7,6 @@ import CustomFormField from '@components/form/CustomFormField'
 import { userInforformDataJson } from '@config/constant/auth'
 import CustomButton from '@components/buttons/CustomButton'
 import { ICountry } from 'react-native-international-phone-number'
-// import { useUser } from "@zustand/userService/user";
-import moment from 'moment'
-import 'moment-timezone'
 import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import * as DocumentPicker from 'react-native-document-picker'
@@ -20,6 +17,8 @@ import { getFile } from '../../helpers/file'
 import { useModal } from '@zustand/modal/useModal'
 import { useAuth } from '@zustand/auth/useAuth'
 import { useApplication } from '@zustand/index'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { ITimeFormat } from '@config/constant'
 
 interface UserInformationForm {
 	firstName: string
@@ -36,7 +35,7 @@ interface UserInformationForm {
 const UserInformationPage = () => {
 	const { setCustomFailedModal } = useModal()
 	const { setIsLoading } = useApplication()
-	const { createUserAction, isLoading, error } = useUser();
+	const { createUserAction, isLoading, error } = useUser()
 	const { tempToken } = useAuth()
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
@@ -57,11 +56,7 @@ const UserInformationPage = () => {
 		dateOfBirth: Yup.date().required('Date of Birth is required'),
 		gender: Yup.string().required('Gender is required'),
 	})
-	const onDatePickerChange = (event, selectedDate: Date) => {
-		if (event.type === 'dismissed') {
-			setShowCalendar(false)
-			return
-		}
+	const onDatePickerChange = (selectedDate: Date) => {
 		formik.setFieldValue('dateOfBirth', selectedDate)
 		setShowCalendar(false)
 	}
@@ -70,7 +65,7 @@ const UserInformationPage = () => {
 			const pickerFile = await DocumentPicker.pick({
 				type: [DocumentPicker.types.allFiles],
 				allowMultiSelection: true,
-				copyTo: "cachesDirectory"
+				copyTo: 'cachesDirectory',
 			})
 			setSelectedFiles(pickerFile)
 		} catch (error) {
@@ -79,7 +74,7 @@ const UserInformationPage = () => {
 			} else {
 				setCustomFailedModal({
 					title: 'File Selection Failed',
-					subtitle: "Please try again or contact support if the issue persists.",
+					subtitle: 'Please try again or contact support if the issue persists.',
 				})
 			}
 		}
@@ -91,41 +86,51 @@ const UserInformationPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setIsLoading(true)
-			const response = await createUserAction({
-				firstName: values.firstName,
-				lastName: values.lastName,
-				userName: values.userName,
-				contactNumber: values.countryCode.callingCode + values.phoneNumber,
-				gender: values.gender,
-				floorNumber: values.floor,
-				unitNumber: values.unitNumber,
-				dateOfBirth: values.dateOfBirth.toUTCString(),
-				supportedFiles: selectedFiles.length > 0 ? await Promise.all(selectedFiles.map(async (selectedFile) => {
-					const file = await getFile(selectedFile)
-					return file;
-				})): []
-			}, tempToken)
+			const response = await createUserAction(
+				{
+					firstName: values.firstName,
+					lastName: values.lastName,
+					userName: values.userName,
+					contactNumber: values.countryCode.callingCode + values.phoneNumber,
+					gender: values.gender,
+					floorNumber: values.floor,
+					unitNumber: values.unitNumber,
+					dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+					supportedFiles:
+						selectedFiles.length > 0
+							? await Promise.all(
+									selectedFiles.map(async (selectedFile) => {
+										const file = await getFile(selectedFile)
+										return file
+									}),
+							  )
+							: [],
+				},
+				tempToken,
+			)
 			if (response.success) {
 				setCustomFailedModal({
 					title: 'Account updated successfully',
-					subtitle: "Please wait for system admin approval to log in",
+					subtitle: 'Please wait for system admin approval to log in',
 				})
 			} else {
 				setCustomFailedModal({
 					title: 'Account updated failed',
-					subtitle: "Please contact our support team for assistance",
+					subtitle: 'Please contact our support team for assistance',
 				})
 			}
-			setIsLoading(true)
+			setIsLoading(false)
 		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
-				<CustomModal customConfirmButtonPress={() => {
-					formik.resetForm()
-					router.push("/")
-				}}/>
+				<CustomModal
+					customConfirmButtonPress={() => {
+						formik.resetForm()
+						router.push('/')
+					}}
+				/>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-8">
 					<View className="items-center mb-7">
 						<Text className="text-5xl font-bold text-primary">Welcome</Text>
@@ -197,67 +202,28 @@ const UserInformationPage = () => {
 					/>
 					<View className="flex flex-row mb-3">
 						<View className="flex-1 mr-2">
-							{Platform.OS === 'ios' ? (
-								<CustomFormField
-									title="Date of Birth"
-									textStyle="text-base"
-									type="DateTime"
-									platform="ios"
-									selectedDate={
-										formik.values.dateOfBirth ? formik.values.dateOfBirth : moment().toDate()
-									}
-									onChange={onDatePickerChange}
-									buttonTitle={
-										formik.values.dateOfBirth
-											? moment(formik.values.dateOfBirth)
-													.tz('Asia/Kuala_Lumpur')
-													.format('DD MMM YYYY')
-											: '-'
-									}
-									display="spinner"
-									minimumDate={null}
-									maximumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-									mode="date"
-									errorMessage={
-										formik.touched.dateOfBirth &&
-										formik.errors.dateOfBirth &&
-										(formik.errors.dateOfBirth as string)
-									}
-									timeZoneName="Asia/Kuala_Lumpur"
-									setShowDateTime={setShowCalendar}
-									showDateTime={showCalendar}
-								/>
-							) : (
-								<CustomFormField
-									title="Date of Birth"
-									textStyle="text-base"
-									type="DateTime"
-									platform="android"
-									selectedDate={
-										formik.values.dateOfBirth ? formik.values.dateOfBirth : moment().toDate()
-									}
-									onChange={onDatePickerChange}
-									buttonTitle={
-										formik.values.dateOfBirth
-											? moment(formik.values.dateOfBirth)
-													.tz('Asia/Kuala_Lumpur')
-													.format('DD MMM YYYY')
-											: '-'
-									}
-									display="calendar"
-									minimumDate={null}
-									maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-									mode="date"
-									errorMessage={
-										formik.touched.dateOfBirth &&
-										formik.errors.dateOfBirth &&
-										(formik.errors.dateOfBirth as string)
-									}
-									timeZoneName="Asia/Kuala_Lumpur"
-									setShowDateTime={setShowCalendar}
-									showDateTime={showCalendar}
-								/>
-							)}
+							<CustomFormField
+								title="Date of Birth"
+								textStyle="text-base"
+								type="DateTime"
+								selectedDate={
+									formik.values.dateOfBirth ? 
+									formik.values.dateOfBirth : 
+									getTodayDate()
+								}
+								onChange={onDatePickerChange}
+								buttonTitle={
+									getLocalDateString(formik.values.dateOfBirth, ITimeFormat.date)
+								}
+								mode="date"
+								errorMessage={
+									formik.touched.dateOfBirth &&
+									formik.errors.dateOfBirth &&
+									(formik.errors.dateOfBirth as string)
+								}
+								setShowDateTime={setShowCalendar}
+								showDateTime={showCalendar}
+							/>
 						</View>
 						<CustomFormField
 							title="Gender"

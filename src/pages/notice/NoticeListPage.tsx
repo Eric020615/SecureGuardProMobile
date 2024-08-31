@@ -3,12 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNotice } from '@zustand/notice/useNotice'
 import { getNoticeDto } from '@zustand/types'
-import moment from 'moment'
-import 'moment-timezone'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '@zustand/index'
+import { getUTCRelativeTimeFromNow } from '../../helpers/time'
 
 const NoticeListPage = () => {
 	const { getNotice } = useNotice()
@@ -58,7 +57,9 @@ const NoticeListPage = () => {
 									<Text>{x.description}</Text>
 								</View>
 								<View>
-									<Text className="font-bold">{moment.utc(x.startDate).fromNow()}</Text>
+									<Text className="font-bold">{
+										getUTCRelativeTimeFromNow(new Date(x.startDate))
+									}</Text>
 								</View>
 							</View>
 						))}

@@ -1,8 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import moment from 'moment'
-import 'moment-timezone'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
 import CustomButton from '@components/buttons/CustomButton'
@@ -10,6 +8,8 @@ import { VisitorEnum } from '@config/constant/visitor'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { useApplication } from '@zustand/index'
+import { ITimeFormat } from '@config/constant'
+import { convertUTCStringToLocalDateString } from '../../helpers/time'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
@@ -31,12 +31,10 @@ const VisitorListPage = () => {
 			const response = await getVisitorsAction(isPast)
 			if (response.success) {
 				setVisitor(response.data)
-				console.log(response.data)
 			}
 			setIsLoading(false)
 		} catch (error) {
 			setIsLoading(false)
-			console.log(error)
 		}
 	}
 
@@ -81,7 +79,7 @@ const VisitorListPage = () => {
 									<View className="flex flex-row gap-1 items-center">
 										<AntDesign name="clockcircle" color="#10312b" size={16} />
 										<Text className="font-bold">
-											{moment.utc(x.visitDateTime).tz('Asia/Kuala_Lumpur').format('D/M/YYYY, HH:mm')}
+											{convertUTCStringToLocalDateString(x.visitDateTime, ITimeFormat.dateTime)}
 										</Text>
 									</View>
 								</View>

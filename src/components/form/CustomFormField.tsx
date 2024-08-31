@@ -2,7 +2,7 @@ import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import { icons } from '@assets/index'
 import PhoneInput, { ICountry } from 'react-native-international-phone-number'
-import DatePicker, { DateTimePickerEvent } from '@react-native-community/datetimepicker'
+import DatePicker from 'react-native-date-picker'
 import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { Picker } from '@react-native-picker/picker'
@@ -24,38 +24,18 @@ export interface CustomTextInputProps extends CustomFormFieldProps {
 	onChangeText: (e: any) => void
 }
 
-type IOSMode = 'date' | 'time' | 'datetime' | 'countdown'
-type AndroidMode = 'date' | 'time'
-type Display = 'spinner' | 'default' | 'clock' | 'calendar'
-type IOSDisplay = 'default' | 'compact' | 'inline' | 'spinner'
-// type MinuteInterval = 1 | 2 | 3 | 4 | 5 | 6 | 10 | 12 | 15 | 20 | 30
-// type DAY_OF_WEEK = 0 | 1 | 2 | 3 | 4 | 5 | 6
-
-export interface CustomAndroidDateTimeInputProps extends CustomDateInputProps {
-	platform: 'android'
-	mode: AndroidMode
-	display: Display
-	is24Hour?: boolean
-}
-
-export interface CustomIOSDateTimeInputProps extends CustomDateInputProps {
-	platform: 'ios'
-	mode: IOSMode
-	display: IOSDisplay
-}
-
 export interface CustomDateInputProps extends CustomFormFieldProps {
 	type: 'DateTime'
 	buttonContainerStyles?: string
 	buttonTextStyles?: string
 	buttonTitle: string
-	timeZoneName: string
-	minimumDate: Date
-	maximumDate: Date
+	mode: 'date' | 'time' | 'datetime'
+	minimumDate?: Date
+	maximumDate?: Date
 	selectedDate: Date
 	showDateTime: boolean
 	setShowDateTime: Dispatch<SetStateAction<boolean>>
-	onChange: (event: DateTimePickerEvent, date?: Date) => void
+	onChange: (date?: Date) => void
 }
 
 export interface CustomPickerInputProps extends CustomFormFieldProps {
@@ -85,8 +65,7 @@ const CustomFormField = (
 	props:
 		| CustomPhoneInputProps
 		| CustomTextInputProps
-		| CustomAndroidDateTimeInputProps
-		| CustomIOSDateTimeInputProps
+		| CustomDateInputProps
 		| CustomPickerInputProps
 		| CustomFilePickerInputProps,
 ) => {
@@ -147,36 +126,6 @@ const CustomFormField = (
 					</View>
 				)
 			case 'DateTime':
-				const defineCalendar = () => {
-					switch (props.platform) {
-						case 'android':
-							return (
-								<DatePicker
-									mode={props.mode}
-									timeZoneName={props.timeZoneName}
-									value={props.selectedDate}
-									display={props.display}
-									minimumDate={props.minimumDate}
-									maximumDate={props.maximumDate}
-									onChange={props.onChange}
-									is24Hour={props.is24Hour}
-								/>
-							)
-						case 'ios':
-							return (
-								<DatePicker
-									className="justify-between ml-auto"
-									mode={props.mode}
-									timeZoneName={props.timeZoneName}
-									value={props.selectedDate}
-									display={props.display}
-									minimumDate={props.minimumDate}
-									maximumDate={props.maximumDate}
-									onChange={props.onChange}
-								/>
-							)
-					}
-				}
 				return (
 					<>
 						<View>
@@ -192,7 +141,19 @@ const CustomFormField = (
 								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
 								iconStyles=""
 							/>
-							{props.showDateTime && defineCalendar()}
+							<DatePicker
+								modal
+								open={props.showDateTime}
+								date={props.selectedDate}
+								onConfirm={props.onChange}
+								onCancel={() => {
+									props.setShowDateTime(!props.showDateTime)
+								}}
+								timeZoneOffsetInMinutes={ 8 * 60 }
+								mode={props.mode}
+								minimumDate={props.minimumDate}
+								maximumDate={props.maximumDate}
+							/>
 						</View>
 					</>
 				)
@@ -222,9 +183,7 @@ const CustomFormField = (
 									<CustomButton
 										handlePress={props.clearFile}
 										containerStyles="mx-5"
-										reactNativeIcons={
-											<Iconicons name="close-circle" color={'#10312b'} size={30} />
-										}
+										reactNativeIcons={<Iconicons name="close-circle" color={'#10312b'} size={30} />}
 									/>
 									<View className="flex flex-col">
 										{props.selectedFiles.map((selectedFile, id) => (

@@ -7,9 +7,9 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFacility } from '@zustand/facility/useFacility'
 import { getFacilityBookingHistoryDto } from '@zustand/types'
 import { FacilityConst } from '@config/constant/facilities'
-import moment from 'moment'
-import 'moment-timezone'
 import { useApplication } from '@zustand/index'
+import { convertDateStringToDate, convertUTCStringToLocalDateString, getTodayDate } from '../../helpers/time'
+import { ITimeFormat } from '@config/constant'
 
 const FacilityBookingHistoryPage = () => {
 	const { getFacilityBookingHistory } = useFacility()
@@ -97,11 +97,11 @@ const FacilityBookingHistoryPage = () => {
 									<Text className="font-bold">{FacilityConst[x.facilityId]}</Text>
 									<View className="flex flex-row gap-1">
 										<Text className="">
-											{moment.utc(x.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY, HH:mm')}
+											{convertUTCStringToLocalDateString(x.startDate, ITimeFormat.dateTime)}
 										</Text>
 										<Text>-</Text>
 										<Text className="">
-											{moment.utc(x.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')}
+											{convertUTCStringToLocalDateString(x.endDate, ITimeFormat.time)}
 										</Text>
 									</View>
 								</View>
@@ -112,8 +112,7 @@ const FacilityBookingHistoryPage = () => {
 											Cancelled
 										</Text>
 									) : (
-										moment.utc(x.startDate).tz('Asia/Kuala_Lumpur') >
-											moment().tz('Asia/Kuala_Lumpur') && (
+										convertDateStringToDate(x.startDate) > getTodayDate() && (
 											<CustomButton
 												containerStyles="flex flex-row self-end h-fit mt-1"
 												handlePress={() => {

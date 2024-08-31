@@ -5,39 +5,36 @@ import Iconicons from 'react-native-vector-icons/Ionicons'
 import CustomButton from '@components/buttons/CustomButton'
 import CustomSwiper from '@components/form/CustomSwiper'
 import { router } from 'expo-router'
-import { FacilityList, GuestList } from '@config/listOption/facility'
-import DatePicker from '@react-native-community/datetimepicker'
-import moment from 'moment'
-import 'moment-timezone'
+import { BookingDurationList, FacilityList, GuestList } from '@config/listOption/facility'
+import moment from 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useFacility } from '@zustand/facility/useFacility'
 import { facilityBookingConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
 import { useApplication } from '@zustand/index'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { ITimeFormat } from '@config/constant'
 
 interface FacilityBooking {
 	facilityId: string
 	startDate: Date
-	endDate: Date
+	duration: number
 	numofGuest: number
 }
 
 const CreateFacilityBookingPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [showStartTime, setShowStartTime] = useState(false)
-	const [showEndTime, setShowEndTime] = useState(false)
-	const [isEndTimeTouched, setisEndTimeTouched] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
 	const { submitBooking } = useFacility()
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Date is required'),
-		startDate: Yup.date().required('Start time is required'),
-		endDate: Yup.date()
-			.required('End time is required')
-			.min(Yup.ref('startDate'), 'End date must be after start date'),
-		numofGuest: Yup.number().required('Number of guest is required'),
+		startDate: Yup.date()
+			.required('Start time is required')
+			.min(getTodayDate(), 'Start date must be after now'),
+		duration: Yup.number().required('Booking duration is required'),
+		numofGuest: Yup.number().required('Number of guest is required')
 	})
 
 	const formik = useFormik<FacilityBooking>({
@@ -47,10 +44,12 @@ const CreateFacilityBookingPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setIsLoading(true)
+			console.log(values)
 			const response = await submitBooking({
 				facilityId: values.facilityId,
-				startDate: moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD HH:mm'),
-				endDate: moment(formik.values.endDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD HH:mm'),
+				startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
+				endDate: getUTCDateString(moment(formik.values.startDate)
+					.add(formik.values.duration, 'hours').toDate(), ITimeFormat.dateTime),
 				numOfGuest: values.numofGuest,
 			})
 			if (response.success) {
@@ -67,34 +66,9 @@ const CreateFacilityBookingPage = () => {
 		formik.setFieldValue('facilityId', facilityId)
 	}, [facilityId])
 
-	const onDatePickerChange = (event, selectedDate: Date) => {
-		formik.handleBlur('startDate')
-		if (event.type === 'dismissed') {
-			setShowCalendar(false)
-			return
-		}
+	const onDatePickerChange = (selectedDate: Date) => {
+		formik.handleBlur('selectedDate')
 		formik.setFieldValue('startDate', selectedDate)
-		formik.setFieldValue('endDate', selectedDate)
-		setShowCalendar(false)
-	}
-
-	const onStartTimePickerChange = (event, selectedTime) => {
-		if (event.type === 'dismissed') {
-			setShowStartTime(false)
-			return
-		}
-		formik.setFieldValue('startDate', selectedTime)
-		setShowStartTime(false)
-	}
-
-	const onEndTimePickerChange = (event, selectedTime) => {
-		setisEndTimeTouched(true)
-		if (event.type === 'dismissed') {
-			setShowEndTime(false)
-			return
-		}
-		formik.setFieldValue('endDate', selectedTime)
-		setShowEndTime(false)
 	}
 
 	return (
@@ -120,141 +94,46 @@ const CreateFacilityBookingPage = () => {
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Facilities</Text>
 					<CustomSwiper item={FacilityList} onChangeIndex={setFacilityId} />
-					{/* form */}
-					{Platform.OS === 'ios' ? (
-						<CustomFormField
-							title="Booking Date"
-							textStyle="text-base font-bold"
-							type="DateTime"
-							platform="ios"
-							selectedDate={formik.values.startDate ? formik.values.startDate : moment().toDate()}
-							onChange={onDatePickerChange}
-							buttonTitle={
-								formik.values.startDate
-									? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY')
-									: '-'
-							}
-							display="spinner"
-							minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-							maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-							mode="date"
-							errorMessage={
-								formik.touched.startDate &&
-								formik.errors.startDate &&
-								(formik.errors.startDate as string)
-							}
-							timeZoneName="Asia/Kuala_Lumpur"
-							setShowDateTime={setShowCalendar}
-							showDateTime={showCalendar}
-						/>
-					) : (
-						<CustomFormField
-							title="Booking Date"
-							textStyle="text-base font-bold"
-							type="DateTime"
-							platform="android"
-							selectedDate={formik.values.startDate ? formik.values.startDate : moment().toDate()}
-							onChange={onDatePickerChange}
-							buttonTitle={
-								formik.values.startDate
-									? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('DD MMM YYYY')
-									: '-'
-							}
-							display="calendar"
-							minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-							maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-							mode="date"
-							errorMessage={
-								formik.touched.startDate &&
-								formik.errors.startDate &&
-								(formik.errors.startDate as string)
-							}
-							timeZoneName="Asia/Kuala_Lumpur"
-							setShowDateTime={setShowCalendar}
-							showDateTime={showCalendar}
-						/>
-					)}
-					<View className="flex flex-row gap-3 mt-1">
-						<View className="flex-1">
-							<Text className="text-base font-bold">Start Time</Text>
-							<CustomButton
-								containerStyles="items-center h-fit bg-primary p-3 mt-3"
-								handlePress={() => {
-									setShowStartTime(true)
-								}}
-								title={
-									formik.values.startDate
-										? moment(formik.values.startDate).tz('Asia/Kuala_Lumpur').format('HH:mm')
-										: '-'
-								}
-								textStyles="text-sm text-white"
-							/>
-							{showStartTime && (
-								<>
-									{Platform.OS === 'ios' ? (
-										<DatePicker
-											timeZoneName="Asia/Kuala_Lumpur"
-											mode="time"
-											value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
-											display="spinner"
-											is24Hour={true}
-											onChange={onStartTimePickerChange}
-										/>
-									) : (
-										<DatePicker
-											timeZoneName="Asia/Kuala_Lumpur"
-											mode="time"
-											value={formik.values.startDate ? formik.values.startDate : moment().toDate()}
-											display="spinner"
-											is24Hour={true}
-											onChange={onStartTimePickerChange}
-										/>
-									)}
-								</>
-							)}
-						</View>
-						<View className="flex-1">
-							<Text className="text-base font-bold">End Time</Text>
-							<CustomButton
-								containerStyles="items-center h-fit bg-primary p-3 mt-3"
-								handlePress={() => {
-									setShowEndTime(true)
-								}}
-								title={
-									formik.values.endDate
-										? moment(formik.values.endDate).tz('Asia/Kuala_Lumpur').format('HH:mm')
-										: '-'
-								}
-								textStyles="text-sm text-white"
-							/>
-							{showEndTime && (
-								<>
-									{Platform.OS === 'ios' ? (
-										<DatePicker
-											timeZoneName="Asia/Kuala_Lumpur"
-											mode="time"
-											value={formik.values.endDate ? formik.values.endDate : new Date()}
-											display="spinner"
-											is24Hour={true}
-											onChange={onEndTimePickerChange}
-										/>
-									) : (
-										<DatePicker
-											timeZoneName="Asia/Kuala_Lumpur"
-											mode="time"
-											value={formik.values.endDate ? formik.values.endDate : new Date()}
-											display="spinner"
-											is24Hour={true}
-											onChange={onEndTimePickerChange}
-										/>
-									)}
-								</>
-							)}
-							{isEndTimeTouched && formik.errors.endDate && (
-								<Text className="text-red-700 text-xs">{formik.errors.endDate as string}</Text>
-							)}
-						</View>
-					</View>
+					<CustomFormField
+						title="Booking Date"
+						textStyle="text-base font-bold"
+						type="DateTime"
+						selectedDate={
+							formik.values.startDate 
+							? formik.values.startDate : 
+							moment().toDate()
+						}
+						onChange={onDatePickerChange}
+						buttonTitle={
+							getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)
+						}
+						minimumDate={moment().toDate()}
+						maximumDate={moment().add(2, 'week').toDate()}
+						mode="datetime"
+						errorMessage={
+							formik.touched.startDate &&
+							formik.errors.startDate &&
+							(formik.errors.startDate as string)
+						}
+						setShowDateTime={setShowCalendar}
+						showDateTime={showCalendar}
+					/>
+					<CustomFormField
+						containerStyle="mt-4"
+						title="Duration"
+						textStyle="text-base font-bold"
+						type="Picker"
+						selectedValue={formik.values.duration}
+						onValueChange={(e) => {
+							formik.setFieldValue('duration', e)
+						}}
+						items={BookingDurationList}
+						errorMessage={
+							formik.touched.duration &&
+							formik.errors.duration &&
+							(formik.errors.duration as string)
+						}
+					/>
 					<CustomFormField
 						containerStyle="my-4"
 						title="Number of Guests"

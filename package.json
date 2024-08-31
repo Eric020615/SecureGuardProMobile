@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-native-community/datetimepicker": "8.0.1",
     "@react-native-picker/picker": "2.7.5",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/react": "~18.2.45",
@@ -41,6 +40,7 @@
     "react-native": "0.74.3",
     "react-native-animatable": "^1.4.0",
     "react-native-blob-util": "^0.19.11",
+    "react-native-date-picker": "^5.0.5",
     "react-native-document-picker": "^9.3.0",
     "react-native-international-phone-number": "^0.7.6",
     "react-native-modal": "^13.0.1",

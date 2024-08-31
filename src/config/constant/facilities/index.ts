@@ -7,6 +7,6 @@ export const FacilityConst = {
 export const facilityBookingConst = {
     facilityId: "",
     startDate: null,
-    endDate: null,
+    duration: null,
     numofGuest: null,
 }

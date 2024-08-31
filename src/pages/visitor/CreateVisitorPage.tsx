@@ -15,10 +15,11 @@ import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { useApplication } from '@zustand/index'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { ITimeFormat } from '@config/constant'
 
 interface CreateVisitor {
-	visitDate: Date
-	visitTime: Date
+	visitDateTime: Date
 	visitorCategory: VisitorEnum
 	visitorName: string
 	visitorCountryCode: ICountry
@@ -33,8 +34,7 @@ const CreateVisitorPage = () => {
 	const { setIsLoading } = useApplication()
 
 	const validationSchema = Yup.object().shape({
-		visitDate: Yup.date().required('Visit date is required'),
-		visitTime: Yup.date().required('Visit time is required'),
+		visitDateTime: Yup.date().required('Visit date is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
 		visitorPhoneNumber: Yup.string()
@@ -60,8 +60,7 @@ const CreateVisitorPage = () => {
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-				visitDateTime:
-					moment(values.visitDate).tz('Asia/Kuala_Lumpur').format('YYYY-MM-DD ') + moment(values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm'),
+				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
 			})
 			if (response.success) {
 				formik.resetForm()
@@ -72,22 +71,9 @@ const CreateVisitorPage = () => {
 			setIsLoading(false)
 		},
 	})
-	const onDatePickerChange = (event, selectedDate: Date) => {
-		if (event.type === 'dismissed') {
-			setShowCalendar(false)
-			return
-		}
-		formik.setFieldValue('visitDate', selectedDate)
+	const onDatePickerChange = (selectedDate: Date) => {
+		formik.setFieldValue('visitDateTime', selectedDate)
 		setShowCalendar(false)
-	}
-
-	const onTimePickerChange = (event, selectedTime) => {
-		if (event.type === 'dismissed') {
-			setShowTime(false)
-			return
-		}
-		formik.setFieldValue('visitTime', selectedTime)
-		setShowTime(false)
 	}
 
 	return (
@@ -160,126 +146,27 @@ const CreateVisitorPage = () => {
 						/>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
-								{Platform.OS === 'ios' ? (
-									<CustomFormField
-										title="Visit Date"
-										textStyle="text-base font-bold"
-										type="DateTime"
-										platform="ios"
-										selectedDate={
-											formik.values.visitDate ? formik.values.visitDate : moment().toDate()
-										}
-										onChange={onDatePickerChange}
-										buttonTitle={
-											formik.values.visitDate
-												? moment(formik.values.visitDate)
-														.tz('Asia/Kuala_Lumpur')
-														.format('DD MMM YYYY')
-												: '-'
-										}
-										display="spinner"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										mode="date"
-										errorMessage={
-											formik.touched.visitDate &&
-											formik.errors.visitDate &&
-											(formik.errors.visitDate as string)
-										}
-										timeZoneName="Asia/Kuala_Lumpur"
-										setShowDateTime={setShowCalendar}
-										showDateTime={showCalendar}
-									/>
-								) : (
-									<CustomFormField
-										title="Visit Date"
-										textStyle="text-base font-bold"
-										type="DateTime"
-										platform="android"
-										selectedDate={
-											formik.values.visitDate ? formik.values.visitDate : moment().toDate()
-										}
-										onChange={onDatePickerChange}
-										buttonTitle={
-											formik.values.visitDate
-												? moment(formik.values.visitDate)
-														.tz('Asia/Kuala_Lumpur')
-														.format('DD MMM YYYY')
-												: '-'
-										}
-										display="calendar"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										mode="date"
-										errorMessage={
-											formik.touched.visitDate &&
-											formik.errors.visitDate &&
-											(formik.errors.visitDate as string)
-										}
-										timeZoneName="Asia/Kuala_Lumpur"
-										setShowDateTime={setShowCalendar}
-										showDateTime={showCalendar}
-									/>
-								)}
-							</View>
-							<View className="flex-1">
-								{Platform.OS === 'ios' ? (
-									<CustomFormField
-										title="Visit Time"
-										textStyle="text-base font-bold"
-										type="DateTime"
-										platform="ios"
-										selectedDate={
-											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
-										}
-										onChange={onTimePickerChange}
-										buttonTitle={
-											formik.values.visitTime
-												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-												: '-'
-										}
-										display="spinner"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										mode="time"
-										errorMessage={
-											formik.touched.visitTime &&
-											formik.errors.visitTime &&
-											(formik.errors.visitTime as string)
-										}
-										timeZoneName="Asia/Kuala_Lumpur"
-										setShowDateTime={setShowTime}
-										showDateTime={showTime}
-									/>
-								) : (
-									<CustomFormField
-										title="Visit Times"
-										textStyle="text-base font-bold"
-										type="DateTime"
-										platform="android"
-										selectedDate={
-											formik.values.visitTime ? formik.values.visitTime : moment().toDate()
-										}
-										onChange={onTimePickerChange}
-										buttonTitle={
-											formik.values.visitTime
-												? moment(formik.values.visitTime).tz('Asia/Kuala_Lumpur').format('HH:mm')
-												: '-'
-										}
-										display="spinner"
-										minimumDate={moment().tz('Asia/Kuala_Lumpur').toDate()}
-										maximumDate={moment().tz('Asia/Kuala_Lumpur').add(2, 'week').toDate()}
-										mode="time"
-										errorMessage={
-											formik.touched.visitTime &&
-											formik.errors.visitTime &&
-											(formik.errors.visitTime as string)
-										}
-										timeZoneName="Asia/Kuala_Lumpur"
-										setShowDateTime={setShowTime}
-										showDateTime={showTime}
-									/>
-								)}
+								<CustomFormField
+									title="Visit Date"
+									textStyle="text-base font-bold"
+									type="DateTime"
+									selectedDate={
+										formik.values.visitDateTime ? formik.values.visitDateTime : getTodayDate()
+									}
+									onChange={onDatePickerChange}
+									buttonTitle={
+										getLocalDateString(formik.values.visitDateTime, ITimeFormat.dateTime)
+									}
+									minimumDate={getTodayDate()}
+									mode="datetime"
+									errorMessage={
+										formik.touched.visitDateTime &&
+										formik.errors.visitDateTime &&
+										(formik.errors.visitDateTime as string)
+									}
+									setShowDateTime={setShowCalendar}
+									showDateTime={showCalendar}
+								/>
 							</View>
 						</View>
 						<CustomButton
