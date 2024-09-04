@@ -85,41 +85,46 @@ const UserInformationPage = () => {
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			const response = await createUserAction(
-				{
-					firstName: values.firstName,
-					lastName: values.lastName,
-					userName: values.userName,
-					contactNumber: values.countryCode.callingCode + values.phoneNumber,
-					gender: values.gender,
-					floorNumber: values.floor,
-					unitNumber: values.unitNumber,
-					dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
-					supportedFiles:
-						selectedFiles.length > 0
-							? await Promise.all(
-									selectedFiles.map(async (selectedFile) => {
-										const file = await getFile(selectedFile)
-										return file
-									}),
-							  )
-							: [],
-				},
-				tempToken,
-			)
-			if (response.success) {
-				setCustomFailedModal({
-					title: 'Account updated successfully',
-					subtitle: 'Please wait for system admin approval to log in',
-				})
-			} else {
-				setCustomFailedModal({
-					title: 'Account updated failed',
-					subtitle: 'Please contact our support team for assistance',
-				})
+			try {
+				setIsLoading(true)
+				const response = await createUserAction(
+					{
+						firstName: values.firstName,
+						lastName: values.lastName,
+						userName: values.userName,
+						contactNumber: values.countryCode.callingCode + values.phoneNumber,
+						gender: values.gender,
+						floorNumber: values.floor,
+						unitNumber: values.unitNumber,
+						dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+						supportedFiles:
+							selectedFiles.length > 0
+								? await Promise.all(
+										selectedFiles.map(async (selectedFile) => {
+											const file = await getFile(selectedFile)
+											return file
+										}),
+								  )
+								: [],
+					},
+					tempToken,
+				)
+				if (response.success) {
+					setCustomFailedModal({
+						title: 'Account updated successfully',
+						subtitle: 'Please wait for system admin approval to log in',
+					})
+				} else {
+					setCustomFailedModal({
+						title: 'Account updated failed',
+						subtitle: 'Please contact our support team for assistance',
+					})
+				}
+			} catch (error) {
+				console.log(error)
+			} finally {
+				setIsLoading(false)
 			}
-			setIsLoading(false)
 		},
 	})
 	return (
@@ -207,14 +212,10 @@ const UserInformationPage = () => {
 								textStyle="text-base"
 								type="DateTime"
 								selectedDate={
-									formik.values.dateOfBirth ? 
-									formik.values.dateOfBirth : 
-									getTodayDate()
+									formik.values.dateOfBirth ? formik.values.dateOfBirth : getTodayDate()
 								}
 								onChange={onDatePickerChange}
-								buttonTitle={
-									getLocalDateString(formik.values.dateOfBirth, ITimeFormat.date)
-								}
+								buttonTitle={getLocalDateString(formik.values.dateOfBirth, ITimeFormat.date)}
 								mode="date"
 								errorMessage={
 									formik.touched.dateOfBirth &&
