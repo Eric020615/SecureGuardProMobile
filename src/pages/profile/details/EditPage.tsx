@@ -2,14 +2,13 @@ import { ScrollView, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router, usePathname } from 'expo-router'
 import { useApplication } from '@zustand/index'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { GetUserProfileByIdDto } from '@zustand/types'
-import { Gender, RoleEnum } from '@config/constant/user'
+import { Gender } from '@config/constant/user'
 import {
 	convertUTCStringToLocalDate,
 	getLocalDateString,
@@ -36,10 +35,9 @@ interface UserDetails {
 
 const ProfileDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
-	const { setIsLoading } = useApplication()
+	const {isLoading, setIsLoading} = useApplication()
 	const [userDetails, setUserDetails] = useState<GetUserProfileByIdDto>()
-	const { getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
+	const {getUserProfileByIdAction, editUserProfileByIdAction} = useUser()
 	const currentPath = usePathname()
 	const handlePress = () => {
 		if (currentPath.includes('edit')) {
@@ -277,7 +275,7 @@ const ProfileDetailsEditPage = () => {
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-4 w-full mt-8 self-center"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 						textStyles="text-sm text-white"
 					/>
 				</View>
