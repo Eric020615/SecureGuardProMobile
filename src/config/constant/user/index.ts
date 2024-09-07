@@ -7,3 +7,8 @@ export enum Gender {
     'MALE' = 'M',
     'FEMALE' = 'F'
 }
+
+export const GenderConst = {
+    "M": "Male",
+    "F": "Female"
+}

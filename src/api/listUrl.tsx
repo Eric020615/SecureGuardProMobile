@@ -19,6 +19,10 @@ export const listUrl = {
         createUser: {
             path: 'user/create/',
             type: IType.post
+        },
+        getUserProfileById: {
+            path: 'user/profile/',
+            type: IType.get
         }
     },
     facility: {

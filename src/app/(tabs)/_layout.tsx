@@ -106,7 +106,7 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="profile"
+          name="profile/[pageMode]"
           options={{
             title: "Profile",
             headerShown: false,

@@ -9,17 +9,19 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { VisitorEnum } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
-import {
-	getCountriesByCallingCode,
-	ICountry,
-} from 'react-native-international-phone-number'
+import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { useVisitor } from '@zustand/visitor/useVisitor'
 import { GetVisitorDto } from '@zustand/types'
 import { useApplication } from '@zustand/index'
 import { ITimeFormat } from '@config/constant'
-import { convertUTCStringToLocalDate, getLocalDateString, getTodayDate, getUTCDateString } from '../../../helpers/time'
+import {
+	convertUTCStringToLocalDate,
+	getLocalDateString,
+	getTodayDate,
+	getUTCDateString,
+} from '../../../helpers/time'
 
 interface VisitorDetails {
 	visitDateTime: Date
@@ -34,7 +36,7 @@ const VisitorDetailsEditPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
 	const { setIsLoading } = useApplication()
-	const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
+	const [visitorDetails, setVisitorDetails] = useState<GetVisitorDto>()
 	const { id } = useLocalSearchParams()
 	const currentPath = usePathname()
 	useEffect(() => {
@@ -45,7 +47,7 @@ const VisitorDetailsEditPage = () => {
 			setIsLoading(true)
 			const response = await getVisitorDetailsByIdAction(id)
 			if (response.success) {
-				seVisitorDetails(response.data)
+				setVisitorDetails(response.data)
 			} else {
 				console.log(response.msg)
 			}
@@ -189,9 +191,10 @@ const VisitorDetailsEditPage = () => {
 											formik.values.visitDateTime ? formik.values.visitDateTime : getTodayDate()
 										}
 										onChange={onDatePickerChange}
-										buttonTitle={
-											getLocalDateString(formik.values.visitDateTime, ITimeFormat.dateTime)
-										}
+										buttonTitle={getLocalDateString(
+											formik.values.visitDateTime,
+											ITimeFormat.dateTime,
+										)}
 										minimumDate={getTodayDate()}
 										mode="datetime"
 										errorMessage={

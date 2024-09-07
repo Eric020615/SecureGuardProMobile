@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useAuth } from '@zustand/auth/useAuth'
 import { router, useGlobalSearchParams, usePathname } from 'expo-router'
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect } from 'react'
 
 export const GlobalContext = React.createContext<any>(null)
 export const useGlobalContext = () => useContext(GlobalContext)
