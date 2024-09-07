@@ -1,12 +1,13 @@
 import { create } from "zustand"
-import { UserInformationFormDto } from "../types"
-import { createUser, getUserProfileById } from "@api/userService/userService";
+import { EditUserDetailsByIdDto, UserInformationFormDto } from "../types"
+import { createUser, editUserProfileById, getUserProfileById } from "@api/userService/userService";
 
 interface userState {
     isLoading: boolean;
     error: string | null;
     createUserAction: (IUserInformationFormDto: UserInformationFormDto, tempToken: string) => Promise<any>;
     getUserProfileByIdAction: () => Promise<any>;
+    editUserProfileByIdAction: (IEditUserDetailsByIdDto : EditUserDetailsByIdDto) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
 }
@@ -32,6 +33,18 @@ export const useUser = create<userState>((set) => ({
         try {
             set({ isLoading: true, error: null });
             const response = await getUserProfileById();
+            return response;
+        } catch (error) {
+            console.log(error);
+            set({ error: error.msg });
+        } finally {
+            set({ isLoading: false })
+        }
+    },
+    editUserProfileByIdAction: async (IEditUserDetailsByIdDto : EditUserDetailsByIdDto) => {
+        try {
+            set({ isLoading: true, error: null });
+            const response = await editUserProfileById(IEditUserDetailsByIdDto);
             return response;
         } catch (error) {
             console.log(error);

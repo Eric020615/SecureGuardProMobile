@@ -44,7 +44,6 @@ const CreateFacilityBookingPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setIsLoading(true)
-			console.log(values)
 			const response = await submitBooking({
 				facilityId: values.facilityId,
 				startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),

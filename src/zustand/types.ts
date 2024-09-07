@@ -36,6 +36,17 @@ export interface GetUserProfileByIdDto {
     updatedDateTime: string;
 }
 
+export interface EditUserDetailsByIdDto {
+    userId: string;
+    firstName: string;
+    lastName: string;
+    userName: string;
+    email: string;
+    contactNumber: string;
+    gender: string;
+    dateOfBirth: string;
+}
+
 export interface ResidentInformationDto {
     floorNumber: string
 	unitNumber: string

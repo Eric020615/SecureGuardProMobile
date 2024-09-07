@@ -23,6 +23,10 @@ export const listUrl = {
         getUserProfileById: {
             path: 'user/profile/',
             type: IType.get
+        },
+        editUserProfileById: {
+            path: 'user/profile/',
+            type: IType.put
         }
     },
     facility: {

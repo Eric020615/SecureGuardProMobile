@@ -26,7 +26,6 @@ export const useVisitor = create<visitorState>((set) => ({
 	createVisitor: async (createVisitorDto: CreateVisitorDto) => {
 		try {
 			set({ isLoading: true, error: null })
-            console.log(createVisitorDto)
 			const response = await createVisitor(createVisitorDto)
 			return response
 		} catch (error) {

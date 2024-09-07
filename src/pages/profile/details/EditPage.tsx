@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { router } from 'expo-router'
+import { router, usePathname } from 'expo-router'
 import { useApplication } from '@zustand/index'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
@@ -14,6 +14,7 @@ import {
 	convertUTCStringToLocalDate,
 	getLocalDateString,
 	getTodayDate,
+	getUTCDateString,
 } from '../../../helpers/time'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import { useUser } from '@zustand/user/useUser'
@@ -37,7 +38,8 @@ const ProfileDetailsEditPage = () => {
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { setIsLoading } = useApplication()
 	const [userDetails, setUserDetails] = useState<GetUserProfileByIdDto>()
-	const { getUserProfileByIdAction } = useUser()
+	const { getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
+	const currentPath = usePathname()
 	const logOut = async () => {
 		try {
 			await AsyncStorage.clear()
@@ -55,8 +57,6 @@ const ProfileDetailsEditPage = () => {
 			const response = await getUserProfileByIdAction()
 			if (response.success) {
 				setUserDetails(response.data)
-				console.log('alolo')
-				console.log(response.data)
 			} else {
 				console.log(response.msg)
 			}
@@ -69,7 +69,7 @@ const ProfileDetailsEditPage = () => {
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().min(1).required('First name is required'),
 		lastName: Yup.string().min(1).required('Last name is required'),
-	    userName: Yup.string().min(1).required('Username is required'),
+		userName: Yup.string().min(1).required('Username is required'),
 		email: Yup.string().email('Invalid email').required('Email is required'),
 		userPhoneNumber: Yup.string()
 			.required('Phone number is required')
@@ -81,7 +81,6 @@ const ProfileDetailsEditPage = () => {
 				)
 				return phone ? phone.isValid() : false
 			}),
-
 	})
 	const formik = useFormik<UserDetails>({
 		enableReinitialize: true,
@@ -100,29 +99,32 @@ const ProfileDetailsEditPage = () => {
 				? parsePhoneNumberFromString(userDetails?.contactNumber).nationalNumber
 				: '',
 			gender: userDetails?.gender ? userDetails.gender : null,
-			dateOfBirth: convertUTCStringToLocalDate(userDetails?.dateOfBirth)
+			dateOfBirth: convertUTCStringToLocalDate(userDetails?.dateOfBirth),
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-	        console.log(values)
-			// const response = await editVisitorByIdAction({
-			// 	visitorId: id as string,
-			// 	visitorName: values.visitorName,
-			// 	visitorCategory: values.visitorCategory,
-			// 	visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-			// 	visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
-			// })
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push(currentPath.replace('edit', 'view'))
-			// } else {
-			// 	Alert.alert(response.msg)
-			// }
-			// setIsSubmitting(false)
+			setIsLoading(true)
+			const response = await editUserProfileByIdAction({
+				firstName: values.firstName,
+				lastName: values.lastName,
+				userName: values.userName,
+				email: values.email,
+				contactNumber: values.userCountryCode.callingCode + values.userPhoneNumber,
+				gender: values.gender,
+				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+				userId: userDetails?.userId,
+			})
+			if (response.success) {
+				formik.resetForm()
+				router.push(currentPath.replace('edit', 'view'))
+			} else {
+				console.log(response.msg)
+			}
+			setIsLoading(false)
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
-		formik.setFieldValue('visitDateTime', selectedDate)
+		formik.setFieldValue('dateOfBirth', selectedDate)
 		setShowCalendar(false)
 	}
 
@@ -151,7 +153,7 @@ const ProfileDetailsEditPage = () => {
 									}
 								/>
 							</View>
-                            <View>
+							<View>
 								<CustomFormField
 									containerStyle="mt-4"
 									title="Last Name"
@@ -169,7 +171,7 @@ const ProfileDetailsEditPage = () => {
 									}
 								/>
 							</View>
-                            <View>
+							<View>
 								<CustomFormField
 									containerStyle="mt-4"
 									title="Username"
@@ -187,7 +189,7 @@ const ProfileDetailsEditPage = () => {
 									}
 								/>
 							</View>
-                            <CustomFormField
+							<CustomFormField
 								containerStyle="mt-4"
 								title="Email"
 								textStyle="text-base font-bold"
@@ -198,12 +200,10 @@ const ProfileDetailsEditPage = () => {
 								}}
 								placeholder="Email"
 								errorMessage={
-									formik.touched.email &&
-									formik.errors.email &&
-									(formik.errors.email as string)
+									formik.touched.email && formik.errors.email && (formik.errors.email as string)
 								}
 							/>
-                            <CustomFormField
+							<CustomFormField
 								containerStyle="mt-4"
 								title="Contact Number"
 								textStyle="text-base font-bold"
@@ -233,9 +233,7 @@ const ProfileDetailsEditPage = () => {
 								}}
 								items={GenderList}
 								errorMessage={
-									formik.touched.gender &&
-									formik.errors.gender &&
-									(formik.errors.gender as string)
+									formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
 								}
 							/>
 							<View className="flex flex-row gap-4 mt-1">
@@ -252,7 +250,7 @@ const ProfileDetailsEditPage = () => {
 											formik.values.dateOfBirth,
 											ITimeFormat.dateTime,
 										)}
-										minimumDate={getTodayDate()}
+										maximumDate={getTodayDate()}
 										mode="date"
 										errorMessage={
 											formik.touched.dateOfBirth &&
