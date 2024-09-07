@@ -21,6 +21,7 @@ import { useUser } from '@zustand/user/useUser'
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
+import Iconicons from 'react-native-vector-icons/Ionicons'
 
 interface UserDetails {
 	firstName: string
@@ -40,13 +41,12 @@ const ProfileDetailsEditPage = () => {
 	const [userDetails, setUserDetails] = useState<GetUserProfileByIdDto>()
 	const { getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
 	const currentPath = usePathname()
-	const logOut = async () => {
-		try {
-			await AsyncStorage.clear()
-			router.push('/sign-in')
-		} catch (error) {
-			console.log(error)
+	const handlePress = () => {
+		if (currentPath.includes('edit')) {
+			router.push(currentPath.replace('edit', 'view'))
+			return
 		}
+		router.push(currentPath.concat('/view'))
 	}
 	useEffect(() => {
 		getData()
@@ -132,6 +132,15 @@ const ProfileDetailsEditPage = () => {
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
+				<View className="flex flex-row items-center">
+						<CustomButton
+							containerStyles="items-center h-fit"
+							handlePress={() => {
+								handlePress()
+							}}
+							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+						/>
+					</View>
 					<Text className="text-4xl text-black font-bold mt-6">User Details</Text>
 					{userDetails && (
 						<>
@@ -270,15 +279,6 @@ const ProfileDetailsEditPage = () => {
 						containerStyles="bg-primary p-4 w-full mt-8 self-center"
 						isLoading={isSubmitting}
 						textStyles="text-sm text-white"
-					/>
-				</View>
-				<View className="px-4">
-					<CustomButton
-						title="Log Out"
-						handlePress={() => {
-							logOut()
-						}}
-						containerStyles="bg-primary p-3 w-full"
 					/>
 				</View>
 			</ScrollView>

@@ -122,7 +122,7 @@ const VisitorDetailsEditPage = () => {
 							handlePress={() => {
 								router.replace('/visitor')
 							}}
-							reactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Visitor Details</Text>

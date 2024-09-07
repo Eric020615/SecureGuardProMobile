@@ -3,6 +3,11 @@ export enum RoleEnum {
     'RESIDENT' = 'RES',
 }
 
+export enum RoleConst {
+    'RES' = 'Resident',
+    "SA" = "System Admin"
+}
+
 export enum Gender {
     'MALE' = 'M',
     'FEMALE' = 'F'

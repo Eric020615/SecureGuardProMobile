@@ -135,7 +135,7 @@ const CustomFormField = (
 									props.setShowDateTime(!props.showDateTime)
 								}}
 								title={props.buttonTitle}
-								reactNativeIcons={
+								rightReactNativeIcons={
 									<Iconicons name="caret-down" color={'#000000'} size={14} style={{}} />
 								}
 								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
@@ -183,7 +183,7 @@ const CustomFormField = (
 									<CustomButton
 										handlePress={props.clearFile}
 										containerStyles="mx-5"
-										reactNativeIcons={<Iconicons name="close-circle" color={'#10312b'} size={30} />}
+										rightReactNativeIcons={<Iconicons name="close-circle" color={'#10312b'} size={30} />}
 									/>
 									<View className="flex flex-col">
 										{props.selectedFiles.map((selectedFile, id) => (

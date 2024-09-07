@@ -41,7 +41,7 @@ const NoticeListPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							reactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Notice</Text>
