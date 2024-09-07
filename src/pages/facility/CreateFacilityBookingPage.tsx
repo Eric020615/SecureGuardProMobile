@@ -80,7 +80,7 @@ const CreateFacilityBookingPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							reactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							containerStyles="items-center h-fit"

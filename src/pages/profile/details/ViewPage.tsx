@@ -61,7 +61,6 @@ const ProfileDetailsViewPage = () => {
 					</View>
 					{profileDetails && (
 						<>
-							{/* Existing Fields */}
 							<View className="mt-3">
 								<Text className="text-3xl text-black font-semibold">
 									{profileDetails.userName ? profileDetails.userName : ''}
@@ -84,7 +83,7 @@ const ProfileDetailsViewPage = () => {
 						handlePress={() => {
 							handlePress()
 						}}
-						containerStyles="bg-primary p-3 mt-4 self-center rounded-full"
+						containerStyles="bg-primary p-3 mt-4 self-center rounded-full h-fit"
 						textStyles="text-base text-white"
 					/>
 					<View className="mt-2 w-full">
@@ -105,7 +104,9 @@ const ProfileDetailsViewPage = () => {
 						/>
 						<CustomButton
 							title="Face ID"
-							handlePress={() => {}}
+							handlePress={() => {
+								router.push('/camera')
+							}}
 							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
