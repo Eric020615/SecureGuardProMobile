@@ -12,6 +12,7 @@ import * as MediaLibrary from 'expo-media-library'
 import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useApplication } from '@zustand/index'
+import { convertImageToBase64 } from '../../helpers/file'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
@@ -33,8 +34,8 @@ const CameraPage = () => {
 			try {
 				setIsLoading(true)
 				const data = await cameraRef.current.takePictureAsync()
-				console.log(data)
 				setImage(data)
+				convertImageToBase64(data)
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -79,6 +80,7 @@ const CameraPage = () => {
 		if (image) {
 			try {
 				const asset = await MediaLibrary.createAssetAsync(image.uri)
+				
 				console.log(asset)
 				setImage(null)
 			} catch (error) {
