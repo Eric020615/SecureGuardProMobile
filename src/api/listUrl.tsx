@@ -15,6 +15,12 @@ export const listUrl = {
             type: IType.get
         },
     },
+    faceAuth: {
+        create: {
+            path: "face-auth/user/upload",
+            type: IType.post
+        }
+    },
     user: {
         createUser: {
             path: 'user/create/',

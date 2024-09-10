@@ -6,7 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const submitBooking = async (IBooking: FacilityBookingFormDto) : Promise<any> => {
     try {
         const token = await AsyncStorage.getItem("token")
-        const [success, data] = await GlobalHandler({
+        const [success, response] = await GlobalHandler({
             path: listUrl.facility.facilityBooking.path,
             type: listUrl.facility.facilityBooking.type,
             data: IBooking,
@@ -14,8 +14,8 @@ export const submitBooking = async (IBooking: FacilityBookingFormDto) : Promise<
         })
         const result : IResponse<any> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error) {
@@ -58,7 +58,7 @@ export const getFacilityBookingHistory = async (isPast: boolean): Promise<IRespo
 export const cancelBooking = async (bookingId: string): Promise<any> => {
     try {
         const token = await AsyncStorage.getItem("token")
-        const [success, data] = await GlobalHandler({
+        const [success, response] = await GlobalHandler({
             path: listUrl.facility.cancelFacilityBooking.path,
             type: listUrl.facility.cancelFacilityBooking.type,
             data: { bookingId },
@@ -66,8 +66,8 @@ export const cancelBooking = async (bookingId: string): Promise<any> => {
         })
         const result : IResponse<any> = {
             success,
-            msg: success ? 'success': data?.message,
-            data: success ? data?.data : undefined
+            msg: success ? 'success': response?.message,
+            data: success ? response?.data : undefined
         }
         return result;
     } catch (error) {

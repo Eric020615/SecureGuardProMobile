@@ -13,6 +13,11 @@ import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { useApplication } from '@zustand/index'
 import { convertImageToBase64 } from '../../helpers/file'
+import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
+import { CreateUserFaceAuthDto } from '@zustand/types'
+import { router } from 'expo-router'
+import { useModal } from '@zustand/modal/useModal'
+import {} from 'expo'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
@@ -20,6 +25,8 @@ const CameraPage = () => {
 	const [facing, setFacing] = useState<CameraType>('back')
 	const [flash, setFlash] = useState(false)
 	const { setIsLoading } = useApplication()
+	const { uploadUserFaceAuthAction } = useFaceAuth()
+	const { setCustomFailedModal } = useModal()
 	const cameraRef = useRef<CameraView>(null)
 
 	useEffect(() => {
@@ -35,7 +42,6 @@ const CameraPage = () => {
 				setIsLoading(true)
 				const data = await cameraRef.current.takePictureAsync()
 				setImage(data)
-				convertImageToBase64(data)
 			} catch (error) {
 				console.log(error)
 			} finally {
@@ -77,15 +83,38 @@ const CameraPage = () => {
 	}
 
 	const saveImage = async () => {
-		if (image) {
-			try {
-				const asset = await MediaLibrary.createAssetAsync(image.uri)
-				
-				console.log(asset)
+		try {
+			setIsLoading(true)
+			if (image) {
+				console.log(image)
+				// const asset = await MediaLibrary.createAssetAsync(image.uri)
+				let base64 = await convertImageToBase64(image)
+				if(base64 == ""){
+					throw new Error("Failed to convert image to base64")
+				}
+				const response = await uploadUserFaceAuthAction({
+					faceData: base64	
+				})
+				if (response.success) {
+					router.replace('/home')
+				} else {
+					setCustomFailedModal({
+						title: 'Face Auth Created Failed',
+						subtitle: 'Please Retry It Again',
+					})
+				}
 				setImage(null)
-			} catch (error) {
-				console.log(error)
 			}
+			else{
+				throw new Error("No image to save")
+			}
+		} catch (error) {
+			setCustomFailedModal({
+				title: 'Face Auth Created Failed',
+				subtitle: 'Please Retry It Again',
+			})
+		} finally {
+			setIsLoading(false)
 		}
 	}
 

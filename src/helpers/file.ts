@@ -2,6 +2,7 @@ import { GeneralFile } from '@zustand/types';
 import { CameraCapturedPicture } from 'expo-camera';
 import {readAsStringAsync, cacheDirectory, copyAsync} from 'expo-file-system'
 import { DocumentPickerResponse } from 'react-native-document-picker';
+import {manipulateAsync} from "expo-image-manipulator";
 
 export const getFile = async (document: DocumentPickerResponse) : Promise<GeneralFile> => {
     try {
@@ -25,7 +26,8 @@ export const getFile = async (document: DocumentPickerResponse) : Promise<Genera
 
 export const convertImageToBase64 = async (image: CameraCapturedPicture) : Promise<string> => {
     try {
-        const base64 = await readAsStringAsync(image.uri, 
+        const manipulateResult = await manipulateAsync(image.uri, [], {compress: 0.2});
+        const base64 = await readAsStringAsync(manipulateResult.uri, 
             {encoding: "base64"}
         );
         return base64

@@ -124,3 +124,7 @@ export interface GetVisitorDto {
 	createdDateTime: string
 	updatedDateTime: string
 }
+
+export interface CreateUserFaceAuthDto {
+    faceData: string
+}
