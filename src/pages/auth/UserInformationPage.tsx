@@ -33,7 +33,7 @@ interface UserInformationForm {
 }
 
 const UserInformationPage = () => {
-	const { setCustomFailedModal } = useModal()
+	const { setCustomConfirmModal } = useModal()
 	const { setIsLoading } = useApplication()
 	const { createUserAction, isLoading, error } = useUser()
 	const { tempToken } = useAuth()
@@ -72,7 +72,7 @@ const UserInformationPage = () => {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)
 			} else {
-				setCustomFailedModal({
+				setCustomConfirmModal({
 					title: 'File Selection Failed',
 					subtitle: 'Please try again or contact support if the issue persists.',
 				})
@@ -110,12 +110,12 @@ const UserInformationPage = () => {
 					tempToken,
 				)
 				if (response.success) {
-					setCustomFailedModal({
+					setCustomConfirmModal({
 						title: 'Account updated successfully',
 						subtitle: 'Please wait for system admin approval to log in',
 					})
 				} else {
-					setCustomFailedModal({
+					setCustomConfirmModal({
 						title: 'Account updated failed',
 						subtitle: 'Please contact our support team for assistance',
 					})

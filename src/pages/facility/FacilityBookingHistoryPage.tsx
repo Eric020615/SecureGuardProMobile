@@ -32,7 +32,6 @@ const FacilityBookingHistoryPage = () => {
 			const response = await getFacilityBookingHistory(isPast)
 			if (response.success) {
 				setBookingHistory(response.data)
-				console.log(response.data)
 			}
 			setIsLoading(false)
 		} catch (error) {

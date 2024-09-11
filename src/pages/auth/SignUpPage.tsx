@@ -14,7 +14,7 @@ import CustomModal from '@components/modals/CustomModal'
 import { useApplication } from '@zustand/index'
 
 const SignUpPage = () => {
-	const { setCustomFailedModal } = useModal()
+	const { setCustomConfirmModal } = useModal()
 	const { setIsLoading } = useApplication()
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
@@ -44,7 +44,7 @@ const SignUpPage = () => {
 				setTempToken(response.data)
 				router.replace('/user-information')
 			} else {
-				setCustomFailedModal({
+				setCustomConfirmModal({
 					title: 'Account Created Failed',
 					subtitle: response.msg,
 				})
@@ -52,7 +52,7 @@ const SignUpPage = () => {
 			setIsLoading(false)
 		} catch (error) {
 			setIsLoading(false)
-			setCustomFailedModal({
+			setCustomConfirmModal({
 				title: 'Account Created Failed',
 				subtitle: "Please Retry It Again",
 			})

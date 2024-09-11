@@ -18,7 +18,7 @@ const SignInPage = () => {
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
 	})
-	const { setCustomFailedModal } = useModal()
+	const { setCustomConfirmModal } = useModal()
 	const { setIsLoading } = useApplication()
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
@@ -38,14 +38,14 @@ const SignInPage = () => {
 			if (response.success) {
 				router.replace('/home')
 			} else {
-				setCustomFailedModal({
+				setCustomConfirmModal({
 					title: 'Log In Failed',
 					subtitle: 'Please Retry It Again',
 				})
 			}
 			setIsLoading(false)
 		} catch (error) {
-			setCustomFailedModal({
+			setCustomConfirmModal({
 				title: 'Log In Failed',
 				subtitle: 'Please Retry It Again',
 			})

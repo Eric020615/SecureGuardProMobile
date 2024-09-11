@@ -18,6 +18,7 @@ import { CreateUserFaceAuthDto } from '@zustand/types'
 import { router } from 'expo-router'
 import { useModal } from '@zustand/modal/useModal'
 import {} from 'expo'
+import CustomModal from '@components/modals/CustomModal'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
@@ -26,7 +27,7 @@ const CameraPage = () => {
 	const [flash, setFlash] = useState(false)
 	const { setIsLoading } = useApplication()
 	const { uploadUserFaceAuthAction } = useFaceAuth()
-	const { setCustomFailedModal } = useModal()
+	const { setCustomConfirmModal, isError } = useModal()
 	const cameraRef = useRef<CameraView>(null)
 
 	useEffect(() => {
@@ -35,20 +36,6 @@ const CameraPage = () => {
 			await requestCameraPermission()
 		})()
 	}, [])
-
-	const takePicture = async () => {
-		if (cameraRef) {
-			try {
-				setIsLoading(true)
-				const data = await cameraRef.current.takePictureAsync()
-				setImage(data)
-			} catch (error) {
-				console.log(error)
-			} finally {
-				setIsLoading(false)
-			}
-		}
-	}
 
 	if (!cameraPermission) {
 		return (
@@ -62,7 +49,9 @@ const CameraPage = () => {
 		return (
 			<SafeAreaView className="h-full bg-black">
 				<View className="flex-1 justify-center mx-8">
-					<Text className="text-center pb-10 text-white">We need your permission to show the camera</Text>
+					<Text className="text-center pb-10 text-white">
+						We need your permission to show the camera
+					</Text>
 					<CustomButton
 						title="Grant Permission"
 						handlePress={requestCameraPermission}
@@ -82,36 +71,50 @@ const CameraPage = () => {
 		setFlash(!flash)
 	}
 
+	const takePicture = async () => {
+		if (cameraRef) {
+			try {
+				setIsLoading(true)
+				const data = await cameraRef.current.takePictureAsync()
+				setImage(data)
+			} catch (error) {
+				setCustomConfirmModal({
+					title: 'Face Authentication Created Failed',
+					subtitle: 'Please Retry It Again Or Contact Our Support Team',
+				})
+			} finally {
+				setIsLoading(false)
+			}
+		}
+	}
+
 	const saveImage = async () => {
 		try {
 			setIsLoading(true)
 			if (image) {
-				console.log(image)
-				// const asset = await MediaLibrary.createAssetAsync(image.uri)
 				let base64 = await convertImageToBase64(image)
-				if(base64 == ""){
-					throw new Error("Failed to convert image to base64")
+				if (base64 == '') {
+					throw new Error('Failed to convert image to base64')
 				}
 				const response = await uploadUserFaceAuthAction({
-					faceData: base64	
+					faceData: base64,
 				})
 				if (response.success) {
-					router.replace('/home')
-				} else {
-					setCustomFailedModal({
-						title: 'Face Auth Created Failed',
-						subtitle: 'Please Retry It Again',
+					setCustomConfirmModal({
+						title: 'Face Recognition Setup Complete',
+						subtitle: 'You can now access the premises using your face.',
 					})
+				} else {
+					throw new Error('No image to save')
 				}
 				setImage(null)
-			}
-			else{
-				throw new Error("No image to save")
+			} else {
+				throw new Error('No image to save')
 			}
 		} catch (error) {
-			setCustomFailedModal({
-				title: 'Face Auth Created Failed',
-				subtitle: 'Please Retry It Again',
+			setCustomConfirmModal({
+				title: 'Face Authentication Created Failed',
+				subtitle: 'Please Retry It Again Or Contact Our Support Team',
 			})
 		} finally {
 			setIsLoading(false)
@@ -120,8 +123,22 @@ const CameraPage = () => {
 
 	return (
 		<SafeAreaView className="h-full">
+			<CustomModal
+				customConfirmButtonPress={() => {
+					if (isError) {
+						router.replace('/camera')
+					} else {
+						router.replace('/profile/view')
+					}
+				}}
+			/>
 			{!image ? (
-				<CameraView className="flex-1 rounded-3xl" facing={facing} ref={cameraRef} enableTorch={flash}>
+				<CameraView
+					className="flex-1 rounded-3xl"
+					facing={facing}
+					ref={cameraRef}
+					enableTorch={flash}
+				>
 					<View className="flex-1 bg-transparent">
 						<View className="flex-row justify-between px-8 py-4">
 							<CustomButton
