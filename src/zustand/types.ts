@@ -1,9 +1,15 @@
-import { Gender, RoleEnum } from "@config/constant/user";
-import { VisitorEnum } from "@config/constant/visitor";
+import { Gender, RoleEnum } from '@config/constant/user'
+import { VisitorEnum } from '@config/constant/visitor'
 
 export type GeneralFile = {
-	fileName: string;
+	fileName: string
 	data: string
+}
+
+export interface Page<T> {
+	data: T[]
+	previousCursor?: number
+	nextCursor?: number
 }
 
 export interface UserInformationFormDto {
@@ -19,36 +25,36 @@ export interface UserInformationFormDto {
 }
 
 export interface GetUserProfileByIdDto {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
-    contactNumber: string;
-    gender: Gender;
-    role: RoleEnum;
-    roleInformation?: ResidentInformationDto;
-    dateOfBirth: string;
-    isActive?: boolean;
-    createdBy: string;
-    createdDateTime: string;
-    updatedBy: string;
-    updatedDateTime: string;
+	userId: string
+	firstName: string
+	lastName: string
+	userName: string
+	email: string
+	contactNumber: string
+	gender: Gender
+	role: RoleEnum
+	roleInformation?: ResidentInformationDto
+	dateOfBirth: string
+	isActive?: boolean
+	createdBy: string
+	createdDateTime: string
+	updatedBy: string
+	updatedDateTime: string
 }
 
 export interface EditUserDetailsByIdDto {
-    userId: string;
-    firstName: string;
-    lastName: string;
-    userName: string;
-    email: string;
-    contactNumber: string;
-    gender: string;
-    dateOfBirth: string;
+	userId: string
+	firstName: string
+	lastName: string
+	userName: string
+	email: string
+	contactNumber: string
+	gender: string
+	dateOfBirth: string
 }
 
 export interface ResidentInformationDto {
-    floorNumber: string
+	floorNumber: string
 	unitNumber: string
 	supportedFiles: string[]
 }
@@ -106,11 +112,11 @@ export interface CreateVisitorDto {
 }
 
 export interface EditVisitorByIdDto {
-    visitorId: string;
-    visitorName: string;
-    visitorCategory: string;
-    visitorContactNumber: string;
-    visitDateTime: string;
+	visitorId: string
+	visitorName: string
+	visitorCategory: string
+	visitorContactNumber: string
+	visitDateTime: string
 }
 
 export interface GetVisitorDto {
@@ -126,5 +132,5 @@ export interface GetVisitorDto {
 }
 
 export interface CreateUserFaceAuthDto {
-    faceData: string
+	faceData: string
 }

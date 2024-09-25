@@ -31,7 +31,7 @@ export const getLocalDateString = (date: Date, dateFormat: string) => {
 
 export const getUTCDateString = (date: Date, dateFormat: string) => {
 	if (date === null) return ''
-	const dateString = moment(date).format(dateFormat)
+	const dateString = moment(date).utc().format(dateFormat)
 	return dateString
 }
 

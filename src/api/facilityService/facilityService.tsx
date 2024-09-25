@@ -28,14 +28,16 @@ export const submitBooking = async (IBooking: FacilityBookingFormDto) : Promise<
     }
 }
 
-export const getFacilityBookingHistory = async (isPast: boolean): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
+export const getFacilityBookingHistory = async (isPast: boolean, page: number, limit: number): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
     try {
         const token = await AsyncStorage.getItem("token")
         const [success, response] = await GlobalHandler({
             path: listUrl.facility.getFacilityBookingHistory.path,
             type: listUrl.facility.getFacilityBookingHistory.type,
             data: {
-                isPast: isPast
+                isPast: isPast,
+                page: page,
+                limit: limit
             },
             _token: token
         })
