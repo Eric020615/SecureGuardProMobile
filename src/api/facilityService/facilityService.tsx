@@ -1,5 +1,5 @@
 import { FacilityBookingFormDto, getFacilityBookingHistoryDto } from "@zustand/types"
-import GlobalHandler, { IResponse } from "../globalHandler"
+import GlobalHandler, { IPaginatedResponse, IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
@@ -28,7 +28,7 @@ export const submitBooking = async (IBooking: FacilityBookingFormDto) : Promise<
     }
 }
 
-export const getFacilityBookingHistory = async (isPast: boolean, page: number, limit: number): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
+export const getFacilityBookingHistory = async (isPast: boolean, startAt: string, limit: number): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
     try {
         const token = await AsyncStorage.getItem("token")
         const [success, response] = await GlobalHandler({
@@ -36,7 +36,7 @@ export const getFacilityBookingHistory = async (isPast: boolean, page: number, l
             type: listUrl.facility.getFacilityBookingHistory.type,
             data: {
                 isPast: isPast,
-                page: page,
+                startAt: startAt,
                 limit: limit
             },
             _token: token
@@ -44,7 +44,7 @@ export const getFacilityBookingHistory = async (isPast: boolean, page: number, l
         const result : IResponse<getFacilityBookingHistoryDto[]> = {
             success,
             msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
+            data: success ? response?.data : undefined,
         }
         return result;
     } catch (error) {

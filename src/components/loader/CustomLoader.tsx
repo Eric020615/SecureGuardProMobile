@@ -21,8 +21,8 @@ const CustomLoader = ({ containerStyle, loaderHeight, loaderWidth }: CustomLoade
 				loop
 				ref={animation}
 				style={{
-					width: loaderWidth || 250,
-					height: loaderHeight || 250,
+					width: loaderWidth || 150,
+					height: loaderHeight || 150,
 					backgroundColor: 'transparent',
 				}}
 				source={animations.loadingEffect}

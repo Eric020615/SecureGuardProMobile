@@ -1,17 +1,17 @@
 import {
-	ActivityIndicator,
 	FlatList,
 	ListRenderItem,
+	Text,
 	ViewStyle,
-	useWindowDimensions,
 } from 'react-native'
-import { useMemo, useRef } from 'react'
+import { useMemo } from 'react'
 
 interface CustomFlatListProps<T> {
 	data: T[]
 	renderItem: ListRenderItem<T>
 	fetchNextPage: () => void
 	loading: boolean
+    isRefreshing?: boolean
 	onRefresh: () => void
 	itemHeight?: number
 	numColumns?: number
@@ -24,6 +24,7 @@ const CustomFlatList = <T extends object>({
 	renderItem,
 	fetchNextPage,
 	loading,
+    isRefreshing = false,
 	onRefresh,
 	itemHeight = 100, // Default item height
 	numColumns = 1,
@@ -34,24 +35,6 @@ const CustomFlatList = <T extends object>({
 		return null
 	}
 	const flatListContentStyle = useMemo(() => ({ gap }), [gap])
-	// Use case: increase impression count for posts
-	// that are visible on the screen for more than 0.5 seconds
-	const viewabilityConfigCallbackPairs = useRef([
-		{
-			viewabilityConfig: {
-				minimumViewTime: 500,
-				itemVisiblePercentThreshold: 50,
-			},
-			onViewableItemsChanged: ({ changed }) => {
-				changed.forEach((changedItem) => {
-					if (changedItem.isViewable) {
-						console.log('++ Impression for: ', changedItem.item.id)
-					}
-				})
-			},
-		},
-	])
-
 	return (
 		<FlatList
 			data={data}
@@ -59,14 +42,17 @@ const CustomFlatList = <T extends object>({
 			contentContainerStyle={flatListContentStyle}
 			columnWrapperStyle={columnWrapperStyle}
 			onEndReached={() => {
-                if (data.length >= 10) { // Check if there are at least 5 items
-                    fetchNextPage();
-                }
-            }}
+                if(loading) return
+				fetchNextPage()
+			}}
 			onEndReachedThreshold={0.5}
-			ListFooterComponent={() => loading && <ActivityIndicator />}
-			refreshing={loading}
-			onRefresh={onRefresh}
+            ListHeaderComponent={() => <></>}
+			ListFooterComponent={() => <Text className="self-center text-sm text-black">Load more</Text>}
+            refreshing={isRefreshing}
+			onRefresh={() => {
+                if(loading) return
+                onRefresh()
+            }}
 			numColumns={numColumns}
 			initialNumToRender={10}
 			getItemLayout={(_data, index) => ({
@@ -74,7 +60,6 @@ const CustomFlatList = <T extends object>({
 				offset: (itemHeight + gap) * index,
 				index,
 			})}
-			viewabilityConfigCallbackPairs={viewabilityConfigCallbackPairs.current}
 		/>
 	)
 }

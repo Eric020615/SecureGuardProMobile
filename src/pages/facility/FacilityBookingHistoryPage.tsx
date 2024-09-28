@@ -1,21 +1,19 @@
-import { View, Text, ScrollView, Alert, FlatList, ListRenderItem } from 'react-native'
+import { View, Text, Alert, ListRenderItem } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useFacility } from '@zustand/facility/useFacility'
-import { getFacilityBookingHistoryDto, Page } from '@zustand/types'
+import { getFacilityBookingHistoryDto } from '@zustand/types'
 import { FacilityConst } from '@config/constant/facilities'
 import { useApplication } from '@zustand/index'
 import {
-	convertDateStringToDate,
+	convertUTCStringToLocalDate,
 	convertUTCStringToLocalDateString,
 	getTodayDate,
 } from '../../helpers/time'
 import { ITimeFormat } from '@config/constant'
-import { useInfiniteQuery } from 'react-query'
-import CustomLoader from '@components/loader/CustomLoader'
 import CustomFlatList from '@components/list/CustomFlatList'
 
 const FacilityBookingHistoryPage = () => {
@@ -24,28 +22,29 @@ const FacilityBookingHistoryPage = () => {
 	const { isLoading, setIsLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
 	const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([])
-	const [currentPage, setCurrentPage] = useState(0)
+	const [lastId, setLastId] = useState('')
+	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
-		fetchFacilityBookingHistory(0)
-	}, [])
+		setBookingHistory([]) // Reset the booking history
+		setLastId('') // Reset the lastId
+		fetchFacilityBookingHistory('')
+	}, [isPast]) // Dependency on isPast to refetch data
 
-	useEffect(() => {
-		fetchFacilityBookingHistory(0)
-	}, [isPast])
-
-	const fetchFacilityBookingHistory = async (page: number) => {
+	const fetchFacilityBookingHistory = async (startAt: string) => {
 		try {
+			if (isLoading) return
 			setIsLoading(true)
-			console.log('fetching page: ', page)
-			const response = await getFacilityBookingHistory(isPast, page, 10)
+			const response = await getFacilityBookingHistory(isPast, startAt, 10)
 			if (response.success) {
-				setBookingHistory(response.data)
-				setCurrentPage(page)
+				setBookingHistory((prev) => [...prev, ...response.data.result])
+				setLastId(bookingHistory.length > 0 ? bookingHistory[bookingHistory.length - 1].bookingId : '')
+				setTotalRecords(response.data.count) // Update total records from response
 			}
-			setIsLoading(false)
 		} catch (error) {
-			setIsLoading
+			console.log(error)
+		} finally {
+			setIsLoading(false)
 		}
 	}
 
@@ -65,13 +64,17 @@ const FacilityBookingHistoryPage = () => {
 	}
 
 	const fetchNextPage = async () => {
+		if (isLoading || bookingHistory.length >= totalRecords) return
+		if (lastId == '') return
 		// Logic to fetch the next page
-		fetchFacilityBookingHistory(currentPage + 1) // Fetch the first page again
+		fetchFacilityBookingHistory(lastId) // Fetch the first page again
 	}
 	const onRefresh = async () => {
+		if (isLoading == true) return
 		// Logic to refresh data
 		setBookingHistory([]) // Clear existing data
-		fetchFacilityBookingHistory(0) // Fetch the first page again
+		setLastId('') // Reset the lastId
+		fetchFacilityBookingHistory('') // Fetch the first page again
 	}
 
 	const renderItem: ListRenderItem<getFacilityBookingHistoryDto> = ({ item, index }) => (
@@ -95,7 +98,7 @@ const FacilityBookingHistoryPage = () => {
 						Cancelled
 					</Text>
 				) : (
-					convertDateStringToDate(item.startDate) > getTodayDate() && (
+					convertUTCStringToLocalDate(item.startDate) > getTodayDate() && (
 						<CustomButton
 							containerStyles="flex flex-row self-end h-fit mt-1"
 							handlePress={() => {
@@ -142,66 +145,12 @@ const FacilityBookingHistoryPage = () => {
 						/>
 					</View>
 					<View className="flex-1 mt-4">
-						{/* <FlatList
-							data={bookingHistory}
-							renderItem={({ item, index }) => (
-								<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
-									<View>
-										<Text className="font-bold">{FacilityConst[item.facilityId]}</Text>
-										<View className="flex flex-row gap-1">
-											<Text className="">
-												{convertUTCStringToLocalDateString(item.startDate, ITimeFormat.dateTime)}
-											</Text>
-											<Text>-</Text>
-											<Text className="">
-												{convertUTCStringToLocalDateString(item.endDate, ITimeFormat.time)}
-											</Text>
-										</View>
-									</View>
-									<View>
-										<Text className="font-bold">{item.numOfGuest} Guests(s)</Text>
-										{item.isCancelled ? (
-											<Text className="bg-red-500 text-xs text-white rounded-lg text-center mt-1">
-												Cancelled
-											</Text>
-										) : (
-											convertDateStringToDate(item.startDate) > getTodayDate() && (
-												<CustomButton
-													containerStyles="flex flex-row self-end h-fit mt-1"
-													handlePress={() => {
-														cancel(item.bookingId)
-													}}
-													rightReactNativeIcons={
-														<Iconicons name="close-circle" color={'#ff0000'} size={16} />
-													}
-												/>
-											)
-										)}
-									</View>
-								</View>
-							)}
-							contentContainerStyle={{ gap: 20 }}
-							onEndReached={() => fetchFacilityBookingHistory(next)}
-							onEndReachedThreshold={5}
-							refreshing={isRefreshing}
-							ListFooterComponent={() => (
-								<View>
-									{isRefreshing ? (
-										<CustomLoader loaderHeight={100} loaderWidth={100} />
-									) : (
-										<Text className="self-center text-xl text-blue-600">
-											Load more
-										</Text>
-									)}
-								</View>
-							)}
-						/> */}
 						<CustomFlatList<getFacilityBookingHistoryDto>
 							data={bookingHistory}
 							renderItem={renderItem}
 							fetchNextPage={fetchNextPage}
-							loading={isLoading}
 							onRefresh={onRefresh}
+							loading={isLoading}
 							numColumns={1}
 							itemHeight={120} // Customize the item height if needed
 						/>
