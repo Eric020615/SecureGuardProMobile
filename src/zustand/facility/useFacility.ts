@@ -6,8 +6,8 @@ interface facilityState {
     isLoading: boolean;
     error: string | null;
     submitBooking: (facilityBookingForm: FacilityBookingFormDto) => Promise<any>;
-    getFacilityBookingHistory: (isPast: boolean, startAt: string, limit: number) => Promise<any>;
-    cancelBooking: (bookingId: string) => Promise<any>;
+    getFacilityBookingHistory: (isPast: boolean, page: number, limit: number) => Promise<any>;
+    cancelBooking: (bookingGuid: string) => Promise<any>;
     setLoading: (isLoading: boolean) => void;
     setError: (error: string | null) => void;
 }
@@ -30,10 +30,10 @@ export const useFacility = create<facilityState>((set) => ({
             set({ isLoading: false })
         }
     },
-    getFacilityBookingHistory: async (isPast: boolean, startAt: string, limit: number) => {
+    getFacilityBookingHistory: async (isPast: boolean, page: number, limit: number) => {
         try {
             set({ isLoading: true, error: null });
-            const response = await getFacilityBookingHistory(isPast, startAt, limit);
+            const response = await getFacilityBookingHistory(isPast, page, limit);
             return response;
         } catch (error) {
             console.log(error);
@@ -42,10 +42,10 @@ export const useFacility = create<facilityState>((set) => ({
             set({ isLoading: false })
         }
     },
-    cancelBooking: async (bookingId: string) => {
+    cancelBooking: async (bookingGuid: string) => {
         try {
             set({ isLoading: true, error: null });
-            const response = await cancelBooking(bookingId);
+            const response = await cancelBooking(bookingGuid);
             return response;
         } catch (error) {
             console.log(error);

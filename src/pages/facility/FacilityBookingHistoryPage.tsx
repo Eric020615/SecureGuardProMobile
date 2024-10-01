@@ -22,23 +22,22 @@ const FacilityBookingHistoryPage = () => {
 	const { isLoading, setIsLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
 	const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([])
-	const [lastId, setLastId] = useState('')
+	const [pageNumber, setPageNumber] = useState(0)
 	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
 		setBookingHistory([]) // Reset the booking history
-		setLastId('') // Reset the lastId
-		fetchFacilityBookingHistory('')
+		setPageNumber(0)
+		fetchFacilityBookingHistory()
 	}, [isPast]) // Dependency on isPast to refetch data
 
-	const fetchFacilityBookingHistory = async (startAt: string) => {
+	const fetchFacilityBookingHistory = async () => {
 		try {
 			if (isLoading) return
 			setIsLoading(true)
-			const response = await getFacilityBookingHistory(isPast, startAt, 10)
+			const response = await getFacilityBookingHistory(isPast, pageNumber, 10)
 			if (response.success) {
 				setBookingHistory((prev) => [...prev, ...response.data.result])
-				setLastId(bookingHistory.length > 0 ? bookingHistory[bookingHistory.length - 1].bookingId : '')
 				setTotalRecords(response.data.count) // Update total records from response
 			}
 		} catch (error) {
@@ -48,10 +47,10 @@ const FacilityBookingHistoryPage = () => {
 		}
 	}
 
-	const cancel = async (bookingId: string) => {
+	const cancel = async (bookingGuid: string) => {
 		try {
 			setIsLoading(true)
-			const response = await cancelBooking(bookingId)
+			const response = await cancelBooking(bookingGuid)
 			if (response.success) {
 				router.push('/facilityHistory')
 			} else {
@@ -65,16 +64,17 @@ const FacilityBookingHistoryPage = () => {
 
 	const fetchNextPage = async () => {
 		if (isLoading || bookingHistory.length >= totalRecords) return
-		if (lastId == '') return
+		if (bookingHistory.length % 10 !== 0) return
+		setPageNumber((prev) => prev + 1)
 		// Logic to fetch the next page
-		fetchFacilityBookingHistory(lastId) // Fetch the first page again
+		fetchFacilityBookingHistory() // Fetch the first page again
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
 		// Logic to refresh data
+		setPageNumber(0)
 		setBookingHistory([]) // Clear existing data
-		setLastId('') // Reset the lastId
-		fetchFacilityBookingHistory('') // Fetch the first page again
+		fetchFacilityBookingHistory() // Fetch the first page again
 	}
 
 	const renderItem: ListRenderItem<getFacilityBookingHistoryDto> = ({ item, index }) => (
@@ -102,7 +102,7 @@ const FacilityBookingHistoryPage = () => {
 						<CustomButton
 							containerStyles="flex flex-row self-end h-fit mt-1"
 							handlePress={() => {
-								cancel(item.bookingId)
+								cancel(item.bookingGuid)
 							}}
 							rightReactNativeIcons={<Iconicons name="close-circle" color={'#ff0000'} size={16} />}
 						/>

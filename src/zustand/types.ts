@@ -78,7 +78,8 @@ export interface FacilityBookingFormDto {
 }
 
 export interface getFacilityBookingHistoryDto {
-	bookingId: string
+	bookingId: number
+	bookingGuid: string
 	startDate: string
 	facilityId: string
 	facilityName: string
