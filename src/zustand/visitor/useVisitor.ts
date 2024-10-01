@@ -11,9 +11,9 @@ interface visitorState {
 	isLoading: boolean
 	error: string | null
 	createVisitor: (createVisitorDto: CreateVisitorDto) => Promise<any>
-	editVisitorByIdAction: (EditVisitorByIdDto: EditVisitorByIdDto) => Promise<any>
+	editVisitorByIdAction: (EditVisitorByIdDto: EditVisitorByIdDto, visitorGuid: string) => Promise<any>
 	getVisitorsAction: (isPast: boolean) => Promise<any>
-	getVisitorDetailsByIdAction: (id: string) => Promise<any>
+	getVisitorDetailsByIdAction: (visitorGuid: string) => Promise<any>
 	setLoading: (isLoading: boolean) => void
 	setError: (error: string | null) => void
 }
@@ -35,10 +35,10 @@ export const useVisitor = create<visitorState>((set) => ({
 			set({ isLoading: false })
 		}
 	},
-	editVisitorByIdAction: async (editVisitorByIdDto: EditVisitorByIdDto) => {
+	editVisitorByIdAction: async (editVisitorByIdDto: EditVisitorByIdDto, visitorGuid: string) => {
         try {
 			set({ isLoading: true, error: null })
-			const response = await editVisitorById(editVisitorByIdDto)
+			const response = await editVisitorById(editVisitorByIdDto, visitorGuid)
 			return response
 		} catch (error) {
 			set({ error: error.msg })
@@ -58,10 +58,10 @@ export const useVisitor = create<visitorState>((set) => ({
 			set({ isLoading: false })
 		}
 	},
-	getVisitorDetailsByIdAction: async (id: string) => {
+	getVisitorDetailsByIdAction: async (visitorGuid: string) => {
 		try {
 			set({ isLoading: true, error: null })
-			const response = await getVisitorDetailsById(id)
+			const response = await getVisitorDetailsById(visitorGuid)
 			return response
 		} catch (error) {
 			console.log(error)

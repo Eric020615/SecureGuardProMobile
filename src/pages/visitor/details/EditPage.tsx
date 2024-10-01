@@ -92,12 +92,11 @@ const VisitorDetailsEditPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			const response = await editVisitorByIdAction({
-				visitorId: id as string,
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
-			})
+			}, id as string)
 			if (response.success) {
 				formik.resetForm()
 				router.push(currentPath.replace('edit', 'view'))

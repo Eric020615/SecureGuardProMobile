@@ -77,6 +77,8 @@ const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerRespon
 											  }
 											: {}),
 									},
+									params: payload.params,
+									paramsSerializer: (params) => parseParams(params),
 								},
 							)
 						} else if (type === 'patch') {

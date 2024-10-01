@@ -113,15 +113,15 @@ export interface CreateVisitorDto {
 }
 
 export interface EditVisitorByIdDto {
-	visitorId: string
-	visitorName: string
-	visitorCategory: string
-	visitorContactNumber: string
-	visitDateTime: string
+    visitorName: string;
+    visitorCategory: string;
+    visitorContactNumber: string;
+    visitDateTime: string;
 }
 
 export interface GetVisitorDto {
-	visitorId: string
+	visitorId: number
+	visitorGuid: string;
 	visitorName: string
 	visitorCategory: VisitorEnum | null
 	visitorContactNumber: string

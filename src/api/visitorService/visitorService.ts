@@ -28,7 +28,10 @@ export const createVisitor = async (IVisitor: CreateVisitorDto): Promise<any> =>
 	}
 }
 
-export const editVisitorById = async (IVisitor: EditVisitorByIdDto): Promise<any> => {
+export const editVisitorById = async (
+	IVisitor: EditVisitorByIdDto,
+	visitorGuid: string,
+): Promise<any> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -36,6 +39,9 @@ export const editVisitorById = async (IVisitor: EditVisitorByIdDto): Promise<any
 			type: listUrl.visitor.editVisitorById.type,
 			data: IVisitor,
 			_token: token,
+			params: {
+				visitorGuid: visitorGuid,
+			},
 		})
 		const result: IResponse<any> = {
 			success,
@@ -80,14 +86,14 @@ export const getVisitors = async (isPast: boolean): Promise<IResponse<GetVisitor
 	}
 }
 
-export const getVisitorDetailsById = async (id: string) => {
-    try {
+export const getVisitorDetailsById = async (visitorGuid: string) => {
+	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
 			path: listUrl.visitor.getVisitorDetailsById.path,
 			type: listUrl.visitor.getVisitorDetailsById.type,
 			data: {
-				visitorId: id,
+				visitorGuid: visitorGuid,
 			},
 			_token: token,
 		})
