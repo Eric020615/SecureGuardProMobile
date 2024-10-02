@@ -52,7 +52,7 @@ const NoticeListPage = () => {
 		fetchNotice() // Fetch the first page again
 	}
 	const renderItem: ListRenderItem<getNoticeDto> = ({ item, index }) => (
-		<View className="bg-white mt-5 p-4 rounded-lg flex flex-row justify-between" key={index}>
+		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
 			<View>
 				<Text className="font-bold">{item.title}</Text>
 				<Text>{item.description}</Text>
@@ -77,7 +77,7 @@ const NoticeListPage = () => {
 						/>
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Notice</Text>
-					<View className="flex-1">
+					<View className="flex-1 mt-4">
 						<CustomFlatList<getNoticeDto>
 							data={notice}
 							renderItem={renderItem}
@@ -85,7 +85,7 @@ const NoticeListPage = () => {
 							onRefresh={onRefresh}
 							loading={isLoading}
 							numColumns={1}
-							itemHeight={120} // Customize the item height if needed
+							itemHeight={80} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
 									{isLoading && page > 0 ? (

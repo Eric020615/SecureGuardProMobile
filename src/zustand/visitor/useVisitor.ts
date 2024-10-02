@@ -50,7 +50,6 @@ export const useVisitor = create<visitorState>((set) => ({
 		try {
 			set({ isLoading: true, error: null })
 			const response = await getVisitors(isPast, page, limit)
-			console.log(response)
 			return response
 		} catch (error) {
 			console.log(error)
