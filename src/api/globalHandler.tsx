@@ -24,13 +24,6 @@ export interface IServerResponse {
 	data: any
 }
 
-export interface IPaginatedResponse<T> {
-	message?: string
-	data?: T | T[] | null
-	status?: string
-	count: number
-}
-
 const GlobalHandler = async (payload: IHandler): Promise<[boolean, IServerResponse]> => {
 	const _handler = async (payload: IHandler): Promise<[boolean, IServerResponse]> => {
 		try {

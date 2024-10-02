@@ -1,5 +1,5 @@
 import { FacilityBookingFormDto, getFacilityBookingHistoryDto } from "@zustand/types"
-import GlobalHandler, { IPaginatedResponse, IResponse } from "../globalHandler"
+import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 

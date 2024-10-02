@@ -31,9 +31,10 @@ const VisitorListPage = () => {
 			setIsLoading(true)
 			const response = await getVisitorsAction(isPast, page, 10)
 			if (response.success) {
-				setVisitor((prev) => [...prev, ...response.data])
-				setTotalRecords(response.count) // Update total records from response
+				setVisitor((prev) => [...prev, ...response.data.list])
+				setTotalRecords(response.data.count) // Update total records from response
 			}
+			console.log(response)
 		} catch (error) {
 			console.log(error)
 		} finally {

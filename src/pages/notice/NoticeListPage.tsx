@@ -28,8 +28,8 @@ const NoticeListPage = () => {
 			setIsLoading(true)
 			const response = await getNotice(page, 10)
 			if (response.success) {
-				setNotice((prev) => [...prev, ...response.data])
-				setTotalRecords(response.count) // Update total records from response
+				setNotice((prev) => [...prev, ...response.data.list])
+				setTotalRecords(response.data.count) // Update total records from response
 			}
 		} catch (error) {
 			console.log(error)

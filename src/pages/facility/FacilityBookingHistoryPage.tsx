@@ -37,8 +37,8 @@ const FacilityBookingHistoryPage = () => {
 			setIsLoading(true)
 			const response = await getFacilityBookingHistory(isPast, page, 10)
 			if (response.success) {
-				setBookingHistory((prev) => [...prev, ...response.data])
-				setTotalRecords(response.count) // Update total records from response
+				setBookingHistory((prev) => [...prev, ...response.data.list])
+				setTotalRecords(response.data.count) // Update total records from response
 			}
 		} catch (error) {
 			console.log(error)
