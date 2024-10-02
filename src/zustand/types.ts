@@ -43,7 +43,6 @@ export interface GetUserProfileByIdDto {
 }
 
 export interface EditUserDetailsByIdDto {
-	userId: string
 	firstName: string
 	lastName: string
 	userName: string

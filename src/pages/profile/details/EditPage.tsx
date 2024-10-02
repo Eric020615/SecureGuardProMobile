@@ -110,7 +110,6 @@ const ProfileDetailsEditPage = () => {
 				contactNumber: values.userCountryCode.callingCode + values.userPhoneNumber,
 				gender: values.gender,
 				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
-				userId: userDetails?.userId,
 			})
 			if (response.success) {
 				formik.resetForm()
