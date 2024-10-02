@@ -20,7 +20,6 @@ export const useFacility = create<facilityState>((set) => ({
     submitBooking: async (facilityBookingForm: FacilityBookingFormDto) => {
         try {
             set({ isLoading: true, error: null });
-            console.log(facilityBookingForm)
             const response = await submitBooking(facilityBookingForm);
             return response;
         } catch (error) {

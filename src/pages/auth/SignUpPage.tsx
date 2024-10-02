@@ -75,6 +75,7 @@ const SignUpPage = () => {
 						}}
 						onBlur={formik.handleBlur('email')}
 						errorMessage={formik.errors.email}
+						placeholder={"Enter your email"}
 					/>
 					<CustomFormField
 						title="Password"
@@ -87,6 +88,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('password')}
 						errorMessage={formik.errors.password}
+						placeholder={"Enter your password"}
 					/>
 					<CustomFormField
 						title="Confirm Password"
@@ -99,6 +101,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('confirmPassword')}
 						errorMessage={formik.errors.confirmPassword}
+						placeholder={"Enter your confirm password"}
 					/>
 					<CustomButton
 						title="Sign Up"

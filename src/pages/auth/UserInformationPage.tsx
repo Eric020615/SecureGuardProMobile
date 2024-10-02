@@ -155,6 +155,7 @@ const UserInformationPage = () => {
 							formik.errors.userName &&
 							(formik.errors.userName as string)
 						}
+						placeholder={'Enter your username'}
 					/>
 					<CustomFormField
 						title="First Name"
@@ -170,6 +171,7 @@ const UserInformationPage = () => {
 							formik.errors.firstName &&
 							(formik.errors.firstName as string)
 						}
+						placeholder={'Enter your first name'}
 					/>
 					<CustomFormField
 						title="Last Name"
@@ -185,6 +187,7 @@ const UserInformationPage = () => {
 							formik.errors.lastName &&
 							(formik.errors.lastName as string)
 						}
+						placeholder={'Enter your last name'}
 					/>
 					<CustomFormField
 						title="Phone Number"
@@ -204,6 +207,7 @@ const UserInformationPage = () => {
 							formik.errors.phoneNumber &&
 							(formik.errors.phoneNumber as string)
 						}
+						placeholder={'Enter phone number'}
 					/>
 					<View className="flex flex-row mb-3">
 						<View className="flex-1 mr-2">
@@ -224,6 +228,7 @@ const UserInformationPage = () => {
 								}
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
+								placeholder={"Select date of birth"}
 							/>
 						</View>
 						<CustomFormField
@@ -239,6 +244,7 @@ const UserInformationPage = () => {
 							errorMessage={
 								formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
 							}
+							placeholder={"Select gender"}
 						/>
 					</View>
 					<View className="flex flex-row mb-3">
@@ -254,6 +260,7 @@ const UserInformationPage = () => {
 							errorMessage={
 								formik.touched.floor && formik.errors.floor && (formik.errors.floor as string)
 							}
+							placeholder={"Select floor"}
 						/>
 						<CustomFormField
 							title="Unit"
@@ -269,6 +276,7 @@ const UserInformationPage = () => {
 								formik.errors.unitNumber &&
 								(formik.errors.unitNumber as string)
 							}
+							placeholder={"Select unit"}
 						/>
 					</View>
 					<CustomFormField

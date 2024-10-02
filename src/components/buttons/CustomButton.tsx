@@ -27,17 +27,14 @@ const CustomButton = ({
 			onPress={handlePress}
 			activeOpacity={0.7}
 			className={`rounded-xl justify-center 
-      items-center ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
+      		items-center ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
 			disabled={isLoading}
 		>
 			{leftReactNativeIcons ? (
 				<View className={`${iconStyles}`}>{leftReactNativeIcons}</View>
 			) : null}
 			{title && (
-				<Text
-					className={`text-white font-psemibold text-lg self-center
-        ${textStyles}`}
-				>
+				<Text className={`text-white font-psemibold text-lg self-center ${textStyles}`}>
 					{title}
 				</Text>
 			)}

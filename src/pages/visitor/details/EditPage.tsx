@@ -137,7 +137,7 @@ const VisitorDetailsEditPage = () => {
 									onChangeText={(e) => {
 										formik.setFieldValue('visitorName', e)
 									}}
-									placeholder={formik.values.visitorName}
+									placeholder={"Enter full name"}
 									errorMessage={
 										formik.touched.visitorName &&
 										formik.errors.visitorName &&
@@ -150,6 +150,7 @@ const VisitorDetailsEditPage = () => {
 								title="Visitor Category"
 								textStyle="text-base font-bold"
 								type="Picker"
+								placeholder={"Select visitor category"}
 								selectedValue={formik.values.visitorCategory}
 								onValueChange={(e) => {
 									formik.setFieldValue('visitorCategory', e)
@@ -179,6 +180,7 @@ const VisitorDetailsEditPage = () => {
 									formik.errors.visitorPhoneNumber &&
 									(formik.errors.visitorPhoneNumber as string)
 								}
+								placeholder={"Enter phone number"}
 							/>
 							<View className="flex flex-row gap-4 mt-1">
 								<View className="flex-1">
@@ -203,6 +205,7 @@ const VisitorDetailsEditPage = () => {
 										}
 										setShowDateTime={setShowCalendar}
 										showDateTime={showCalendar}
+										placeholder={"Select visit date"}
 									/>
 								</View>
 							</View>

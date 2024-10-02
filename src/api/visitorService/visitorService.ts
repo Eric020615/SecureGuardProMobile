@@ -59,7 +59,7 @@ export const editVisitorById = async (
 	}
 }
 
-export const getVisitors = async (isPast: boolean): Promise<IResponse<GetVisitorDto[]>> => {
+export const getVisitors = async (isPast: boolean, page: number, limit: number): Promise<IResponse<GetVisitorDto[]>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -67,6 +67,8 @@ export const getVisitors = async (isPast: boolean): Promise<IResponse<GetVisitor
 			type: listUrl.visitor.getVisitors.type,
 			data: {
 				isPast: isPast,
+				page: page,
+				limit: limit
 			},
 			_token: token,
 		})

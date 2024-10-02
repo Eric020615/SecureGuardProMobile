@@ -12,7 +12,7 @@ interface visitorState {
 	error: string | null
 	createVisitor: (createVisitorDto: CreateVisitorDto) => Promise<any>
 	editVisitorByIdAction: (EditVisitorByIdDto: EditVisitorByIdDto, visitorGuid: string) => Promise<any>
-	getVisitorsAction: (isPast: boolean) => Promise<any>
+	getVisitorsAction: (isPast: boolean, page: number, limit: number) => Promise<any>
 	getVisitorDetailsByIdAction: (visitorGuid: string) => Promise<any>
 	setLoading: (isLoading: boolean) => void
 	setError: (error: string | null) => void
@@ -46,10 +46,10 @@ export const useVisitor = create<visitorState>((set) => ({
 			set({ isLoading: false })
 		}
     },
-	getVisitorsAction: async (isPast: boolean) => {
+	getVisitorsAction: async (isPast: boolean, page: number, limit: number) => {
 		try {
 			set({ isLoading: true, error: null })
-			const response = await getVisitors(isPast)
+			const response = await getVisitors(isPast, page, limit)
 			return response
 		} catch (error) {
 			console.log(error)

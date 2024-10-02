@@ -116,6 +116,7 @@ const CreateFacilityBookingPage = () => {
 						}
 						setShowDateTime={setShowCalendar}
 						showDateTime={showCalendar}
+						placeholder={"Select booking date"}
 					/>
 					<CustomFormField
 						containerStyle="mt-4"
@@ -132,6 +133,7 @@ const CreateFacilityBookingPage = () => {
 							formik.errors.duration &&
 							(formik.errors.duration as string)
 						}
+						placeholder={"Select booking duration"}
 					/>
 					<CustomFormField
 						containerStyle="my-4"
@@ -148,13 +150,14 @@ const CreateFacilityBookingPage = () => {
 							formik.errors.numofGuest &&
 							(formik.errors.numofGuest as string)
 						}
+						placeholder={"Select number of guests"}
 					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}
-						containerStyles="border-primary border bg-white p-3 w-full mt-2 flex flex-row self-center"
+						containerStyles="border-primary border bg-primary p-3 w-full mt-2 flex flex-row self-center"
 						isLoading={isLoading}
-						textStyles="text-sm text-primary"
+						textStyles="text-sm text-white"
 					/>
 				</View>
 			</ScrollView>

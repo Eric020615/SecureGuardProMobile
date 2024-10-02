@@ -3,13 +3,17 @@ import GlobalHandler, { IResponse } from "../globalHandler"
 import { listUrl } from "../listUrl"
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-export const getNotices = async (): Promise<IResponse<getNoticeDto[]>> => {
+export const getNotices = async (page: number, limit: number): Promise<IResponse<getNoticeDto[]>> => {
     try {
         const token = await AsyncStorage.getItem("token")
         const [success, response] = await GlobalHandler({
             path: listUrl.notice.getNoticesByResident.path,
             type: listUrl.notice.getNoticesByResident.type,
-            _token: token ? token : ""
+            _token: token ? token : "",
+            data: {
+                page: page,
+                limit: limit
+            }
         })
         const result : IResponse<getNoticeDto[]> = {
             success,

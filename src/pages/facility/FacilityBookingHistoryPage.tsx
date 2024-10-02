@@ -1,4 +1,4 @@
-import { View, Text, Alert, ListRenderItem } from 'react-native'
+import { View, Text, Alert, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
@@ -22,12 +22,12 @@ const FacilityBookingHistoryPage = () => {
 	const { isLoading, setIsLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
 	const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([])
-	const [pageNumber, setPageNumber] = useState(0)
+	const [page, setPage] = useState(0)
 	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
 		setBookingHistory([]) // Reset the booking history
-		setPageNumber(0)
+		setPage(0)
 		fetchFacilityBookingHistory()
 	}, [isPast]) // Dependency on isPast to refetch data
 
@@ -35,10 +35,10 @@ const FacilityBookingHistoryPage = () => {
 		try {
 			if (isLoading) return
 			setIsLoading(true)
-			const response = await getFacilityBookingHistory(isPast, pageNumber, 10)
+			const response = await getFacilityBookingHistory(isPast, page, 10)
 			if (response.success) {
-				setBookingHistory((prev) => [...prev, ...response.data.result])
-				setTotalRecords(response.data.count) // Update total records from response
+				setBookingHistory((prev) => [...prev, ...response.data])
+				setTotalRecords(response.count) // Update total records from response
 			}
 		} catch (error) {
 			console.log(error)
@@ -65,14 +65,14 @@ const FacilityBookingHistoryPage = () => {
 	const fetchNextPage = async () => {
 		if (isLoading || bookingHistory.length >= totalRecords) return
 		if (bookingHistory.length % 10 !== 0) return
-		setPageNumber((prev) => prev + 1)
+		setPage((prev) => prev + 1)
 		// Logic to fetch the next page
 		fetchFacilityBookingHistory() // Fetch the first page again
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
 		// Logic to refresh data
-		setPageNumber(0)
+		setPage(0)
 		setBookingHistory([]) // Clear existing data
 		fetchFacilityBookingHistory() // Fetch the first page again
 	}
@@ -153,6 +153,19 @@ const FacilityBookingHistoryPage = () => {
 							loading={isLoading}
 							numColumns={1}
 							itemHeight={120} // Customize the item height if needed
+							listFooterComponent={
+								<View className="py-4 items-center">
+									{isLoading && page > 0 ? (
+										// Show a loading indicator while fetching more data
+										<ActivityIndicator size="large" color="#0000ff" />
+									) : bookingHistory.length < totalRecords ? (
+										<Text className="text-gray-500">Load More</Text>
+									) : (
+										// Show a message when all data is loaded
+										<Text className="text-gray-500">You've reached the end of the list.</Text>
+									)}
+								</View>
+							}
 						/>
 					</View>
 				</View>

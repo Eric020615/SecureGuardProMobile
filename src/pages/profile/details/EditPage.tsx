@@ -152,7 +152,7 @@ const ProfileDetailsEditPage = () => {
 									onChangeText={(e) => {
 										formik.setFieldValue('firstName', e)
 									}}
-									placeholder={formik.values.firstName}
+									placeholder="Enter your first name"
 									errorMessage={
 										formik.touched.firstName &&
 										formik.errors.firstName &&
@@ -170,7 +170,7 @@ const ProfileDetailsEditPage = () => {
 									onChangeText={(e) => {
 										formik.setFieldValue('lastName', e)
 									}}
-									placeholder={formik.values.lastName}
+									placeholder="Enter your last name"
 									errorMessage={
 										formik.touched.lastName &&
 										formik.errors.lastName &&
@@ -188,7 +188,7 @@ const ProfileDetailsEditPage = () => {
 									onChangeText={(e) => {
 										formik.setFieldValue('userName', e)
 									}}
-									placeholder={formik.values.userName}
+									placeholder="Enter your username"
 									errorMessage={
 										formik.touched.userName &&
 										formik.errors.userName &&
@@ -205,7 +205,7 @@ const ProfileDetailsEditPage = () => {
 								onChangeText={(e) => {
 									formik.setFieldValue('email', e)
 								}}
-								placeholder="Email"
+								placeholder="Enter your email"
 								errorMessage={
 									formik.touched.email && formik.errors.email && (formik.errors.email as string)
 								}
@@ -228,6 +228,7 @@ const ProfileDetailsEditPage = () => {
 									formik.errors.userPhoneNumber &&
 									(formik.errors.userPhoneNumber as string)
 								}
+								placeholder="Enter phone number"
 							/>
 							<CustomFormField
 								containerStyle="mt-4"
@@ -242,6 +243,7 @@ const ProfileDetailsEditPage = () => {
 								errorMessage={
 									formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
 								}
+								placeholder="Select gender"
 							/>
 							<View className="flex flex-row gap-4 mt-1">
 								<View className="flex-1">
@@ -266,6 +268,7 @@ const ProfileDetailsEditPage = () => {
 										}
 										setShowDateTime={setShowCalendar}
 										showDateTime={showCalendar}
+										placeholder="Select date of birth"
 									/>
 								</View>
 							</View>

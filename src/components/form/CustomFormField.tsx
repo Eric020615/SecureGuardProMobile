@@ -61,6 +61,15 @@ interface CustomFormFieldProps {
 	errorMessage?: any
 }
 
+const CustomFormFieldStyled = {
+	container: 'w-full h-[45px] bg-white rounded-2xl focus:border-secondary mt-2',
+	input: 'w-full h-[45px] rounded-xl bg-white focus:border-secondary items-center flex-row px-4',
+	button: 'items-center flex-row justify-between h-[45px] bg-white py-2 px-4 mt-2',
+	textInput: 'flex-1 text-black text-base',
+	placeholderText: 'text-sm text-black',
+	iconSize: 'w-6 h-6',
+}
+
 const CustomFormField = (
 	props:
 		| CustomPhoneInputProps
@@ -74,24 +83,22 @@ const CustomFormField = (
 		switch (props.type) {
 			case 'Text':
 				return (
-					<View
-						className={`w-full h-[50px] px-4 bg-white rounded-2xl focus:border-secondary items-center flex-row mt-4`}
-					>
+					<View className={`${CustomFormFieldStyled.input}`}>
 						<TextInput
-							className="flex-1 text-black text-base"
+							className={CustomFormFieldStyled.textInput}
 							value={String(props.textValue)}
 							placeholder={props.placeholder}
 							placeholderTextColor="#7b7b8b"
 							onChangeText={props.onChangeText}
 							secureTextEntry={props.isSecureTextEntry && !showPassword}
 							onBlur={props.onBlur}
-							keyboardType={'default'}
+							keyboardType="default"
 						/>
 						{props.isSecureTextEntry && (
 							<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
 								<Image
 									source={!showPassword ? icons.eye : icons.eyeHide}
-									className="w-6 h-6"
+									className={CustomFormFieldStyled.iconSize}
 									resizeMode="contain"
 								/>
 							</TouchableOpacity>
@@ -100,18 +107,11 @@ const CustomFormField = (
 				)
 			case 'Phone':
 				return (
-					<View
-						className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary items-center flex-row mt-4`}
-					>
+					<View className={`${CustomFormFieldStyled.input} px-0`}>
 						<PhoneInput
 							phoneInputStyles={{
-								container: {
-									borderWidth: 0,
-									backgroundColor: 'transparent',
-								},
-								flagContainer: {
-									backgroundColor: 'transparent',
-								},
+								container: { borderWidth: 0, backgroundColor: 'transparent' },
+								flagContainer: { backgroundColor: 'transparent' },
 							}}
 							defaultCountry="MY"
 							selectedCountry={props.selectedCountryCode ? props.selectedCountryCode : null}
@@ -120,52 +120,44 @@ const CustomFormField = (
 							value={props.phoneNumber}
 							keyboardType="phone-pad"
 							maxLength={25}
-							onChangeText={props.setPhoneNumber}
 							onBlur={props.onBlur}
+							placeholder={props.placeholder}
+							onChangeText={props.setPhoneNumber}
 						/>
 					</View>
 				)
 			case 'DateTime':
 				return (
 					<>
-						<View>
-							<CustomButton
-								containerStyles={`items-center flex-row justify-between h-[50px] bg-white p-4 mt-2 ${props.buttonContainerStyles}`}
-								handlePress={() => {
-									props.setShowDateTime(!props.showDateTime)
-								}}
-								title={props.buttonTitle}
-								rightReactNativeIcons={
-									<Iconicons name="caret-down" color={'#000000'} size={14} style={{}} />
-								}
-								textStyles={`text-sm text-black ml-auto mr-auto ${props.buttonTextStyles}`}
-								iconStyles=""
-							/>
-							<DatePicker
-								modal
-								open={props.showDateTime}
-								date={props.selectedDate}
-								onConfirm={props.onChange}
-								onCancel={() => {
-									props.setShowDateTime(!props.showDateTime)
-								}}
-								timeZoneOffsetInMinutes={ 8 * 60 }
-								mode={props.mode}
-								minimumDate={props.minimumDate}
-								maximumDate={props.maximumDate}
-							/>
-						</View>
+						<CustomButton
+							containerStyles={`${CustomFormFieldStyled.button} ${props.buttonContainerStyles}`}
+							handlePress={() => props.setShowDateTime(!props.showDateTime)}
+							title={props.buttonTitle ? props.buttonTitle : props.placeholder}
+							rightReactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
+							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-pmedium`}
+						/>
+						<DatePicker
+							modal
+							open={props.showDateTime}
+							date={props.selectedDate}
+							onConfirm={props.onChange}
+							onCancel={() => props.setShowDateTime(!props.showDateTime)}
+							timeZoneOffsetInMinutes={8 * 60}
+							mode={props.mode}
+							minimumDate={props.minimumDate}
+							maximumDate={props.maximumDate}
+						/>
 					</>
 				)
 			case 'Picker':
 				return (
-					<View className={`w-full h-[50px] bg-white rounded-2xl focus:border-secondary mt-2`}>
+					<View className={`${CustomFormFieldStyled.container} justify-center`}>
 						<Picker
 							selectedValue={props.selectedValue}
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
 						>
-							{!props.selectedValue && <Picker.Item label="Please select ..." value="" />}
+							{!props.selectedValue && <Picker.Item label={props.placeholder} value="" />}
 							{props.items.map((x) => (
 								<Picker.Item key={x.key} label={x.label} value={x.value} />
 							))}
@@ -174,36 +166,34 @@ const CustomFormField = (
 				)
 			case 'FilePicker':
 				return (
-					<>
-						<View
-							className={`w-full h-[50px] flex flex-row items-center bg-white rounded-2xl focus:border-secondary mt-2`}
-						>
-							{props.selectedFiles.length > 0 ? (
-								<>
-									<CustomButton
-										handlePress={props.clearFile}
-										containerStyles="mx-5"
-										rightReactNativeIcons={<Iconicons name="close-circle" color={'#10312b'} size={30} />}
-									/>
-									<View className="flex flex-col">
-										{props.selectedFiles.map((selectedFile, id) => (
-											<Text key={id}>{selectedFile.name}</Text>
-										))}
-									</View>
-								</>
-							) : (
-								<>
-									<CustomButton
-										title="Choose File"
-										handlePress={props.onFileChanged}
-										textStyles="text-white text-sm"
-										containerStyles="bg-primary px-2 mx-5"
-									/>
-									<Text>No File Selected</Text>
-								</>
-							)}
-						</View>
-					</>
+					<View className={`${CustomFormFieldStyled.container} flex flex-row items-center`}>
+						{props.selectedFiles.length > 0 ? (
+							<>
+								<CustomButton
+									handlePress={props.clearFile}
+									containerStyles="mx-5"
+									rightReactNativeIcons={
+										<Iconicons name="close-circle" color={'#10312b'} size={30} />
+									}
+								/>
+								<View className="flex flex-col">
+									{props.selectedFiles.map((selectedFile, id) => (
+										<Text key={id}>{selectedFile.name}</Text>
+									))}
+								</View>
+							</>
+						) : (
+							<>
+								<CustomButton
+									title="Choose File"
+									handlePress={props.onFileChanged}
+									textStyles="text-white text-sm"
+									containerStyles="bg-primary px-2 mx-5"
+								/>
+								<Text>No File Selected</Text>
+							</>
+						)}
+					</View>
 				)
 		}
 	}

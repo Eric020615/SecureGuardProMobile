@@ -18,25 +18,25 @@ const HomePage = () => {
 						<Text className="text-black text-lg font-psemibold mb-4">About Your Property</Text>
 						<View className="flex flex-row gap-5">
 							<TouchableOpacity
-								className="p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1"
+								className="py-4 w-fit flex justify-center items-center bg-white rounded-md flex-1"
 								onPress={() => router.push('/package')}
 							>
 								<Image source={icons.packages} className="mb-2" />
-								<Text className="text-sm">Package</Text>
+								<Text className="text-sm font-semibold">Package</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								className="p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1"
+								className="py-4 w-fit flex justify-center items-center bg-white rounded-md flex-1"
 								onPress={() => router.push('/facility')}
 							>
 								<Image source={icons.facility} className="mb-2" />
-								<Text className="text-sm">Facility</Text>
+								<Text className="text-sm font-semibold">Facility</Text>
 							</TouchableOpacity>
 							<TouchableOpacity
-								className="p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1"
+								className="py-4 w-fit flex justify-center items-center bg-white rounded-md flex-1"
 								onPress={() => router.push('/notices')}
 							>
 								<Image source={icons.notices} className="mb-2" />
-								<Text className="text-sm">Notices</Text>
+								<Text className="text-sm font-semibold">Notices</Text>
 							</TouchableOpacity>
 						</View>
 						<View className="mt-6">

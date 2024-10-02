@@ -67,6 +67,7 @@ const SignInPage = () => {
 							formik.setFieldValue('email', e)
 						}}
 						errorMessage={formik.errors.email}
+						placeholder={"Enter your email"}
 					/>
 					<CustomFormField
 						title="Password"
@@ -78,6 +79,7 @@ const SignInPage = () => {
 						}}
 						isSecureTextEntry={true}
 						errorMessage={formik.errors.password}
+						placeholder={"Enter your password"}
 					/>
 					<CustomButton
 						title="Log In"
