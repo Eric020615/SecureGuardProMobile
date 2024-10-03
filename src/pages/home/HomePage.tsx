@@ -26,7 +26,7 @@ const HomePage = () => {
 							</TouchableOpacity>
 							<TouchableOpacity
 								className="py-4 w-fit flex justify-center items-center bg-white rounded-md flex-1"
-								onPress={() => router.push('/facility')}
+								onPress={() => router.push('/facility/create')}
 							>
 								<Image source={icons.facility} className="mb-2" />
 								<Text className="text-sm font-semibold">Facility</Text>

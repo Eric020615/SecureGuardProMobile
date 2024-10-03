@@ -52,7 +52,7 @@ const FacilityBookingHistoryPage = () => {
 			setIsLoading(true)
 			const response = await cancelBooking(bookingGuid)
 			if (response.success) {
-				router.push('/facilityHistory')
+				router.push('/facility/history')
 			} else {
 				Alert.alert(response.msg)
 			}
@@ -120,7 +120,7 @@ const FacilityBookingHistoryPage = () => {
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
-								router.push('/facility')
+								router.push("/facility/create")
 							}}
 							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
 						/>

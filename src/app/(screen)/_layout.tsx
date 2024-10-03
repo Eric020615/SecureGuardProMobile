@@ -7,18 +7,6 @@ const ScreenLayout = () => {
 		<>
 			<Stack>
 				<Stack.Screen
-					name="facility"
-					options={{
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen
-					name="facilityHistory"
-					options={{
-						headerShown: false,
-					}}
-				/>
-				<Stack.Screen
 					name="notices"
 					options={{
 						headerShown: false,
@@ -44,6 +32,24 @@ const ScreenLayout = () => {
 				/>
 				<Stack.Screen
 					name="camera"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="facility/create"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="facility/history"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="facility/[facilityId]/[startDate]/[duration]/check"
 					options={{
 						headerShown: false,
 					}}

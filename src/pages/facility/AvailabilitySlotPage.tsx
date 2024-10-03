@@ -23,7 +23,7 @@ interface FacilityBooking {
 	numofGuest: number
 }
 
-const CreateFacilityBookingPage = () => {
+const AvailabilitySlotPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
@@ -165,4 +165,4 @@ const CreateFacilityBookingPage = () => {
 	)
 }
 
-export default CreateFacilityBookingPage
+export default AvailabilitySlotPage
