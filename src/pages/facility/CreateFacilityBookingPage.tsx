@@ -109,7 +109,7 @@ const CreateFacilityBookingPage = () => {
 						title="Booking Date"
 						textStyle="text-base font-bold"
 						type="DateTime"
-						selectedDate={formik.values.startDate ? formik.values.startDate : moment().toDate()}
+						selectedDate={formik.values.startDate ? formik.values.startDate : moment().add(1, "minute").toDate()}
 						onChange={onDatePickerChange}
 						buttonTitle={getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)}
 						minimumDate={moment().toDate()}
