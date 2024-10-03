@@ -1,9 +1,9 @@
-import FacilityBookingHistoryPage from "@pages/facility/FacilityBookingHistoryPage";
+import AvailabilitySlotPage from "@pages/facility/AvailabilitySlotPage";
 
-const facilityHistory = () => {
+const AvailabilitySlot = () => {
   return (
-    <FacilityBookingHistoryPage/>
+    <AvailabilitySlotPage/>
   );
 };
 
-export default facilityHistory;
+export default AvailabilitySlot;

@@ -5,7 +5,7 @@ import CustomDataNotFound from '@components/dataNotFound/CustomDataNotFound'
 interface CustomFlatListProps<T> {
 	data: T[]
 	renderItem: ListRenderItem<T>
-	fetchNextPage: () => void
+	fetchNextPage?: () => void
 	loading: boolean
 	isRefreshing?: boolean
 	onRefresh: () => void
@@ -53,6 +53,7 @@ const CustomFlatList = <T extends object>({
 			columnWrapperStyle={columnWrapperStyle}
 			onEndReached={() => {
 				if (loading) return
+				if (fetchNextPage == undefined) return
 				fetchNextPage()
 			}}
 			onEndReachedThreshold={0.5}

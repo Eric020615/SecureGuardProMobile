@@ -40,3 +40,9 @@ export const getUTCRelativeTimeFromNow = (date: Date) => {
 	const relativeTime = moment.utc(date).tz('Asia/Kuala_Lumpur').fromNow()
 	return relativeTime
 }
+
+export const formatDateString = (dateString: string, dateFormat: string) => {
+	if (dateString === null) return ''
+	const localDateString = moment(dateString).tz('Asia/Kuala_Lumpur').format(dateFormat)
+	return localDateString
+}

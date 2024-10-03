@@ -44,21 +44,27 @@ const CreateFacilityBookingPage = () => {
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			setIsLoading(true)
-			const response = await submitBooking({
-				facilityId: values.facilityId,
-				startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
-				endDate: getUTCDateString(
-					moment(formik.values.startDate).add(formik.values.duration, 'hours').toDate(),
+			router.push(
+				`/facility/${formik.values.facilityId}/${getLocalDateString(
+					formik.values.startDate,
 					ITimeFormat.dateTime,
-				),
-				numOfGuest: values.numofGuest,
-			})
-			if (response.success) {
-				formik.resetForm()
-				router.push('/facility/history')
-			} else {
-				Alert.alert(response.msg)
-			}
+				)}/${formik.values.duration}/check`,
+			)
+			// const response = await submitBooking({
+			// 	facilityId: values.facilityId,
+			// 	startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
+			// 	endDate: getUTCDateString(
+			// 		moment(formik.values.startDate).add(formik.values.duration, 'hours').toDate(),
+			// 		ITimeFormat.dateTime,
+			// 	),
+			// 	numOfGuest: values.numofGuest,
+			// })
+			// if (response.success) {
+			// 	formik.resetForm()
+			// 	router.push('/facility/history')
+			// } else {
+			// 	Alert.alert(response.msg)
+			// }
 			setIsLoading(false)
 		},
 	})

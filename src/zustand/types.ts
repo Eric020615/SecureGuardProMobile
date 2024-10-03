@@ -76,6 +76,13 @@ export interface FacilityBookingFormDto {
 	numOfGuest: number
 }
 
+export interface SpaceAvailabilityDto {
+	spaceId: string
+	spaceName: string
+	isBooked: boolean // Change to isBooked or any other name if required
+	capacity: number
+}
+
 export interface getFacilityBookingHistoryDto {
 	bookingId: number
 	bookingGuid: string

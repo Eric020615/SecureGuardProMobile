@@ -34,7 +34,6 @@ const VisitorListPage = () => {
 				setVisitor((prev) => [...prev, ...response.data.list])
 				setTotalRecords(response.data.count) // Update total records from response
 			}
-			console.log(response)
 		} catch (error) {
 			console.log(error)
 		} finally {

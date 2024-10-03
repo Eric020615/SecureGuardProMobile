@@ -134,7 +134,7 @@ const CustomFormField = (
 							handlePress={() => props.setShowDateTime(!props.showDateTime)}
 							title={props.buttonTitle ? props.buttonTitle : props.placeholder}
 							rightReactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
-							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-pmedium`}
+							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-psemibold`}
 						/>
 						<DatePicker
 							modal
