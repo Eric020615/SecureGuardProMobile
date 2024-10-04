@@ -13,7 +13,7 @@ interface facilityState {
 	submitBooking: (facilityBookingForm: FacilityBookingFormDto) => Promise<any>
 	getFacilityBookingHistory: (isPast: boolean, page: number, limit: number) => Promise<any>
 	cancelBooking: (bookingGuid: string) => Promise<any>
-	checkAvailabilitySlotAction: (facilityId: string, startDate: string, duration: string) => Promise<any>
+	checkAvailabilitySlotAction: (facilityId: string, startDate: string, endDate: string) => Promise<any>
     setLoading: (isLoading: boolean) => void
 	setError: (error: string | null) => void
 }
@@ -58,10 +58,10 @@ export const useFacility = create<facilityState>((set) => ({
 			set({ isLoading: false })
 		}
 	},
-	checkAvailabilitySlotAction: async (facilityId: string, startDate: string, duration: string) => {
+	checkAvailabilitySlotAction: async (facilityId: string, startDate: string, endDate: string) => {
 		try {
 			set({ isLoading: true, error: null })
-			const response = await checkAvailabilitySlot(facilityId, startDate, duration)
+			const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
 			return response
 		} catch (error) {
 			console.log(error)

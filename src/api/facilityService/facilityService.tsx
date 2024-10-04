@@ -93,7 +93,7 @@ export const cancelBooking = async (bookingGuid: string): Promise<any> => {
 export const checkAvailabilitySlot = async (
 	facilityId: string,
 	startDate: string,
-	duration: string,
+	endDate: string,
 ): Promise<IResponse<SpaceAvailabilityDto[]>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
@@ -103,7 +103,7 @@ export const checkAvailabilitySlot = async (
 			data: {
 				facilityId: facilityId,
 				startDate: startDate,
-				duration: duration,
+				endDate: endDate,
 			},
 			_token: token,
 		})

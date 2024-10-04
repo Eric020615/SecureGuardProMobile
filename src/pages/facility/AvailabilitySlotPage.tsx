@@ -55,9 +55,9 @@ const AvailabilitySlotPage = () => {
 			setIsLoading(true)
 			if (!facilityId || !startDate || !duration) return
 			const response = await checkAvailabilitySlotAction(
-				facilityId as string,
-				convertLocalDateStringToUTCString(startDate as string, ITimeFormat.dateTime),
-				duration as string,
+				formik.values.facilityId,
+				getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
+				getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
 			)
 			if (response.success) {
 				setAvailabilitySlot(response.data)
