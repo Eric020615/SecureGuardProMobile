@@ -1,4 +1,4 @@
-import { View, Image, Dimensions, StyleSheet, Text, ImageSourcePropType } from 'react-native'
+import { View, Image, Dimensions, StyleSheet, ImageSourcePropType } from 'react-native'
 import React, { Dispatch, SetStateAction, useState } from 'react'
 import Carousel from 'react-native-reanimated-carousel'
 

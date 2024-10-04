@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
@@ -35,7 +35,7 @@ interface UserInformationForm {
 const UserInformationPage = () => {
 	const { setCustomConfirmModal } = useModal()
 	const { setIsLoading } = useApplication()
-	const { createUserAction, isLoading, error } = useUser()
+	const { createUserAction, isLoading } = useUser()
 	const { tempToken } = useAuth()
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)

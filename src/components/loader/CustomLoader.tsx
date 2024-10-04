@@ -1,4 +1,4 @@
-import { View, Text } from 'react-native'
+import { View } from 'react-native'
 import React, { useEffect, useRef } from 'react'
 import LottieView from 'lottie-react-native'
 import { animations } from '@assets/index'

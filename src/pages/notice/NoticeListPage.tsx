@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useNotice } from '@zustand/notice/useNotice'

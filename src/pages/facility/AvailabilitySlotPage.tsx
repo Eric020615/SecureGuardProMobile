@@ -1,4 +1,4 @@
-import { View, Text, ListRenderItem, TouchableOpacity } from 'react-native'
+import { View, Text, ListRenderItem, TouchableOpacity, Alert } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
@@ -8,10 +8,29 @@ import { useApplication } from '@zustand/index'
 import { SpaceAvailabilityDto } from '@zustand/types'
 import CustomFlatList from '@components/list/CustomFlatList'
 import Iconicons from 'react-native-vector-icons/Ionicons'
-import { FacilityConst } from '@config/constant/facilities'
+import {
+	facilityBookingSubmissionConst,
+	FacilityConst,
+} from '@config/constant/facilities'
 import moment from 'moment'
 import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
+import {
+	convertDateStringToDate,
+	convertLocalDateStringToUTCString,
+	getTodayDate,
+	getUTCDateString,
+} from '../../helpers/time'
+
+interface FacilityBooking {
+	facilityId: string
+	startDate: Date
+	endDate: Date
+	numofGuest: number
+	space: string
+}
 
 const AvailabilitySlotPage = () => {
 	const { isLoading, setIsLoading } = useApplication()
@@ -22,8 +41,20 @@ const AvailabilitySlotPage = () => {
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null) // State to track selected slot
 
 	useEffect(() => {
+		formik.setFieldValue('facilityId', facilityId)
+		formik.setFieldValue('startDate', convertDateStringToDate(startDate as string))
+		formik.setFieldValue(
+			'endDate',
+			moment(startDate)
+				.add(duration as string, 'hours')
+				.format(ITimeFormat.dateTime),
+		)
 		fetchAvailabilitySlot()
 	}, [facilityId, startDate, duration])
+
+	useEffect(() => {
+		formik.setFieldValue('space', selectedSlot)
+	}, [selectedSlot])
 
 	const fetchAvailabilitySlot = async () => {
 		try {
@@ -31,7 +62,7 @@ const AvailabilitySlotPage = () => {
 			if (!facilityId || !startDate || !duration) return
 			const response = await checkAvailabilitySlotAction(
 				facilityId as string,
-				startDate as string,
+				convertLocalDateStringToUTCString(startDate as string, ITimeFormat.dateTime),
 				duration as string,
 			)
 			if (response.success) {
@@ -45,13 +76,59 @@ const AvailabilitySlotPage = () => {
 	}
 
 	const handleSlotSelection = (index: number) => {
-		// If the same slot is clicked again, deselect it by setting selectedSlot to null
 		if (selectedSlot === index) {
 			setSelectedSlot(null)
 		} else {
 			setSelectedSlot(index)
 		}
 	}
+
+	const validationSchema = Yup.object().shape({
+		facilityId: Yup.string().required('Please select a facility to proceed.'),
+		startDate: Yup.date()
+			.required('Please select a start date and time for your booking.')
+			.min(
+				getTodayDate(),
+				'Start time cannot be in the past, please select a valid future date and time',
+			),
+		endDate: Yup.date()
+			.required('Please select a start date and time for your booking.')
+			.min(
+				Yup.ref('startDate'),
+				'End time cannot be before the start time, please select a valid end time.',
+			),
+		numofGuest: Yup.number().required('Please specify the number of guests attending.'),
+		space: Yup.string().required('Please select a slot to proceed.'),
+	})
+
+	const formik = useFormik<FacilityBooking>({
+		enableReinitialize: true,
+		validateOnBlur: false,
+		initialValues: facilityBookingSubmissionConst,
+		validationSchema: validationSchema,
+		onSubmit: async (values) => {
+			try {
+				setIsLoading(true)
+				const response = await submitBooking({
+					facilityId: values.facilityId,
+					startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
+					endDate: getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
+					numOfGuest: values.numofGuest,
+					// space
+				})
+				if (response.success) {
+					formik.resetForm()
+					router.push('/facility/history')
+				} else {
+					Alert.alert(response.msg)
+				}
+			} catch (error) {
+				console.log(error)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+	})
 
 	const renderItem: ListRenderItem<SpaceAvailabilityDto> = ({ item, index }) => (
 		<TouchableOpacity
@@ -140,10 +217,7 @@ const AvailabilitySlotPage = () => {
 					<View>
 						<CustomButton
 							title="Submit"
-							handlePress={() => {
-								// Handle submit logic here
-								console.log(`Selected slot: ${selectedSlot}`)
-							}}
+							handlePress={formik.handleSubmit}
 							containerStyles={`border-primary border bg-primary
 							p-3 w-full mt-2 flex flex-row self-center`}
 							isLoading={isLoading}

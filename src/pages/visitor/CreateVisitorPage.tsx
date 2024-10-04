@@ -1,11 +1,9 @@
-import { View, Text, ScrollView, Platform, Alert } from 'react-native'
+import { View, Text, ScrollView, Alert } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
-import moment from 'moment'
-import 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
@@ -28,10 +26,8 @@ interface CreateVisitor {
 
 const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [showTime, setShowTime] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
 	const { createVisitor } = useVisitor()
-	const { setIsLoading } = useApplication()
+	const { isLoading, setIsLoading } = useApplication()
 
 	const validationSchema = Yup.object().shape({
 		visitDateTime: Yup.date().required('Visit date is required'),
@@ -102,7 +98,7 @@ const CreateVisitorPage = () => {
 							onChangeText={(e) => {
 								formik.setFieldValue('visitorName', e)
 							}}
-							placeholder={"Enter full name"}
+							placeholder={'Enter full name'}
 							errorMessage={
 								formik.touched.visitorName &&
 								formik.errors.visitorName &&
@@ -119,7 +115,7 @@ const CreateVisitorPage = () => {
 								formik.setFieldValue('visitorCategory', e)
 							}}
 							items={VisitorCategoryList}
-							placeholder={"Select visitor category"}
+							placeholder={'Select visitor category'}
 							errorMessage={
 								formik.touched.visitorCategory &&
 								formik.errors.visitorCategory &&
@@ -144,7 +140,7 @@ const CreateVisitorPage = () => {
 								formik.errors.visitorPhoneNumber &&
 								(formik.errors.visitorPhoneNumber as string)
 							}
-							placeholder={"Enter phone number"}
+							placeholder={'Enter phone number'}
 						/>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
@@ -156,9 +152,10 @@ const CreateVisitorPage = () => {
 										formik.values.visitDateTime ? formik.values.visitDateTime : getTodayDate()
 									}
 									onChange={onDatePickerChange}
-									buttonTitle={
-										getLocalDateString(formik.values.visitDateTime, ITimeFormat.dateTime)
-									}
+									buttonTitle={getLocalDateString(
+										formik.values.visitDateTime,
+										ITimeFormat.dateTime,
+									)}
 									minimumDate={getTodayDate()}
 									mode="datetime"
 									errorMessage={
@@ -168,7 +165,7 @@ const CreateVisitorPage = () => {
 									}
 									setShowDateTime={setShowCalendar}
 									showDateTime={showCalendar}
-									placeholder={"Select visit date"}
+									placeholder={'Select visit date'}
 								/>
 							</View>
 						</View>
@@ -176,7 +173,7 @@ const CreateVisitorPage = () => {
 							title="Submit"
 							handlePress={formik.handleSubmit}
 							containerStyles="bg-primary p-4 w-full mt-8 self-center"
-							isLoading={isSubmitting}
+							isLoading={isLoading}
 							textStyles="text-sm text-white"
 						/>
 					</View>

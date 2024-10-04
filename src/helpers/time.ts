@@ -6,6 +6,13 @@ export const convertDateStringToDate = (dateString: string) => {
 	return date
 }
 
+
+export const convertLocalDateStringToUTCString = (dateString: string, dateFormat: string) => {
+	if (!dateString) return
+	const localDateString = moment(dateString).utc().format(dateFormat)
+	return localDateString
+}
+
 export const convertUTCStringToLocalDateString = (UTCString: string, dateFormat: string) => {
 	if (!UTCString) return
 	const localDateString = moment.utc(UTCString).tz('Asia/Kuala_Lumpur').format(dateFormat)

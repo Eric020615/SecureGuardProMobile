@@ -1,5 +1,5 @@
-import { View, Text, ScrollView, Alert } from 'react-native'
-import React, { useState } from 'react'
+import { View, Text, ScrollView } from 'react-native'
+import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomFormField from '@components/form/CustomFormField'
 import CustomButton from '@components/buttons/CustomButton'

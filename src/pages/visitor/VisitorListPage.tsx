@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, TouchableOpacity, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useVisitor } from '@zustand/visitor/useVisitor'

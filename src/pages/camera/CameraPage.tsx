@@ -5,7 +5,6 @@ import {
 	CameraView,
 	CameraType,
 	useCameraPermissions,
-	FlashMode,
 	CameraCapturedPicture,
 } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
@@ -14,10 +13,8 @@ import Entypo from 'react-native-vector-icons/Entypo'
 import { useApplication } from '@zustand/index'
 import { convertImageToBase64 } from '../../helpers/file'
 import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
-import { CreateUserFaceAuthDto } from '@zustand/types'
 import { router } from 'expo-router'
 import { useModal } from '@zustand/modal/useModal'
-import {} from 'expo'
 import CustomModal from '@components/modals/CustomModal'
 
 const CameraPage = () => {
@@ -92,7 +89,7 @@ const CameraPage = () => {
 		try {
 			setIsLoading(true)
 			if (image) {
-				let base64 = await convertImageToBase64(image)
+				const base64 = await convertImageToBase64(image)
 				if (base64 == '') {
 					throw new Error('Failed to convert image to base64')
 				}

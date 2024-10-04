@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Platform, Alert } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Iconicons from 'react-native-vector-icons/Ionicons'
@@ -8,11 +8,10 @@ import { BookingDurationList, FacilityList, GuestList } from '@config/listOption
 import moment from 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { useFacility } from '@zustand/facility/useFacility'
-import { facilityBookingConst } from '@config/constant/facilities'
+import { facilityBookingSlotCheckConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
 import { useApplication } from '@zustand/index'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { getLocalDateString, getTodayDate } from '../../helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
 
@@ -27,7 +26,6 @@ const CreateFacilityBookingPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
-	const { submitBooking } = useFacility()
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Date is required'),
 		startDate: Yup.date()
@@ -40,32 +38,22 @@ const CreateFacilityBookingPage = () => {
 	const formik = useFormik<FacilityBooking>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: facilityBookingConst,
+		initialValues: facilityBookingSlotCheckConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			router.push(
-				`/facility/${formik.values.facilityId}/${getLocalDateString(
-					formik.values.startDate,
-					ITimeFormat.dateTime,
-				)}/${formik.values.duration}/check`,
-			)
-			// const response = await submitBooking({
-			// 	facilityId: values.facilityId,
-			// 	startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
-			// 	endDate: getUTCDateString(
-			// 		moment(formik.values.startDate).add(formik.values.duration, 'hours').toDate(),
-			// 		ITimeFormat.dateTime,
-			// 	),
-			// 	numOfGuest: values.numofGuest,
-			// })
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/facility/history')
-			// } else {
-			// 	Alert.alert(response.msg)
-			// }
-			setIsLoading(false)
+			try {
+				setIsLoading(true)
+				router.push(
+					`/facility/${values.facilityId}/${getLocalDateString(
+						values.startDate,
+						ITimeFormat.dateTime,
+					)}/${values.duration}/check`,
+				)
+			} catch (error) {
+				console.log(error)
+			} finally {
+				setIsLoading(false)
+			}
 		},
 	})
 
@@ -109,7 +97,9 @@ const CreateFacilityBookingPage = () => {
 						title="Booking Date"
 						textStyle="text-base font-bold"
 						type="DateTime"
-						selectedDate={formik.values.startDate ? formik.values.startDate : moment().add(1, "minute").toDate()}
+						selectedDate={
+							formik.values.startDate ? formik.values.startDate : moment().add(1, 'minute').toDate()
+						}
 						onChange={onDatePickerChange}
 						buttonTitle={getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)}
 						minimumDate={moment().toDate()}
