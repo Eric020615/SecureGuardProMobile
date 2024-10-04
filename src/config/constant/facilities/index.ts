@@ -8,13 +8,13 @@ export const facilityBookingSlotCheckConst = {
 	facilityId: '',
 	startDate: null,
 	duration: null,
-	numofGuest: null,
+	numOfGuest: null,
 }
 
 export const facilityBookingSubmissionConst = {
 	facilityId: '',
 	startDate: null,
 	endDate: null,
-	numofGuest: null,
+	numOfGuest: null,
 	space: '',
 }

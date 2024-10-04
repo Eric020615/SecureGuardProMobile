@@ -19,7 +19,7 @@ interface FacilityBooking {
 	facilityId: string
 	startDate: Date
 	duration: number
-	numofGuest: number
+	numOfGuest: number
 }
 
 const CreateFacilityBookingPage = () => {
@@ -32,7 +32,7 @@ const CreateFacilityBookingPage = () => {
 			.required('Start time is required')
 			.min(getTodayDate(), 'Start date must be after now'),
 		duration: Yup.number().required('Booking duration is required'),
-		numofGuest: Yup.number().required('Number of guest is required'),
+		numOfGuest: Yup.number().required('Number of guest is required'),
 	})
 
 	const formik = useFormik<FacilityBooking>({
@@ -47,7 +47,7 @@ const CreateFacilityBookingPage = () => {
 					`/facility/${values.facilityId}/${getLocalDateString(
 						values.startDate,
 						ITimeFormat.dateTime,
-					)}/${values.duration}/check`,
+					)}/${values.duration}/${values.numOfGuest}/check`,
 				)
 			} catch (error) {
 				console.log(error)
@@ -67,8 +67,9 @@ const CreateFacilityBookingPage = () => {
 	}
 
 	return (
-		<SafeAreaView className="bg-slate-100 h-full px-4">
-			<ScrollView>
+		<SafeAreaView className="bg-slate-100 h-full">
+			<ScrollView className="px-4">
+				{/* Adding horizontal padding */}
 				<View className="w-full min-h-[85vh] my-6">
 					<View className="flex flex-row items-center justify-between">
 						<CustomButton
@@ -88,73 +89,81 @@ const CreateFacilityBookingPage = () => {
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Facilities</Text>
-					<CustomImageSlider
-						item={FacilityList}
-						onChangeIndex={setFacilityId}
-						containerStyle="my-4"
-					/>
-					<CustomFormField
-						title="Booking Date"
-						textStyle="text-base font-bold"
-						type="DateTime"
-						selectedDate={
-							formik.values.startDate ? formik.values.startDate : moment().add(1, 'minute').toDate()
-						}
-						onChange={onDatePickerChange}
-						buttonTitle={getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)}
-						minimumDate={moment().toDate()}
-						maximumDate={moment().add(2, 'week').toDate()}
-						mode="datetime"
-						errorMessage={
-							formik.touched.startDate &&
-							formik.errors.startDate &&
-							(formik.errors.startDate as string)
-						}
-						setShowDateTime={setShowCalendar}
-						showDateTime={showCalendar}
-						placeholder={'Select booking date'}
-					/>
-					<CustomFormField
-						containerStyle="mt-4"
-						title="Duration"
-						textStyle="text-base font-bold"
-						type="Picker"
-						selectedValue={formik.values.duration}
-						onValueChange={(e) => {
-							formik.setFieldValue('duration', e)
-						}}
-						items={BookingDurationList}
-						errorMessage={
-							formik.touched.duration &&
-							formik.errors.duration &&
-							(formik.errors.duration as string)
-						}
-						placeholder={'Select booking duration'}
-					/>
-					<CustomFormField
-						containerStyle="my-4"
-						title="Number of Guests"
-						textStyle="text-base font-bold"
-						type="Picker"
-						selectedValue={formik.values.numofGuest}
-						onValueChange={(e) => {
-							formik.setFieldValue('numofGuest', e)
-						}}
-						items={GuestList}
-						errorMessage={
-							formik.touched.numofGuest &&
-							formik.errors.numofGuest &&
-							(formik.errors.numofGuest as string)
-						}
-						placeholder={'Select number of guests'}
-					/>
-					<CustomButton
-						title="Submit"
-						handlePress={formik.handleSubmit}
-						containerStyles="border-primary border bg-primary p-3 w-full mt-2 flex flex-row self-center"
-						isLoading={isLoading}
-						textStyles="text-sm text-white"
-					/>
+					<View className="items-center my-4">
+						{/* Centering image slider */}
+						<CustomImageSlider
+							item={FacilityList}
+							onChangeIndex={setFacilityId}
+							containerStyle="w-full" // Ensure slider takes full width
+						/>
+					</View>
+					<View>
+						{/* Horizontal padding for form */}
+						<CustomFormField
+							title="Booking Date"
+							textStyle="text-base font-bold"
+							type="DateTime"
+							selectedDate={
+								formik.values.startDate
+									? formik.values.startDate
+									: moment().add(1, 'minute').toDate()
+							}
+							onChange={onDatePickerChange}
+							buttonTitle={getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)}
+							minimumDate={moment().toDate()}
+							maximumDate={moment().add(2, 'week').toDate()}
+							mode="datetime"
+							errorMessage={
+								formik.touched.startDate &&
+								formik.errors.startDate &&
+								(formik.errors.startDate as string)
+							}
+							setShowDateTime={setShowCalendar}
+							showDateTime={showCalendar}
+							placeholder={'Select booking date'}
+						/>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Duration"
+							textStyle="text-base font-bold"
+							type="Picker"
+							selectedValue={formik.values.duration}
+							onValueChange={(e) => {
+								formik.setFieldValue('duration', e)
+							}}
+							items={BookingDurationList}
+							errorMessage={
+								formik.touched.duration &&
+								formik.errors.duration &&
+								(formik.errors.duration as string)
+							}
+							placeholder={'Select booking duration'}
+						/>
+						<CustomFormField
+							containerStyle="my-4"
+							title="Number of Guests"
+							textStyle="text-base font-bold"
+							type="Picker"
+							selectedValue={formik.values.numOfGuest}
+							onValueChange={(e) => {
+								formik.setFieldValue('numOfGuest', e)
+							}}
+							items={GuestList}
+							errorMessage={
+								formik.touched.numOfGuest &&
+								formik.errors.numOfGuest &&
+								(formik.errors.numOfGuest as string)
+							}
+							placeholder={'Select number of guests'}
+						/>
+						<CustomButton
+							title="Submit"
+							handlePress={formik.handleSubmit}
+							containerStyles="border-primary border bg-primary p-3 w-full mt-2 flex flex-row self-center"
+							isLoading={isLoading}
+							textStyles="text-sm text-white"
+						/>
+					</View>
 				</View>
 			</ScrollView>
 		</SafeAreaView>

@@ -8,10 +8,7 @@ import { useApplication } from '@zustand/index'
 import { SpaceAvailabilityDto } from '@zustand/types'
 import CustomFlatList from '@components/list/CustomFlatList'
 import Iconicons from 'react-native-vector-icons/Ionicons'
-import {
-	facilityBookingSubmissionConst,
-	FacilityConst,
-} from '@config/constant/facilities'
+import { facilityBookingSubmissionConst, FacilityConst } from '@config/constant/facilities'
 import moment from 'moment'
 import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
@@ -28,14 +25,14 @@ interface FacilityBooking {
 	facilityId: string
 	startDate: Date
 	endDate: Date
-	numofGuest: number
+	numOfGuest: number
 	space: string
 }
 
 const AvailabilitySlotPage = () => {
 	const { isLoading, setIsLoading } = useApplication()
 	const { submitBooking } = useFacility()
-	const { facilityId, startDate, duration } = useLocalSearchParams()
+	const { facilityId, startDate, duration, numOfGuest } = useLocalSearchParams()
 	const { checkAvailabilitySlotAction } = useFacility()
 	const [availabilitySlot, setAvailabilitySlot] = useState<SpaceAvailabilityDto[]>([])
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null) // State to track selected slot
@@ -48,13 +45,10 @@ const AvailabilitySlotPage = () => {
 			moment(startDate)
 				.add(duration as string, 'hours')
 				.format(ITimeFormat.dateTime),
-		)
+		),
+			formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
-	}, [facilityId, startDate, duration])
-
-	useEffect(() => {
-		formik.setFieldValue('space', selectedSlot)
-	}, [selectedSlot])
+	}, [facilityId, startDate, duration, numOfGuest])
 
 	const fetchAvailabilitySlot = async () => {
 		try {
@@ -69,17 +63,17 @@ const AvailabilitySlotPage = () => {
 				setAvailabilitySlot(response.data)
 			}
 		} catch (error) {
-			console.log(error)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
-	const handleSlotSelection = (index: number) => {
+	const handleSlotSelection = (index: number, spaceId: string) => {
 		if (selectedSlot === index) {
 			setSelectedSlot(null)
 		} else {
 			setSelectedSlot(index)
+			formik.setFieldValue('space', spaceId)
 		}
 	}
 
@@ -97,7 +91,7 @@ const AvailabilitySlotPage = () => {
 				Yup.ref('startDate'),
 				'End time cannot be before the start time, please select a valid end time.',
 			),
-		numofGuest: Yup.number().required('Please specify the number of guests attending.'),
+		numOfGuest: Yup.number().required('Please select the number of guests for your booking.'),
 		space: Yup.string().required('Please select a slot to proceed.'),
 	})
 
@@ -111,16 +105,20 @@ const AvailabilitySlotPage = () => {
 				setIsLoading(true)
 				const response = await submitBooking({
 					facilityId: values.facilityId,
-					startDate: getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
-					endDate: getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
-					numOfGuest: values.numofGuest,
-					// space
+					startDate: getUTCDateString(values.startDate, ITimeFormat.dateTime),
+					endDate: getUTCDateString(values.endDate, ITimeFormat.dateTime),
+					numOfGuest: values.numOfGuest,
+					spaceId: values.space,
 				})
 				if (response.success) {
 					formik.resetForm()
 					router.push('/facility/history')
 				} else {
-					Alert.alert(response.msg)
+					Alert.alert(
+						'Booking Error', // Title
+						response.msg || 'Something went wrong. Please try again.', // Message
+						[{ text: 'OK' }], // Buttons array
+					)
 				}
 			} catch (error) {
 				console.log(error)
@@ -139,7 +137,7 @@ const AvailabilitySlotPage = () => {
 					? 'bg-primary'
 					: 'bg-green-700 border-green-800'
 			}`}
-			onPress={() => handleSlotSelection(index)} // Handle slot selection/deselection
+			onPress={() => handleSlotSelection(index, item.spaceId)} // Handle slot selection/deselection
 			disabled={item.isBooked} // Disable if booked
 			key={index}
 		>
@@ -148,7 +146,7 @@ const AvailabilitySlotPage = () => {
 					<CheckBox
 						disabled={item.isBooked}
 						value={selectedSlot === index}
-						onValueChange={() => handleSlotSelection(index)}
+						onValueChange={() => handleSlotSelection(index, item.spaceId)}
 						tintColors={{ true: 'white', false: 'white' }}
 					/>
 					<View>
@@ -174,7 +172,7 @@ const AvailabilitySlotPage = () => {
 	return (
 		<SafeAreaView className="bg-slate-100 h-full px-4">
 			<View className="flex-1">
-				<View className="w-full min-h-[85vh] px-4 my-6">
+				<View className="w-full min-h-[85vh] my-6">
 					<View className="flex flex-row items-center">
 						<CustomButton
 							containerStyles="items-center h-fit"

@@ -41,7 +41,6 @@ export const useFacility = create<facilityState>((set) => ({
 			const response = await getFacilityBookingHistory(isPast, page, limit)
 			return response
 		} catch (error) {
-			console.log(error)
 			set({ error: error.msg })
 		} finally {
 			set({ isLoading: false })

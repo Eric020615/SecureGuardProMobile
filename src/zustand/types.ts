@@ -74,6 +74,7 @@ export interface FacilityBookingFormDto {
 	startDate: string
 	endDate: string
 	numOfGuest: number
+	spaceId: string
 }
 
 export interface SpaceAvailabilityDto {
