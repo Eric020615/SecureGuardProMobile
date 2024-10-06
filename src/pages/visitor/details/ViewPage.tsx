@@ -1,39 +1,24 @@
 import { View, Text, ScrollView } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { VisitorEnum } from '@config/constant/visitor'
-import { useVisitor } from '@zustand/visitor/useVisitor'
-import { GetVisitorDto } from '@zustand/types'
-import { useApplication } from '@zustand/index'
 import { ITimeFormat } from '@config/constant'
 import { convertUTCStringToLocalDateString } from '../../../helpers/time'
+import { useVisitor } from '../../../store/visitor/useVisitor'
 
 const VisitorDetailsViewPage = () => {
-	const { getVisitorDetailsByIdAction } = useVisitor()
-	const [visitorDetails, seVisitorDetails] = useState<GetVisitorDto>()
+	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
 	const { id } = useLocalSearchParams()
-	const { setIsLoading } = useApplication()
 
 	useEffect(() => {
 		getData(id as string)
 	}, [id])
 
 	const getData = async (id: string) => {
-		try {
-			setIsLoading(true)
-			const response = await getVisitorDetailsByIdAction(id)
-			if (response.success) {
-				seVisitorDetails(response.data)
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-		}
+		await getVisitorDetailsByIdAction(id)
 	}
 
 	return (
@@ -73,7 +58,12 @@ const VisitorDetailsViewPage = () => {
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Visit Date</Text>
 								<Text className="text-base text-black">
-									{visitorDetails.visitDateTime ? convertUTCStringToLocalDateString(visitorDetails.visitDateTime, ITimeFormat.dateTime) : ''}
+									{visitorDetails.visitDateTime
+										? convertUTCStringToLocalDateString(
+												visitorDetails.visitDateTime,
+												ITimeFormat.dateTime,
+										  )
+										: ''}
 								</Text>
 							</View>
 						</>

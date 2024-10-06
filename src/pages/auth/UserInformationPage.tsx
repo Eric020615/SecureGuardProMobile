@@ -11,14 +11,14 @@ import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import * as DocumentPicker from 'react-native-document-picker'
 import CustomModal from '@components/modals/CustomModal'
-import { useUser } from '@zustand/user/useUser'
 import { router } from 'expo-router'
 import { getFile } from '../../helpers/file'
-import { useModal } from '@zustand/modal/useModal'
-import { useAuth } from '@zustand/auth/useAuth'
-import { useApplication } from '@zustand/index'
 import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '../../store/application/useApplication'
+import { useModal } from '../../store/modal/useModal'
+import { useAuth } from '../../store/auth/useAuth'
+import { useUser } from '../../store/user/useUser'
 
 interface UserInformationForm {
 	firstName: string
@@ -33,12 +33,13 @@ interface UserInformationForm {
 }
 
 const UserInformationPage = () => {
-	const { setCustomConfirmModal } = useModal()
-	const { setIsLoading } = useApplication()
-	const { createUserAction, isLoading } = useUser()
-	const { tempToken } = useAuth()
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
+	const setCustomConfirmModal = useModal((state) => state.setCustomConfirmModalAction)
+	const createUserAction = useUser((state) => state.createUserAction)
+	const tempToken = useAuth((state) => state.tempToken)
+	const isLoading = useApplication((state) => state.isLoading)
+
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
 		lastName: Yup.string().required('Last Name is required'),
@@ -85,53 +86,35 @@ const UserInformationPage = () => {
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			try {
-				setIsLoading(true)
-				const response = await createUserAction(
-					{
-						firstName: values.firstName,
-						lastName: values.lastName,
-						userName: values.userName,
-						contactNumber: values.countryCode.callingCode + values.phoneNumber,
-						gender: values.gender,
-						floorNumber: values.floor,
-						unitNumber: values.unitNumber,
-						dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
-						supportedFiles:
-							selectedFiles.length > 0
-								? await Promise.all(
-										selectedFiles.map(async (selectedFile) => {
-											const file = await getFile(selectedFile)
-											return file
-										}),
-								  )
-								: [],
-					},
-					tempToken,
-				)
-				if (response.success) {
-					setCustomConfirmModal({
-						title: 'Account updated successfully',
-						subtitle: 'Please wait for system admin approval to log in',
-					})
-				} else {
-					setCustomConfirmModal({
-						title: 'Account updated failed',
-						subtitle: 'Please contact our support team for assistance',
-					})
-				}
-			} catch (error) {
-				console.log(error)
-			} finally {
-				setIsLoading(false)
-			}
+			await createUserAction(
+				{
+					firstName: values.firstName,
+					lastName: values.lastName,
+					userName: values.userName,
+					contactNumber: values.countryCode.callingCode + values.phoneNumber,
+					gender: values.gender,
+					floorNumber: values.floor,
+					unitNumber: values.unitNumber,
+					dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+					supportedFiles:
+						selectedFiles.length > 0
+							? await Promise.all(
+									selectedFiles.map(async (selectedFile) => {
+										const file = await getFile(selectedFile)
+										return file
+									}),
+							  )
+							: [],
+				},
+				tempToken,
+			)
 		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
 				<CustomModal
-					customConfirmButtonPress={() => {
+					customConfirmButtonPressSuccess={() => {
 						formik.resetForm()
 						router.push('/')
 					}}
@@ -228,7 +211,7 @@ const UserInformationPage = () => {
 								}
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
-								placeholder={"Select date of birth"}
+								placeholder={'Select date of birth'}
 							/>
 						</View>
 						<CustomFormField
@@ -244,7 +227,7 @@ const UserInformationPage = () => {
 							errorMessage={
 								formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
 							}
-							placeholder={"Select gender"}
+							placeholder={'Select gender'}
 						/>
 					</View>
 					<View className="flex flex-row mb-3">
@@ -260,7 +243,7 @@ const UserInformationPage = () => {
 							errorMessage={
 								formik.touched.floor && formik.errors.floor && (formik.errors.floor as string)
 							}
-							placeholder={"Select floor"}
+							placeholder={'Select floor'}
 						/>
 						<CustomFormField
 							title="Unit"
@@ -276,7 +259,7 @@ const UserInformationPage = () => {
 								formik.errors.unitNumber &&
 								(formik.errors.unitNumber as string)
 							}
-							placeholder={"Select unit"}
+							placeholder={'Select unit'}
 						/>
 					</View>
 					<CustomFormField

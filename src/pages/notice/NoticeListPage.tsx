@@ -1,45 +1,32 @@
 import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useNotice } from '@zustand/notice/useNotice'
-import { getNoticeDto } from '@zustand/types'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Iconicons from 'react-native-vector-icons/Ionicons'
-import { useApplication } from '@zustand/index'
 import { getUTCRelativeTimeFromNow } from '../../helpers/time'
 import CustomFlatList from '@components/list/CustomFlatList'
+import { useNotice } from '../../store/notice/useNotice'
+import { useApplication } from '../../store/application/useApplication'
+import { GetNoticeDto } from '../../dtos/notice/notice.dto'
 
 const NoticeListPage = () => {
-	const { getNotice } = useNotice()
-	const { isLoading, setIsLoading } = useApplication()
-	const [notice, setNotice] = useState<getNoticeDto[]>([])
+	const { notices, totalNotices, getNoticeAction, resetNotice } = useNotice()
+	const isLoading = useApplication((state) => state.isLoading)
 	const [page, setPage] = useState(0)
-	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
-		setNotice([]) // Reset the booking history
 		setPage(0)
+		resetNotice()
 		fetchNotice()
 	}, [])
 
 	const fetchNotice = async () => {
-		try {
-			setIsLoading(true)
-			const response = await getNotice(page, 10)
-			if (response.success) {
-				setNotice((prev) => [...prev, ...response.data.list])
-				setTotalRecords(response.data.count) // Update total records from response
-			}
-		} catch (error) {
-			console.log(error)
-		} finally {
-			setIsLoading(false)
-		}
+		await getNoticeAction(page, 10)
 	}
 	const fetchNextPage = async () => {
-		if (isLoading || notice.length >= totalRecords) return
-		if (notice.length % 10 !== 0) return
+		if (isLoading || notices.length >= totalNotices) return
+		if (notices.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
 		// Logic to fetch the next page
 		fetchNotice() // Fetch the first page again
@@ -48,10 +35,10 @@ const NoticeListPage = () => {
 		if (isLoading == true) return
 		// Logic to refresh data
 		setPage(0)
-		setNotice([]) // Clear existing data
+		resetNotice()
 		fetchNotice() // Fetch the first page again
 	}
-	const renderItem: ListRenderItem<getNoticeDto> = ({ item, index }) => (
+	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
 		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
 			<View>
 				<Text className="font-bold">{item.title}</Text>
@@ -78,8 +65,8 @@ const NoticeListPage = () => {
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Notice</Text>
 					<View className="flex-1 mt-4">
-						<CustomFlatList<getNoticeDto>
-							data={notice}
+						<CustomFlatList<GetNoticeDto>
+							data={notices}
 							renderItem={renderItem}
 							fetchNextPage={fetchNextPage}
 							onRefresh={onRefresh}
@@ -91,7 +78,7 @@ const NoticeListPage = () => {
 									{isLoading && page > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
-									) : notice.length < totalRecords ? (
+									) : notices.length < totalNotices ? (
 										<Text className="text-gray-500">Load More</Text>
 									) : (
 										// Show a message when all data is loaded

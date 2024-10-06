@@ -1,31 +1,26 @@
 import { View, Text, Image } from 'react-native'
 import React, { useEffect, useRef, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import {
-	CameraView,
-	CameraType,
-	useCameraPermissions,
-	CameraCapturedPicture,
-} from 'expo-camera'
+import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { useApplication } from '@zustand/index'
 import { convertImageToBase64 } from '../../helpers/file'
-import { useFaceAuth } from '@zustand/faceAuth/useFaceAuth'
 import { router } from 'expo-router'
-import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
+import { useApplication } from '../../store/application/useApplication'
+import { useModal } from '../../store/modal/useModal'
+import { useFaceAuth } from '../../store/faceAuth/useFaceAuth'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
 	const [image, setImage] = useState<CameraCapturedPicture>(null)
 	const [facing, setFacing] = useState<CameraType>('back')
 	const [flash, setFlash] = useState(false)
-	const { setIsLoading } = useApplication()
-	const { uploadUserFaceAuthAction } = useFaceAuth()
-	const { setCustomConfirmModal, isError } = useModal()
 	const cameraRef = useRef<CameraView>(null)
+	const { isLoading, setIsLoading } = useApplication()
+	const { setCustomConfirmModalAction, isError } = useModal()
+	const uploadUserFaceAuthAction = useFaceAuth((state) => state.uploadUserFaceAuthAction)
 
 	useEffect(() => {
 		;(async () => {
@@ -75,7 +70,7 @@ const CameraPage = () => {
 				const data = await cameraRef.current.takePictureAsync()
 				setImage(data)
 			} catch (error) {
-				setCustomConfirmModal({
+				setCustomConfirmModalAction({
 					title: 'Face Authentication Created Failed',
 					subtitle: 'Please Retry It Again Or Contact Our Support Team',
 				})
@@ -86,42 +81,24 @@ const CameraPage = () => {
 	}
 
 	const saveImage = async () => {
-		try {
-			setIsLoading(true)
-			if (image) {
-				const base64 = await convertImageToBase64(image)
-				if (base64 == '') {
-					throw new Error('Failed to convert image to base64')
-				}
-				const response = await uploadUserFaceAuthAction({
-					faceData: base64,
-				})
-				if (response.success) {
-					setCustomConfirmModal({
-						title: 'Face Recognition Setup Complete',
-						subtitle: 'You can now access the premises using your face.',
-					})
-				} else {
-					throw new Error('No image to save')
-				}
-				setImage(null)
-			} else {
-				throw new Error('No image to save')
+		if (image) {
+			const base64 = await convertImageToBase64(image)
+			if (base64 == '') {
+				throw new Error('Failed to convert image to base64')
 			}
-		} catch (error) {
-			setCustomConfirmModal({
-				title: 'Face Authentication Created Failed',
-				subtitle: 'Please Retry It Again Or Contact Our Support Team',
+			await uploadUserFaceAuthAction({
+				faceData: base64,
 			})
-		} finally {
-			setIsLoading(false)
+			setImage(null)
+		} else {
+			throw new Error('No image to save')
 		}
 	}
 
 	return (
 		<SafeAreaView className="h-full">
 			<CustomModal
-				customConfirmButtonPress={() => {
+				customConfirmButtonPressSuccess={() => {
 					if (isError) {
 						router.replace('/camera')
 					} else {

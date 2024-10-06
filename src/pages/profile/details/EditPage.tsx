@@ -3,11 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router, usePathname } from 'expo-router'
-import { useApplication } from '@zustand/index'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { GetUserProfileByIdDto } from '@zustand/types'
 import { Gender } from '@config/constant/user'
 import {
 	convertUTCStringToLocalDate,
@@ -16,13 +14,14 @@ import {
 	getUTCDateString,
 } from '../../../helpers/time'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
-import { useUser } from '@zustand/user/useUser'
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
 import Iconicons from 'react-native-vector-icons/Ionicons'
+import { useApplication } from '../../../store/application/useApplication'
+import { useUser } from '../../../store/user/useUser'
 
-interface UserDetails {
+interface userProfile {
 	firstName: string
 	lastName: string
 	userName: string
@@ -35,9 +34,8 @@ interface UserDetails {
 
 const ProfileDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const {isLoading, setIsLoading} = useApplication()
-	const [userDetails, setUserDetails] = useState<GetUserProfileByIdDto>()
-	const {getUserProfileByIdAction, editUserProfileByIdAction} = useUser()
+	const { isLoading, setIsLoading } = useApplication()
+	const { userProfile, getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
 	const currentPath = usePathname()
 	const handlePress = () => {
 		if (currentPath.includes('edit')) {
@@ -50,18 +48,7 @@ const ProfileDetailsEditPage = () => {
 		getData()
 	}, [])
 	const getData = async () => {
-		try {
-			setIsLoading(true)
-			const response = await getUserProfileByIdAction()
-			if (response.success) {
-				setUserDetails(response.data)
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-		}
+		getUserProfileByIdAction()
 	}
 
 	const validationSchema = Yup.object().shape({
@@ -80,29 +67,28 @@ const ProfileDetailsEditPage = () => {
 				return phone ? phone.isValid() : false
 			}),
 	})
-	const formik = useFormik<UserDetails>({
+	const formik = useFormik<userProfile>({
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			firstName: userDetails?.firstName ? userDetails.firstName : '',
-			lastName: userDetails?.lastName ? userDetails.lastName : '',
-			userName: userDetails?.userName ? userDetails.userName : '',
-			email: userDetails?.email ? userDetails.email : '',
-			userCountryCode: userDetails?.contactNumber
+			firstName: userProfile?.firstName ? userProfile.firstName : '',
+			lastName: userProfile?.lastName ? userProfile.lastName : '',
+			userName: userProfile?.userName ? userProfile.userName : '',
+			email: userProfile?.email ? userProfile.email : '',
+			userCountryCode: userProfile?.contactNumber
 				? getCountriesByCallingCode(
-						parsePhoneNumberFromString(userDetails.contactNumber).countryCallingCode,
+						parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode,
 				  )[0]
 				: null,
-			userPhoneNumber: userDetails?.contactNumber
-				? parsePhoneNumberFromString(userDetails?.contactNumber).nationalNumber
+			userPhoneNumber: userProfile?.contactNumber
+				? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
 				: '',
-			gender: userDetails?.gender ? userDetails.gender : null,
-			dateOfBirth: convertUTCStringToLocalDate(userDetails?.dateOfBirth),
+			gender: userProfile?.gender ? userProfile.gender : null,
+			dateOfBirth: convertUTCStringToLocalDate(userProfile?.dateOfBirth),
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			const response = await editUserProfileByIdAction({
+			await editUserProfileByIdAction({
 				firstName: values.firstName,
 				lastName: values.lastName,
 				userName: values.userName,
@@ -111,13 +97,9 @@ const ProfileDetailsEditPage = () => {
 				gender: values.gender,
 				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
 			})
-			if (response.success) {
-				formik.resetForm()
-				router.push(currentPath.replace('edit', 'view'))
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
+			// if (response.success) {
+			// 	formik.resetForm()
+			// 	router.push(currentPath.replace('edit', 'view'))
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -129,7 +111,7 @@ const ProfileDetailsEditPage = () => {
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
-				<View className="flex flex-row items-center">
+					<View className="flex flex-row items-center">
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
@@ -139,7 +121,7 @@ const ProfileDetailsEditPage = () => {
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">User Details</Text>
-					{userDetails && (
+					{userProfile && (
 						<>
 							<View>
 								<CustomFormField

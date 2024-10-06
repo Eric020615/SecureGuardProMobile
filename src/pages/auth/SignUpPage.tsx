@@ -7,15 +7,12 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/auth/useAuth'
-import { UserSignUpFormDto } from '@zustand/types'
-import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
-import { useApplication } from '@zustand/index'
+import { UserSignUpFormDto } from '../../dtos/auth/auth.dto'
+import { useAuth } from '../../store/auth/useAuth'
+import { useApplication } from '../../store/application/useApplication'
 
 const SignUpPage = () => {
-	const { setCustomConfirmModal } = useModal()
-	const { setIsLoading } = useApplication()
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string()
@@ -34,29 +31,11 @@ const SignUpPage = () => {
 			signUp(values)
 		},
 	})
-	const {signUpAction, isLoading, setTempToken} = useAuth()
+	const signUpAction = useAuth((state) => state.signUpAction)
+	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
-		try {
-			setIsLoading(true)
-			const response = await signUpAction(values)
-			if (response.success) {
-				setTempToken(response.data)
-				router.replace('/user-information')
-			} else {
-				setCustomConfirmModal({
-					title: 'Account Created Failed',
-					subtitle: response.msg,
-				})
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-			setCustomConfirmModal({
-				title: 'Account Created Failed',
-				subtitle: "Please Retry It Again",
-			})
-		}
+		await signUpAction(values)
 	}
 
 	return (
@@ -75,7 +54,7 @@ const SignUpPage = () => {
 						}}
 						onBlur={formik.handleBlur('email')}
 						errorMessage={formik.errors.email}
-						placeholder={"Enter your email"}
+						placeholder={'Enter your email'}
 					/>
 					<CustomFormField
 						title="Password"
@@ -88,7 +67,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('password')}
 						errorMessage={formik.errors.password}
-						placeholder={"Enter your password"}
+						placeholder={'Enter your password'}
 					/>
 					<CustomFormField
 						title="Confirm Password"
@@ -101,7 +80,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('confirmPassword')}
 						errorMessage={formik.errors.confirmPassword}
-						placeholder={"Enter your confirm password"}
+						placeholder={'Enter your confirm password'}
 					/>
 					<CustomButton
 						title="Sign Up"

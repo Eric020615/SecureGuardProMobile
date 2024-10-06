@@ -7,19 +7,16 @@ import * as Yup from 'yup'
 import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
 import { signInformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/auth/useAuth'
-import { SignInFormDto } from '@zustand/types'
-import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
-import { useApplication } from '@zustand/index'
+import { SignInFormDto } from '../../dtos/auth/auth.dto'
+import { useAuth } from '../../store/auth/useAuth'
+import { useApplication } from '../../store/application/useApplication'
 
 const SignInPage = () => {
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
 	})
-	const { setCustomConfirmModal } = useModal()
-	const { setIsLoading } = useApplication()
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
 		validateOnBlur: false,
@@ -29,33 +26,20 @@ const SignInPage = () => {
 			signInWithPassword(values)
 		},
 	})
-	const { signInAction, isLoading } = useAuth()
+	const signInAction = useAuth((state) => state.signInAction)
+	const isLoading = useApplication((state) => state.isLoading)
 
 	const signInWithPassword = async (values: SignInFormDto) => {
-		try {
-			setIsLoading(true)
-			const response = await signInAction(values)
-			if (response.success) {
-				router.replace('/home')
-			} else {
-				setCustomConfirmModal({
-					title: 'Log In Failed',
-					subtitle: 'Please Retry It Again',
-				})
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setCustomConfirmModal({
-				title: 'Log In Failed',
-				subtitle: 'Please Retry It Again',
-			})
-			setIsLoading(false)
-		}
+		await signInAction(values)
 	}
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ScrollView>
-				<CustomModal />
+				<CustomModal
+					customConfirmButtonPressSuccess={() => {
+						router.replace('/home')
+					}}
+				/>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Log in</Text>
@@ -67,7 +51,7 @@ const SignInPage = () => {
 							formik.setFieldValue('email', e)
 						}}
 						errorMessage={formik.errors.email}
-						placeholder={"Enter your email"}
+						placeholder={'Enter your email'}
 					/>
 					<CustomFormField
 						title="Password"
@@ -79,7 +63,7 @@ const SignInPage = () => {
 						}}
 						isSecureTextEntry={true}
 						errorMessage={formik.errors.password}
-						placeholder={"Enter your password"}
+						placeholder={'Enter your password'}
 					/>
 					<CustomButton
 						title="Log In"

@@ -12,9 +12,6 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { useVisitor } from '@zustand/visitor/useVisitor'
-import { GetVisitorDto } from '@zustand/types'
-import { useApplication } from '@zustand/index'
 import { ITimeFormat } from '@config/constant'
 import {
 	convertUTCStringToLocalDate,
@@ -22,6 +19,7 @@ import {
 	getTodayDate,
 	getUTCDateString,
 } from '../../../helpers/time'
+import { useVisitor } from '../../../store/visitor/useVisitor'
 
 interface VisitorDetails {
 	visitDateTime: Date
@@ -34,27 +32,14 @@ interface VisitorDetails {
 const VisitorDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
-	const { getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
-	const { setIsLoading } = useApplication()
-	const [visitorDetails, setVisitorDetails] = useState<GetVisitorDto>()
+	const { visitorDetails, getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
 	const { id } = useLocalSearchParams()
 	const currentPath = usePathname()
 	useEffect(() => {
 		getData(id as string)
 	}, [id])
 	const getData = async (id: string) => {
-		try {
-			setIsLoading(true)
-			const response = await getVisitorDetailsByIdAction(id)
-			if (response.success) {
-				setVisitorDetails(response.data)
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-		}
+		await getVisitorDetailsByIdAction(id)
 	}
 
 	const validationSchema = Yup.object().shape({
@@ -91,12 +76,15 @@ const VisitorDetailsEditPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			const response = await editVisitorByIdAction({
-				visitorName: values.visitorName,
-				visitorCategory: values.visitorCategory,
-				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
-			}, id as string)
+			const response = await editVisitorByIdAction(
+				{
+					visitorName: values.visitorName,
+					visitorCategory: values.visitorCategory,
+					visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
+					visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
+				},
+				id as string,
+			)
 			if (response.success) {
 				formik.resetForm()
 				router.push(currentPath.replace('edit', 'view'))
@@ -137,7 +125,7 @@ const VisitorDetailsEditPage = () => {
 									onChangeText={(e) => {
 										formik.setFieldValue('visitorName', e)
 									}}
-									placeholder={"Enter full name"}
+									placeholder={'Enter full name'}
 									errorMessage={
 										formik.touched.visitorName &&
 										formik.errors.visitorName &&
@@ -150,7 +138,7 @@ const VisitorDetailsEditPage = () => {
 								title="Visitor Category"
 								textStyle="text-base font-bold"
 								type="Picker"
-								placeholder={"Select visitor category"}
+								placeholder={'Select visitor category'}
 								selectedValue={formik.values.visitorCategory}
 								onValueChange={(e) => {
 									formik.setFieldValue('visitorCategory', e)
@@ -180,7 +168,7 @@ const VisitorDetailsEditPage = () => {
 									formik.errors.visitorPhoneNumber &&
 									(formik.errors.visitorPhoneNumber as string)
 								}
-								placeholder={"Enter phone number"}
+								placeholder={'Enter phone number'}
 							/>
 							<View className="flex flex-row gap-4 mt-1">
 								<View className="flex-1">
@@ -205,7 +193,7 @@ const VisitorDetailsEditPage = () => {
 										}
 										setShowDateTime={setShowCalendar}
 										showDateTime={showCalendar}
-										placeholder={"Select visit date"}
+										placeholder={'Select visit date'}
 									/>
 								</View>
 							</View>

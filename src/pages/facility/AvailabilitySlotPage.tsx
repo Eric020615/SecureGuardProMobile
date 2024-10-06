@@ -3,9 +3,6 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router, useLocalSearchParams } from 'expo-router'
-import { useFacility } from '@zustand/facility/useFacility'
-import { useApplication } from '@zustand/index'
-import { SpaceAvailabilityDto } from '@zustand/types'
 import CustomFlatList from '@components/list/CustomFlatList'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { facilityBookingSubmissionConst, FacilityConst } from '@config/constant/facilities'
@@ -14,12 +11,10 @@ import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import {
-	convertDateStringToDate,
-	convertLocalDateStringToUTCString,
-	getTodayDate,
-	getUTCDateString,
-} from '../../helpers/time'
+import { convertDateStringToDate, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { SpaceAvailabilityDto } from '../../dtos/facility/facility.dto'
+import { useFacility } from '../../store/facility/useFacility'
+import { useApplication } from '../../store/application/useApplication'
 
 interface FacilityBooking {
 	facilityId: string
@@ -30,12 +25,10 @@ interface FacilityBooking {
 }
 
 const AvailabilitySlotPage = () => {
-	const { isLoading, setIsLoading } = useApplication()
-	const { submitBooking } = useFacility()
 	const { facilityId, startDate, duration, numOfGuest } = useLocalSearchParams()
-	const { checkAvailabilitySlotAction } = useFacility()
-	const [availabilitySlot, setAvailabilitySlot] = useState<SpaceAvailabilityDto[]>([])
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null) // State to track selected slot
+	const { availabilitySlot, checkAvailabilitySlotAction, submitBookingAction } = useFacility()
+	const { isLoading } = useApplication()
 
 	useEffect(() => {
 		formik.setFieldValue('facilityId', facilityId)
@@ -51,21 +44,11 @@ const AvailabilitySlotPage = () => {
 	}, [facilityId, startDate, duration, numOfGuest])
 
 	const fetchAvailabilitySlot = async () => {
-		try {
-			setIsLoading(true)
-			if (!facilityId || !startDate || !duration) return
-			const response = await checkAvailabilitySlotAction(
-				formik.values.facilityId,
-				getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
-				getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
-			)
-			if (response.success) {
-				setAvailabilitySlot(response.data)
-			}
-		} catch (error) {
-		} finally {
-			setIsLoading(false)
-		}
+		await checkAvailabilitySlotAction(
+			formik.values.facilityId,
+			getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
+			getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
+		)
 	}
 
 	const handleSlotSelection = (index: number, spaceId: string) => {
@@ -101,30 +84,17 @@ const AvailabilitySlotPage = () => {
 		initialValues: facilityBookingSubmissionConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			try {
-				setIsLoading(true)
-				const response = await submitBooking({
-					facilityId: values.facilityId,
-					startDate: getUTCDateString(values.startDate, ITimeFormat.dateTime),
-					endDate: getUTCDateString(values.endDate, ITimeFormat.dateTime),
-					numOfGuest: values.numOfGuest,
-					spaceId: values.space,
-				})
-				if (response.success) {
-					formik.resetForm()
-					router.push('/facility/history')
-				} else {
-					Alert.alert(
-						'Booking Error', // Title
-						response.msg || 'Something went wrong. Please try again.', // Message
-						[{ text: 'OK' }], // Buttons array
-					)
-				}
-			} catch (error) {
-				console.log(error)
-			} finally {
-				setIsLoading(false)
-			}
+			const response = await submitBookingAction({
+				facilityId: values.facilityId,
+				startDate: getUTCDateString(values.startDate, ITimeFormat.dateTime),
+				endDate: getUTCDateString(values.endDate, ITimeFormat.dateTime),
+				numOfGuest: values.numOfGuest,
+				spaceId: values.space,
+			})
+
+			// if (response.success) {
+			// 	formik.resetForm()
+			// 	router.push('/facility/history')
 		},
 	})
 

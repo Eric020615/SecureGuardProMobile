@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -11,10 +11,10 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { useVisitor } from '@zustand/visitor/useVisitor'
-import { useApplication } from '@zustand/index'
 import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '../../store/application/useApplication'
+import { useVisitor } from '../../store/visitor/useVisitor'
 
 interface CreateVisitor {
 	visitDateTime: Date
@@ -26,8 +26,8 @@ interface CreateVisitor {
 
 const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const { createVisitor } = useVisitor()
-	const { isLoading, setIsLoading } = useApplication()
+	const { createVisitorAction } = useVisitor()
+	const { isLoading } = useApplication()
 
 	const validationSchema = Yup.object().shape({
 		visitDateTime: Yup.date().required('Visit date is required'),
@@ -51,20 +51,15 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			const response = await createVisitor({
+			await createVisitorAction({
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
 			})
-			if (response.success) {
-				formik.resetForm()
-				router.push('/home')
-			} else {
-				Alert.alert(response.msg)
-			}
-			setIsLoading(false)
+			// if (response.success) {
+			// 	formik.resetForm()
+			// 	router.push('/home')
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {

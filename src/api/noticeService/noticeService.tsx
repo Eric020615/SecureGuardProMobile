@@ -1,32 +1,41 @@
-import { getNoticeDto } from "@zustand/types";
-import GlobalHandler, { IResponse } from "../globalHandler"
-import { listUrl } from "../listUrl"
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import { GetNoticeDto } from '../../dtos/notice/notice.dto'
+import GlobalHandler, { IPaginatedResponse } from '../globalHandler'
+import { listUrl } from '../listUrl'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const getNotices = async (page: number, limit: number): Promise<IResponse<getNoticeDto[]>> => {
-    try {
-        const token = await AsyncStorage.getItem("token")
-        const [success, response] = await GlobalHandler({
-            path: listUrl.notice.getNoticesByResident.path,
-            type: listUrl.notice.getNoticesByResident.type,
-            _token: token ? token : "",
+export const getNotices = async (
+	page: number,
+	limit: number,
+): Promise<IPaginatedResponse<GetNoticeDto>> => {
+	try {
+		const token = await AsyncStorage.getItem('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.notice.getNoticesByResident.path,
+			type: listUrl.notice.getNoticesByResident.type,
+			_token: token ? token : '',
+			data: {
+				page: page,
+				limit: limit,
+			},
+		})
+		const result: IPaginatedResponse<GetNoticeDto> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: {
+				list: success ? response?.data.list : undefined,
+				count: success ? response?.data.count : 0,
+			},
+		}
+		return result
+	} catch (error) {
+		const result: IPaginatedResponse<any> = {
+			success: false,
+			msg: error,
             data: {
-                page: page,
-                limit: limit
-            }
-        })
-        const result : IResponse<getNoticeDto[]> = {
-            success,
-            msg: success ? 'success': response?.message,
-            data: success ? response?.data : undefined
-        }
-        return result;
-    } catch (error) {
-        const result : IResponse<any> = {
-            success: false,
-            msg: error,
-            data: null
-        }
-        return result;
-    }
+				list: null,
+				count: 0,
+			},
+		}
+		return result
+	}
 }
