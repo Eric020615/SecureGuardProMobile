@@ -1,6 +1,6 @@
 import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
-import GlobalHandler, { IPaginatedResponse, IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const createVisitor = async (IVisitor: CreateVisitorDto): Promise<any> => {

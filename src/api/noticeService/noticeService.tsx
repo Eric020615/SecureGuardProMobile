@@ -1,6 +1,6 @@
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
-import GlobalHandler, { IPaginatedResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import GlobalHandler, { IPaginatedResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const getNotices = async (

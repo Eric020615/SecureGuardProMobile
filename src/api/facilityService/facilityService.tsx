@@ -3,8 +3,8 @@ import {
 	GetFacilityBookingHistoryDto,
 	SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
-import GlobalHandler, { IPaginatedResponse, IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<any> => {

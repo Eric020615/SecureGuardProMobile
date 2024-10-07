@@ -1,5 +1,5 @@
-import GlobalHandler, { IResponse } from "../globalHandler";
-import { listUrl } from "../listUrl";
+import GlobalHandler, { IResponse } from "@api/globalHandler";
+import { listUrl } from "@api/listUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RoleEnum } from "@config/constant/user";
 import { SignInFormDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
