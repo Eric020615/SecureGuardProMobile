@@ -54,7 +54,7 @@ export const useFacility = create<State & Actions>((set) => ({
 				set({ totalFacilityBookingHistory: response.data.count })
 				return response
 			},
-			'Booking history retrieved successfully!',
+			'',
 			'Failed to retrieve booking history. Please try again.',
 		)
 	},
@@ -79,7 +79,7 @@ export const useFacility = create<State & Actions>((set) => ({
 				set({ availabilitySlot: response.data })
 				return response
 			},
-			'Slot availability checked successfully!',
+			'',
 			'Failed to check slot availability. Please try again.',
 		)
 	},

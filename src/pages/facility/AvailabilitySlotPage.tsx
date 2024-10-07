@@ -1,4 +1,4 @@
-import { View, Text, ListRenderItem, TouchableOpacity, Alert } from 'react-native'
+import { View, Text, ListRenderItem, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
@@ -15,6 +15,7 @@ import { convertDateStringToDate, getTodayDate, getUTCDateString } from '../../h
 import { SpaceAvailabilityDto } from '../../dtos/facility/facility.dto'
 import { useFacility } from '../../store/facility/useFacility'
 import { useApplication } from '../../store/application/useApplication'
+import CustomModal from '@components/modals/CustomModal'
 
 interface FacilityBooking {
 	facilityId: string
@@ -81,7 +82,15 @@ const AvailabilitySlotPage = () => {
 	const formik = useFormik<FacilityBooking>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: facilityBookingSubmissionConst,
+		initialValues: {
+			facilityId: facilityId as string,
+			startDate: convertDateStringToDate(startDate as string),
+			endDate: moment(startDate as string)
+				.add(duration as string, 'hours')
+				.toDate(),
+			numOfGuest: parseInt(numOfGuest as string),
+			space: '',
+		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			const response = await submitBookingAction({
@@ -91,10 +100,10 @@ const AvailabilitySlotPage = () => {
 				numOfGuest: values.numOfGuest,
 				spaceId: values.space,
 			})
-
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/facility/history')
+			if (response.success) {
+				formik.resetForm()
+				router.push('/facility/history')
+			}
 		},
 	})
 
@@ -141,6 +150,7 @@ const AvailabilitySlotPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full px-4">
+			<CustomModal />
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] my-6">
 					<View className="flex flex-row items-center">

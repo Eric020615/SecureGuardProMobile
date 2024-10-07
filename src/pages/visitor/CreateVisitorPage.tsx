@@ -15,6 +15,7 @@ import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helper
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '../../store/application/useApplication'
 import { useVisitor } from '../../store/visitor/useVisitor'
+import CustomModal from '@components/modals/CustomModal'
 
 interface CreateVisitor {
 	visitDateTime: Date
@@ -57,9 +58,8 @@ const CreateVisitorPage = () => {
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
 			})
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push('/home')
+			formik.resetForm()
+			router.push('/home')
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -69,6 +69,7 @@ const CreateVisitorPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">

@@ -18,8 +18,8 @@ const CameraPage = () => {
 	const [facing, setFacing] = useState<CameraType>('back')
 	const [flash, setFlash] = useState(false)
 	const cameraRef = useRef<CameraView>(null)
-	const { isLoading, setIsLoading } = useApplication()
-	const { setCustomConfirmModalAction, isError } = useModal()
+	const { setIsLoading } = useApplication()
+	const { setCustomConfirmModalAction } = useModal()
 	const uploadUserFaceAuthAction = useFaceAuth((state) => state.uploadUserFaceAuthAction)
 
 	useEffect(() => {
@@ -81,31 +81,36 @@ const CameraPage = () => {
 	}
 
 	const saveImage = async () => {
-		if (image) {
-			const base64 = await convertImageToBase64(image)
-			if (base64 == '') {
-				throw new Error('Failed to convert image to base64')
+		try {
+			if (image) {
+				const base64 = await convertImageToBase64(image)
+				if (base64 == '') {
+					throw new Error('Failed to convert image to base64')
+				}
+				const response = await uploadUserFaceAuthAction({
+					faceData: base64,
+				})
+				if (response.success) {
+					router.replace('/profile/view')
+				} else {
+					router.replace('/camera')
+				}
+			} else {
+				throw new Error('No image to save')
 			}
-			await uploadUserFaceAuthAction({
-				faceData: base64,
+		} catch (error) {
+			setCustomConfirmModalAction({
+				title: 'Face Authentication Created Failed',
+				subtitle: 'Please Retry It Again Or Contact Our Support Team',
 			})
+		} finally {
 			setImage(null)
-		} else {
-			throw new Error('No image to save')
 		}
 	}
 
 	return (
 		<SafeAreaView className="h-full">
-			<CustomModal
-				customConfirmButtonPressSuccess={() => {
-					if (isError) {
-						router.replace('/camera')
-					} else {
-						router.replace('/profile/view')
-					}
-				}}
-			/>
+			<CustomModal />
 			{!image ? (
 				<CameraView
 					className="flex-1 rounded-3xl"

@@ -7,7 +7,7 @@ import 'moment-timezone'
 import { router, useLocalSearchParams, usePathname } from 'expo-router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { VisitorEnum } from '@config/constant/visitor'
+import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
 import { VisitorCategoryList } from '@config/listOption/visitor'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
@@ -20,6 +20,8 @@ import {
 	getUTCDateString,
 } from '../../../helpers/time'
 import { useVisitor } from '../../../store/visitor/useVisitor'
+import { useApplication } from '../../../store/application/useApplication'
+import CustomModal from '@components/modals/CustomModal'
 
 interface VisitorDetails {
 	visitDateTime: Date
@@ -31,17 +33,35 @@ interface VisitorDetails {
 
 const VisitorDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const [isSubmitting, setIsSubmitting] = useState(false)
+	const [formInitialValue, setFormInitialValue] = useState<VisitorDetails>(createVisitorConst)
 	const { visitorDetails, getVisitorDetailsByIdAction, editVisitorByIdAction } = useVisitor()
+	const { isLoading } = useApplication()
 	const { id } = useLocalSearchParams()
 	const currentPath = usePathname()
 	useEffect(() => {
-		getData(id as string)
+		fetchVisitorDetailsByVisitorId(id as string)
 	}, [id])
-	const getData = async (id: string) => {
+	useEffect(() => {
+		if (visitorDetails) {
+			setFormInitialValue({
+				visitDateTime: convertUTCStringToLocalDate(visitorDetails?.visitDateTime),
+				visitorCategory:
+					visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
+				visitorName: visitorDetails?.visitorName ? visitorDetails?.visitorName : '',
+				visitorCountryCode: visitorDetails?.visitorContactNumber
+					? getCountriesByCallingCode(
+							parsePhoneNumberFromString(visitorDetails.visitorContactNumber).countryCallingCode,
+					  )[0]
+					: null,
+				visitorPhoneNumber: visitorDetails?.visitorContactNumber
+					? parsePhoneNumberFromString(visitorDetails?.visitorContactNumber).nationalNumber
+					: '',
+			})
+		}
+	}, [visitorDetails])
+	const fetchVisitorDetailsByVisitorId = async (id: string) => {
 		await getVisitorDetailsByIdAction(id)
 	}
-
 	const validationSchema = Yup.object().shape({
 		visitDateTime: Yup.date().required('Visit date is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
@@ -60,23 +80,10 @@ const VisitorDetailsEditPage = () => {
 	const formik = useFormik<VisitorDetails>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: {
-			visitDateTime: convertUTCStringToLocalDate(visitorDetails?.visitDateTime),
-			visitorCategory:
-				visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
-			visitorName: visitorDetails?.visitorName ? visitorDetails?.visitorName : '',
-			visitorCountryCode: visitorDetails?.visitorContactNumber
-				? getCountriesByCallingCode(
-						parsePhoneNumberFromString(visitorDetails.visitorContactNumber).countryCallingCode,
-				  )[0]
-				: null,
-			visitorPhoneNumber: visitorDetails?.visitorContactNumber
-				? parsePhoneNumberFromString(visitorDetails.visitorContactNumber).nationalNumber
-				: '',
-		},
+		initialValues: formInitialValue,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			const response = await editVisitorByIdAction(
+			await editVisitorByIdAction(
 				{
 					visitorName: values.visitorName,
 					visitorCategory: values.visitorCategory,
@@ -85,15 +92,11 @@ const VisitorDetailsEditPage = () => {
 				},
 				id as string,
 			)
-			if (response.success) {
-				formik.resetForm()
-				router.push(currentPath.replace('edit', 'view'))
-			} else {
-				Alert.alert(response.msg)
-			}
-			setIsSubmitting(false)
+			formik.resetForm()
+			router.push(currentPath.replace('edit', 'view'))
 		},
 	})
+
 	const onDatePickerChange = (selectedDate: Date) => {
 		formik.setFieldValue('visitDateTime', selectedDate)
 		setShowCalendar(false)
@@ -101,6 +104,7 @@ const VisitorDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">
@@ -159,10 +163,14 @@ const VisitorDetailsEditPage = () => {
 								setSelectedCountryCode={(e) => {
 									formik.setFieldValue('visitorCountryCode', e)
 								}}
+								phoneNumber={
+									formik.values.visitorPhoneNumber
+										? formik.values.visitorPhoneNumber
+										: visitorDetails.visitorContactNumber
+								}
 								setPhoneNumber={(e) => {
 									formik.setFieldValue('visitorPhoneNumber', e)
 								}}
-								phoneNumber={`${formik.values.visitorPhoneNumber}`}
 								errorMessage={
 									formik.touched.visitorPhoneNumber &&
 									formik.errors.visitorPhoneNumber &&
@@ -203,7 +211,7 @@ const VisitorDetailsEditPage = () => {
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-4 w-full mt-8 self-center"
-						isLoading={isSubmitting}
+						isLoading={isLoading}
 						textStyles="text-sm text-white"
 					/>
 				</View>

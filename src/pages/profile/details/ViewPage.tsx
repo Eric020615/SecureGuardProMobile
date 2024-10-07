@@ -30,10 +30,10 @@ const userProfileViewPage = () => {
 	}
 
 	useEffect(() => {
-		getData()
+		fetchUserProfileByUserId()
 	}, [])
 
-	const getData = async () => {
+	const fetchUserProfileByUserId = async () => {
 		await getUserProfileByIdAction()
 	}
 
@@ -76,10 +76,10 @@ const userProfileViewPage = () => {
 						<CustomButton
 							title="Settings"
 							handlePress={() => {}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<Ionicons name="settings" color={'#000000'} size={24} />
 								</View>
 							}
@@ -92,10 +92,10 @@ const userProfileViewPage = () => {
 							handlePress={() => {
 								router.push('/camera')
 							}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<MaterialCommunityIcons name="face-recognition" color={'#000000'} size={24} />
 								</View>
 							}
@@ -106,10 +106,10 @@ const userProfileViewPage = () => {
 						<CustomButton
 							title="Password"
 							handlePress={() => {}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<MaterialCommunityIcons
 										name="form-textbox-password"
 										color={'#000000'}
@@ -126,10 +126,10 @@ const userProfileViewPage = () => {
 							handlePress={() => {
 								logOut()
 							}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-red-600 flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<Ionicons name="exit-outline" color={'#FF0000'} size={24} />
 								</View>
 							}

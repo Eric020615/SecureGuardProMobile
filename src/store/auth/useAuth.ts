@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { SignInFormDto, UserSignUpFormDto } from '../types'
 import { checkAuth, signIn, signUp } from '@api/authService/authService'
 import { generalAction } from '../application/useApplication' // Import the generalAction utility
+import { SignInFormDto, UserSignUpFormDto } from '../../dtos/auth/auth.dto'
 
 interface State {
 	isLogged: boolean
@@ -22,11 +22,11 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signUp(userSignUpForm)
-				set({ isLogged: true })
+				set({ isLogged: true, tempToken: response.data })
 				return response
 			},
-			'Sign-up successful! Welcome to our platform.', // Custom success message
-			'Sign-up failed. Please try again.', // Custom error message
+			'', // Custom success message
+			'Account created failed. Please try again.', // Custom error message
 		)
 	},
 
@@ -37,7 +37,7 @@ export const useAuth = create<State & Actions>((set) => ({
 				set({ isLogged: true })
 				return response
 			},
-			'Sign-in successful! Welcome back.', // Custom success message
+			'', // Custom success message
 			'Sign-in failed. Please check your credentials and try again.', // Custom error message
 		)
 	},
@@ -46,11 +46,10 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAuth(token)
-				set({ isLogged: true })
 				return response
 			},
-			'Authentication successful!', // Custom success message for token verification
-			'Authentication failed. Please log in again.', // Custom error message for token verification failure
+			'',
+			'Authentication failed. Please log in again.', // Custom error message
 		)
 	},
 	setTempTokenAction: (token: string) => set({ tempToken: token }),

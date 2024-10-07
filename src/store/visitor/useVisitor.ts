@@ -5,8 +5,7 @@ import {
 	getVisitorDetailsById,
 	getVisitors,
 } from '@api/visitorService/visitorService'
-import { GetVisitorDto } from '../types'
-import { CreateVisitorDto, EditVisitorByIdDto } from '../../dtos/visitor/visitor.dto'
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '../../dtos/visitor/visitor.dto'
 import { generalAction } from '../application/useApplication' // Import generalAction
 
 interface State {
@@ -61,7 +60,7 @@ export const useVisitor = create<State & Actions>((set) => ({
 				set({ totalVisitors: response.data.count })
 				return response
 			},
-			'Visitors retrieved successfully!',
+			'',
 			'Failed to retrieve visitors.',
 		)
 	},
@@ -77,7 +76,7 @@ export const useVisitor = create<State & Actions>((set) => ({
 				set({ visitorDetails: response.data })
 				return response
 			},
-			'Visitor details retrieved successfully!',
+			'',
 			'Failed to retrieve visitor details.',
 		)
 	},

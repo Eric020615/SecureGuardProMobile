@@ -18,8 +18,8 @@ export const useApplication = create<State & Actions>((set) => ({
 
 export const generalAction = async <T>(
 	action: () => Promise<T>,
-	successMessage = 'Operation completed successfully',
-	errorMessage = 'An unexpected error occurred',
+	successMessage?: string,
+	errorMessage?: string,
 ): Promise<T | undefined> => {
 	const { setIsLoading } = useApplication.getState()
 	const { setCustomConfirmModalAction } = useModal.getState()
@@ -28,19 +28,23 @@ export const generalAction = async <T>(
 
 	try {
 		const result = await action()
-		setCustomConfirmModalAction({
-			title: 'Success',
-			subtitle: successMessage,
-			isError: false,
-		})
+		if (successMessage) {
+			setCustomConfirmModalAction({
+				title: 'Success',
+				subtitle: successMessage,
+				isError: false,
+			})
+		}
 		return result
 	} catch (error: any) {
-		const errorMsg = error?.message || errorMessage
-		setCustomConfirmModalAction({
-			title: 'Error',
-			subtitle: errorMsg,
-			isError: true,
-		})
+		if (errorMessage) {
+			const errorMsg = error?.message || errorMessage
+			setCustomConfirmModalAction({
+				title: 'Error',
+				subtitle: errorMsg,
+				isError: true,
+			})
+		}
 		throw error
 	} finally {
 		setIsLoading(false)

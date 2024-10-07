@@ -15,6 +15,7 @@ import CustomFlatList from '@components/list/CustomFlatList'
 import { useApplication } from '../../store/application/useApplication'
 import { useFacility } from '../../store/facility/useFacility'
 import { GetFacilityBookingHistoryDto } from '../../dtos/facility/facility.dto'
+import CustomModal from '@components/modals/CustomModal'
 
 const FacilityBookingHistoryPage = () => {
 	const {
@@ -39,12 +40,10 @@ const FacilityBookingHistoryPage = () => {
 	}
 
 	const cancel = async (bookingGuid: string) => {
-		await cancelBookingAction(bookingGuid)
-		// if (response.success) {
-		// 	router.push('/facility/history')
-		// } else {
-		// 	Alert.alert(response.msg)
-		// }
+		const response = await cancelBookingAction(bookingGuid)
+		if (response.success) {
+			router.push('/facility/history')
+		}
 	}
 
 	const fetchNextPage = async () => {
@@ -99,6 +98,7 @@ const FacilityBookingHistoryPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<View className="flex-1">
 				<View className="w-full px-4 my-6 flex-1">
 					<View className="flex flex-row items-center">

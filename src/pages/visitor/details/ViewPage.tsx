@@ -8,21 +8,23 @@ import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
 import { convertUTCStringToLocalDateString } from '../../../helpers/time'
 import { useVisitor } from '../../../store/visitor/useVisitor'
+import CustomModal from '@components/modals/CustomModal'
 
 const VisitorDetailsViewPage = () => {
 	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
 	const { id } = useLocalSearchParams()
 
 	useEffect(() => {
-		getData(id as string)
+		fetchVisitorDetailsByVisitorId(id as string)
 	}, [id])
 
-	const getData = async (id: string) => {
+	const fetchVisitorDetailsByVisitorId = async (id: string) => {
 		await getVisitorDetailsByIdAction(id)
 	}
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

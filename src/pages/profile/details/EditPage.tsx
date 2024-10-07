@@ -20,8 +20,9 @@ import { ITimeFormat } from '@config/constant'
 import Iconicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '../../../store/application/useApplication'
 import { useUser } from '../../../store/user/useUser'
+import CustomModal from '@components/modals/CustomModal'
 
-interface userProfile {
+interface UserProfile {
 	firstName: string
 	lastName: string
 	userName: string
@@ -34,8 +35,9 @@ interface userProfile {
 
 const ProfileDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const { isLoading, setIsLoading } = useApplication()
+	const { isLoading } = useApplication()
 	const { userProfile, getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
+	const [formInitialValue, setFormInitialValue] = useState<UserProfile>({} as UserProfile)
 	const currentPath = usePathname()
 	const handlePress = () => {
 		if (currentPath.includes('edit')) {
@@ -45,11 +47,31 @@ const ProfileDetailsEditPage = () => {
 		router.push(currentPath.concat('/view'))
 	}
 	useEffect(() => {
-		getData()
+		fetchUserProfileByUserId()
 	}, [])
-	const getData = async () => {
-		getUserProfileByIdAction()
+	const fetchUserProfileByUserId = async () => {
+		await getUserProfileByIdAction()
 	}
+	useEffect(() => {
+		if (userProfile) {
+			setFormInitialValue({
+				firstName: userProfile?.firstName ? userProfile.firstName : '',
+				lastName: userProfile?.lastName ? userProfile.lastName : '',
+				userName: userProfile?.userName ? userProfile.userName : '',
+				email: userProfile?.email ? userProfile.email : '',
+				userCountryCode: userProfile?.contactNumber
+					? getCountriesByCallingCode(
+							parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode,
+					  )[0]
+					: null,
+				userPhoneNumber: userProfile?.contactNumber
+					? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
+					: '',
+				gender: userProfile?.gender ? userProfile.gender : null,
+				dateOfBirth: convertUTCStringToLocalDate(userProfile?.dateOfBirth),
+			})
+		}
+	}, [userProfile])
 
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().min(1).required('First name is required'),
@@ -67,25 +89,10 @@ const ProfileDetailsEditPage = () => {
 				return phone ? phone.isValid() : false
 			}),
 	})
-	const formik = useFormik<userProfile>({
+	const formik = useFormik<UserProfile>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: {
-			firstName: userProfile?.firstName ? userProfile.firstName : '',
-			lastName: userProfile?.lastName ? userProfile.lastName : '',
-			userName: userProfile?.userName ? userProfile.userName : '',
-			email: userProfile?.email ? userProfile.email : '',
-			userCountryCode: userProfile?.contactNumber
-				? getCountriesByCallingCode(
-						parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode,
-				  )[0]
-				: null,
-			userPhoneNumber: userProfile?.contactNumber
-				? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
-				: '',
-			gender: userProfile?.gender ? userProfile.gender : null,
-			dateOfBirth: convertUTCStringToLocalDate(userProfile?.dateOfBirth),
-		},
+		initialValues: formInitialValue,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			await editUserProfileByIdAction({
@@ -97,9 +104,8 @@ const ProfileDetailsEditPage = () => {
 				gender: values.gender,
 				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
 			})
-			// if (response.success) {
-			// 	formik.resetForm()
-			// 	router.push(currentPath.replace('edit', 'view'))
+			formik.resetForm()
+			router.push(currentPath.replace('edit', 'view'))
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -109,6 +115,7 @@ const ProfileDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

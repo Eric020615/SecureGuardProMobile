@@ -1,7 +1,11 @@
 import { create } from 'zustand'
-import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from '../types'
 import { createUser, editUserProfileById, getUserProfileById } from '@api/userService/userService'
 import { generalAction } from '../application/useApplication' // Import generalAction
+import {
+	EditUserDetailsByIdDto,
+	GetUserProfileByIdDto,
+	UserInformationFormDto,
+} from '../../dtos/user/user.dto'
 
 interface State {
 	userProfile: GetUserProfileByIdDto
@@ -35,7 +39,7 @@ export const useUser = create<State & Actions>((set) => ({
 				const response = await getUserProfileById()
 				set({ userProfile: response.data })
 			},
-			'User profile retrieved successfully!',
+			'',
 			'Failed to retrieve user profile.',
 		)
 	},

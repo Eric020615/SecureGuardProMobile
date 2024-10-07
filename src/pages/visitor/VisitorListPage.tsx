@@ -11,6 +11,7 @@ import CustomFlatList from '@components/list/CustomFlatList'
 import { useVisitor } from '../../store/visitor/useVisitor'
 import { useApplication } from '../../store/application/useApplication'
 import { GetVisitorDto } from '../../dtos/visitor/visitor.dto'
+import CustomModal from '@components/modals/CustomModal'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
@@ -68,6 +69,7 @@ const VisitorListPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<Text className="text-4xl text-black font-bold mt-6">My Visitor</Text>

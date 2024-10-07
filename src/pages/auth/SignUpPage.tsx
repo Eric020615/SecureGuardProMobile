@@ -35,7 +35,10 @@ const SignUpPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
-		await signUpAction(values)
+		const response = await signUpAction(values)
+		if (response.success) {
+			router.replace('/user-information')
+		}
 	}
 
 	return (
