@@ -114,8 +114,8 @@ const UserInformationPage = () => {
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
-				<CustomModal />
 				<View className="w-full justify-center min-h-[85vh] px-4 my-8">
 					<View className="items-center mb-7">
 						<Text className="text-5xl font-bold text-primary">Welcome</Text>

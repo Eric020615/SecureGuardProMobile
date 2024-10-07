@@ -2,6 +2,7 @@ import { create } from 'zustand'
 import { checkAuth, signIn, signUp } from '@api/authService/authService'
 import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
 import { SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface State {
 	isLogged: boolean
@@ -34,7 +35,12 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signIn(userSignInForm)
-				set({ isLogged: true })
+				if (response.success) {
+					await AsyncStorage.setItem('token', response?.data)
+					set({ isLogged: true })
+				} else {
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'', // Custom success message
