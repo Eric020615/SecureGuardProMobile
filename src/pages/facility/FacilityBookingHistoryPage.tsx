@@ -9,12 +9,12 @@ import {
 	convertUTCStringToLocalDate,
 	convertUTCStringToLocalDateString,
 	getTodayDate,
-} from '../../helpers/time'
+} from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomFlatList from '@components/list/CustomFlatList'
-import { useApplication } from '../../store/application/useApplication'
-import { useFacility } from '../../store/facility/useFacility'
-import { GetFacilityBookingHistoryDto } from '../../dtos/facility/facility.dto'
+import { useApplication } from '@store/application/useApplication'
+import { useFacility } from '@store/facility/useFacility'
+import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import CustomModal from '@components/modals/CustomModal'
 
 const FacilityBookingHistoryPage = () => {

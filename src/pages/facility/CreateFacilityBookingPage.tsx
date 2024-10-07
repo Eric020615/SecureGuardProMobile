@@ -10,12 +10,12 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { facilityBookingSlotCheckConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
-import { getLocalDateString, getTodayDate } from '../../helpers/time'
+import { getLocalDateString, getTodayDate } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
-import { useApplication } from '../../store/application/useApplication'
+import { useApplication } from '@store/application/useApplication'
 import CustomModal from '@components/modals/CustomModal'
-import { useModal } from '../../store/modal/useModal'
+import { useModal } from '@store/modal/useModal'
 
 interface FacilityBooking {
 	facilityId: string

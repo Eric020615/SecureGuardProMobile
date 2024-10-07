@@ -11,10 +11,10 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
-import { useApplication } from '../../store/application/useApplication'
-import { useVisitor } from '../../store/visitor/useVisitor'
+import { useApplication } from '@store/application/useApplication'
+import { useVisitor } from '@store/visitor/useVisitor'
 import CustomModal from '@components/modals/CustomModal'
 
 interface CreateVisitor {

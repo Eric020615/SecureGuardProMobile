@@ -1,11 +1,11 @@
 import { create } from 'zustand'
 import { createUser, editUserProfileById, getUserProfileById } from '@api/userService/userService'
-import { generalAction } from '../application/useApplication' // Import generalAction
+import { generalAction } from '@store/application/useApplication' // Import generalAction
 import {
 	EditUserDetailsByIdDto,
 	GetUserProfileByIdDto,
 	UserInformationFormDto,
-} from '../../dtos/user/user.dto'
+} from '@dtos/user/user.dto'
 
 interface State {
 	userProfile: GetUserProfileByIdDto

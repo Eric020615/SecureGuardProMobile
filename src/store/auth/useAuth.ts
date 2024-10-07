@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { checkAuth, signIn, signUp } from '@api/authService/authService'
-import { generalAction } from '../application/useApplication' // Import the generalAction utility
-import { SignInFormDto, UserSignUpFormDto } from '../../dtos/auth/auth.dto'
+import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
+import { SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 
 interface State {
 	isLogged: boolean

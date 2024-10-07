@@ -8,9 +8,9 @@ import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
 import CustomModal from '@components/modals/CustomModal'
-import { UserSignUpFormDto } from '../../dtos/auth/auth.dto'
-import { useAuth } from '../../store/auth/useAuth'
-import { useApplication } from '../../store/application/useApplication'
+import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { useAuth } from '@store/auth/useAuth'
+import { useApplication } from '@store/application/useApplication'
 
 const SignUpPage = () => {
 	const validationSchema = Yup.object().shape({

@@ -1,5 +1,5 @@
 import { Gender, RoleEnum } from "@config/constant/user"
-import { GeneralFile } from "../application/application.dto"
+import { GeneralFile } from "@dtos/application/application.dto"
 
 export interface UserInformationFormDto {
 	firstName: string

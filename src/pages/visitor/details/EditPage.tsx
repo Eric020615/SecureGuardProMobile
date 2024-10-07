@@ -18,9 +18,9 @@ import {
 	getLocalDateString,
 	getTodayDate,
 	getUTCDateString,
-} from '../../../helpers/time'
-import { useVisitor } from '../../../store/visitor/useVisitor'
-import { useApplication } from '../../../store/application/useApplication'
+} from '@helpers/time'
+import { useVisitor } from '@store/visitor/useVisitor'
+import { useApplication } from '@store/application/useApplication'
 import CustomModal from '@components/modals/CustomModal'
 
 interface VisitorDetails {

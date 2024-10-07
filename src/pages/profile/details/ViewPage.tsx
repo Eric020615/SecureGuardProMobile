@@ -8,7 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { router, usePathname } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { useUser } from '../../../store/user/useUser'
+import { useUser } from '@store/user/useUser'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()

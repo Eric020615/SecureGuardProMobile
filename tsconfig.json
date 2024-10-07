@@ -4,10 +4,12 @@
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
       // "@/*": ["./*"],
-      "@zustand/*": ["./src/zustand/*"],
+      "@store/*": ["./src/store/*"],
       "@config/*": ["./src/config/*"],
       "@api/*": ["./src/api/*"],
-      "@pages/*": ["./src/pages/*"]
+      "@pages/*": ["./src/pages/*"],
+      "@dtos/*": ["./src/dtos/*"],
+      "@helpers/*": ["./src/helpers/*"]
     }
   },
   "extends": "expo/tsconfig.base",

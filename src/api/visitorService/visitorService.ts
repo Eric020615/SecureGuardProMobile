@@ -1,4 +1,4 @@
-import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '../../dtos/visitor/visitor.dto'
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import GlobalHandler, { IPaginatedResponse, IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'

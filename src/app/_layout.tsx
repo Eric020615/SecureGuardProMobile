@@ -4,7 +4,7 @@ import { NativeWindStyleSheet } from 'nativewind'
 import { useEffect } from 'react'
 import GlobalProvider from '../context/GlobalProvider'
 import CustomLoader from '@components/loader/CustomLoader'
-import { useApplication } from '../store/application/useApplication'
+import { useApplication } from '@store/application/useApplication'
 
 SplashScreen.preventAutoHideAsync()
 

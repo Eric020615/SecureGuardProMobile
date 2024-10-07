@@ -2,7 +2,7 @@ import GlobalHandler, { IResponse } from "../globalHandler";
 import { listUrl } from "../listUrl";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { RoleEnum } from "@config/constant/user";
-import { SignInFormDto, UserSignUpFormDto } from "../../dtos/auth/auth.dto";
+import { SignInFormDto, UserSignUpFormDto } from "@dtos/auth/auth.dto";
 
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
   try {

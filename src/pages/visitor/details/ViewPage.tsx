@@ -6,8 +6,8 @@ import Iconicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
-import { convertUTCStringToLocalDateString } from '../../../helpers/time'
-import { useVisitor } from '../../../store/visitor/useVisitor'
+import { convertUTCStringToLocalDateString } from '@helpers/time'
+import { useVisitor } from '@store/visitor/useVisitor'
 import CustomModal from '@components/modals/CustomModal'
 
 const VisitorDetailsViewPage = () => {

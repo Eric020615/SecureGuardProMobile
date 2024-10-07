@@ -5,12 +5,12 @@ import { CameraView, CameraType, useCameraPermissions, CameraCapturedPicture } f
 import * as MediaLibrary from 'expo-media-library'
 import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { convertImageToBase64 } from '../../helpers/file'
+import { convertImageToBase64 } from '@helpers/file'
 import { router } from 'expo-router'
 import CustomModal from '@components/modals/CustomModal'
-import { useApplication } from '../../store/application/useApplication'
-import { useModal } from '../../store/modal/useModal'
-import { useFaceAuth } from '../../store/faceAuth/useFaceAuth'
+import { useApplication } from '@store/application/useApplication'
+import { useModal } from '@store/modal/useModal'
+import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()

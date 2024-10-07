@@ -2,7 +2,7 @@ import {
 	FacilityBookingFormDto,
 	GetFacilityBookingHistoryDto,
 	SpaceAvailabilityDto,
-} from '../../dtos/facility/facility.dto'
+} from '@dtos/facility/facility.dto'
 import GlobalHandler, { IPaginatedResponse, IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'

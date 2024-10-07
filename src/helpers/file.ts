@@ -2,7 +2,7 @@ import { CameraCapturedPicture } from 'expo-camera'
 import { readAsStringAsync, cacheDirectory, copyAsync } from 'expo-file-system'
 import { DocumentPickerResponse } from 'react-native-document-picker'
 import { manipulateAsync } from 'expo-image-manipulator'
-import { GeneralFile } from '../dtos/application/application.dto'
+import { GeneralFile } from '@dtos/application/application.dto'
 
 export const getFile = async (document: DocumentPickerResponse): Promise<GeneralFile> => {
 	try {

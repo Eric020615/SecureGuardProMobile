@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { useModal } from '../modal/useModal'
+import { useModal } from '@store/modal/useModal'
 
 interface State {
 	isLoading: boolean

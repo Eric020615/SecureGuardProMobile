@@ -5,8 +5,8 @@ import {
 	getVisitorDetailsById,
 	getVisitors,
 } from '@api/visitorService/visitorService'
-import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '../../dtos/visitor/visitor.dto'
-import { generalAction } from '../application/useApplication' // Import generalAction
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import { generalAction } from '@store/application/useApplication' // Import generalAction
 
 interface State {
 	visitors: GetVisitorDto[]

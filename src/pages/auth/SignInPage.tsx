@@ -8,9 +8,9 @@ import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
 import { signInformDataJson } from '@config/constant/auth/index'
 import CustomModal from '@components/modals/CustomModal'
-import { SignInFormDto } from '../../dtos/auth/auth.dto'
-import { useAuth } from '../../store/auth/useAuth'
-import { useApplication } from '../../store/application/useApplication'
+import { SignInFormDto } from '@dtos/auth/auth.dto'
+import { useAuth } from '@store/auth/useAuth'
+import { useApplication } from '@store/application/useApplication'
 
 const SignInPage = () => {
 	const validationSchema = Yup.object().shape({

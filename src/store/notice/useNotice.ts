@@ -1,7 +1,7 @@
 import { create } from 'zustand'
 import { getNotices } from '@api/noticeService/noticeService'
-import { generalAction } from '../application/useApplication' // Import generalAction
-import { GetNoticeDto } from '../../dtos/notice/notice.dto'
+import { generalAction } from '@store/application/useApplication' // Import generalAction
+import { GetNoticeDto } from '@dtos/notice/notice.dto'
 
 interface State {
 	notices: GetNoticeDto[]

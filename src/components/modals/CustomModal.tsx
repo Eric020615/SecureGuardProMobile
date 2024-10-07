@@ -2,7 +2,7 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import Modal from 'react-native-modal'
 import CustomButton from '@components/buttons/CustomButton'
-import { useModal } from '../../store/modal/useModal'
+import { useModal } from '@store/modal/useModal'
 
 interface CustomModalProps {
 	customConfirmButtonPressSuccess?: () => void

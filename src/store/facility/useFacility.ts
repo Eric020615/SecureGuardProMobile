@@ -5,12 +5,12 @@ import {
 	getFacilityBookingHistory,
 	submitBooking,
 } from '@api/facilityService/facilityService'
-import { generalAction } from '../application/useApplication' // Import generalAction
+import { generalAction } from '@store/application/useApplication' // Import generalAction
 import {
 	FacilityBookingFormDto,
 	GetFacilityBookingHistoryDto,
 	SpaceAvailabilityDto,
-} from '../../dtos/facility/facility.dto'
+} from '@dtos/facility/facility.dto'
 
 interface State {
 	availabilitySlot: SpaceAvailabilityDto[]

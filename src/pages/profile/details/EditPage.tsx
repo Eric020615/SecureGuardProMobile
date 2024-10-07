@@ -12,14 +12,14 @@ import {
 	getLocalDateString,
 	getTodayDate,
 	getUTCDateString,
-} from '../../../helpers/time'
+} from '@helpers/time'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
 import Iconicons from 'react-native-vector-icons/Ionicons'
-import { useApplication } from '../../../store/application/useApplication'
-import { useUser } from '../../../store/user/useUser'
+import { useApplication } from '@store/application/useApplication'
+import { useUser } from '@store/user/useUser'
 import CustomModal from '@components/modals/CustomModal'
 
 interface UserProfile {

@@ -1,4 +1,4 @@
-import { GetNoticeDto } from '../../dtos/notice/notice.dto'
+import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import GlobalHandler, { IPaginatedResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'

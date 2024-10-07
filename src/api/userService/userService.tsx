@@ -1,7 +1,7 @@
 import GlobalHandler, { IResponse } from '../globalHandler'
 import { listUrl } from '../listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from '../../dtos/user/user.dto'
+import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from '@dtos/user/user.dto'
 
 export const createUser = async (
 	IUserInformationDto: UserInformationFormDto,
