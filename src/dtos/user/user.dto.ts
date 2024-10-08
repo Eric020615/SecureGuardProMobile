@@ -46,3 +46,7 @@ export interface ResidentInformationDto {
 	unitNumber: string
 	supportedFiles: string[]
 }
+
+export interface CreateSubUserDto {
+	email: string
+}

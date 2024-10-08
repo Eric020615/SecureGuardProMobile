@@ -17,7 +17,7 @@ import { getCountriesByCallingCode, ICountry } from 'react-native-international-
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '@store/application/useApplication'
 import { useUser } from '@store/user/useUser'
 import CustomModal from '@components/modals/CustomModal'
@@ -124,7 +124,7 @@ const ProfileDetailsEditPage = () => {
 							handlePress={() => {
 								handlePress()
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">User Details</Text>

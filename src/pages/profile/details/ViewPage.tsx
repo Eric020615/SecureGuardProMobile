@@ -74,8 +74,10 @@ const userProfileViewPage = () => {
 					<View className="mt-2 w-full">
 						<Text className="text-base text-gray-500 font-semibold">Preferences</Text>
 						<CustomButton
-							title="Settings"
-							handlePress={() => {}}
+							title="Sub-user"
+							handlePress={() => {
+								router.push('/sub-user')
+							}}
 							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={

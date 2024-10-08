@@ -4,8 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router, useLocalSearchParams } from 'expo-router'
 import CustomFlatList from '@components/list/CustomFlatList'
-import Iconicons from 'react-native-vector-icons/Ionicons'
-import { facilityBookingSubmissionConst, FacilityConst } from '@config/constant/facilities'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { FacilityConst } from '@config/constant/facilities'
 import moment from 'moment'
 import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
@@ -159,21 +159,21 @@ const AvailabilitySlotPage = () => {
 							handlePress={() => {
 								router.push('/facility/create')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Book Slot</Text>
 					<View style={{ marginTop: 10 }}>
 						<View className="flex flex-row items-center gap-1">
-							<Iconicons name="location-sharp" color={'#2A5D4F'} size={24} />
+							<Ionicons name="location-sharp" color={'#2A5D4F'} size={24} />
 							<Text className="text-lg text-black">{FacilityConst[facilityId as string]}</Text>
 						</View>
 						<View className="flex flex-row items-center gap-1">
-							<Iconicons name="calendar-outline" color={'#10312B'} size={24} />
+							<Ionicons name="calendar-outline" color={'#10312B'} size={24} />
 							<Text className="text-lg text-black">{startDate}</Text>
 						</View>
 						<View className="flex flex-row items-center gap-1">
-							<Iconicons name="calendar-outline" color={'#B75E2A'} size={24} />
+							<Ionicons name="calendar-outline" color={'#B75E2A'} size={24} />
 							<Text className="text-lg text-black">
 								{moment(startDate)
 									.add(duration as string, 'hours')

@@ -19,13 +19,13 @@ const ScreenLayout = () => {
 					}}
 				/>
 				<Stack.Screen
-					name="createVisitor"
+					name="visitor/create"
 					options={{
 						headerShown: false,
 					}}
 				/>
 				<Stack.Screen
-					name="visitorDetails/[id]/[pageMode]"
+					name="visitor/visitorDetails/[id]/[pageMode]"
 					options={{
 						headerShown: false,
 					}}
@@ -50,6 +50,18 @@ const ScreenLayout = () => {
 				/>
 				<Stack.Screen
 					name="facility/[facilityId]/[startDate]/[duration]/[numOfGuest]/check"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="sub-user/index"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="sub-user/create"
 					options={{
 						headerShown: false,
 					}}

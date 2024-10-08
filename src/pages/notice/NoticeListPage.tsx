@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { getUTCRelativeTimeFromNow } from '@helpers/time'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useNotice } from '@store/notice/useNotice'
@@ -62,7 +62,7 @@ const NoticeListPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Notice</Text>

@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import CustomButton from '@components/buttons/CustomButton'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
@@ -79,7 +79,7 @@ const CreateVisitorPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Register Visitor</Text>

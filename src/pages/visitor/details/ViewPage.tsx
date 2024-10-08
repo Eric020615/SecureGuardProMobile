@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
@@ -33,7 +33,7 @@ const VisitorDetailsViewPage = () => {
 							handlePress={() => {
 								router.replace('/visitor')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Visitor Details</Text>

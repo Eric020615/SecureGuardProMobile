@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import { BookingDurationList, FacilityList, GuestList } from '@config/listOption/facility'
@@ -85,7 +85,7 @@ const CreateFacilityBookingPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							containerStyles="items-center h-fit"

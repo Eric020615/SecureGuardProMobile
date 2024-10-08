@@ -2,7 +2,7 @@ import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FacilityConst } from '@config/constant/facilities'
 import {
@@ -88,7 +88,7 @@ const FacilityBookingHistoryPage = () => {
 							handlePress={() => {
 								cancel(item.bookingGuid)
 							}}
-							rightReactNativeIcons={<Iconicons name="close-circle" color={'#ff0000'} size={16} />}
+							rightReactNativeIcons={<Ionicons name="close-circle" color={'#ff0000'} size={16} />}
 						/>
 					)
 				)}
@@ -107,7 +107,7 @@ const FacilityBookingHistoryPage = () => {
 							handlePress={() => {
 								router.push('/facility/create')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Booking History</Text>
