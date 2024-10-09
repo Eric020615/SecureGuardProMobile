@@ -23,6 +23,9 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signUp(userSignUpForm)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				set({ isLogged: true, tempToken: response.data })
 				return response
 			},
@@ -52,6 +55,9 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAuth(token)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'',

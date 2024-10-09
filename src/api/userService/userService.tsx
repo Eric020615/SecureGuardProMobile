@@ -1,12 +1,12 @@
 import GlobalHandler, { IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from '@dtos/user/user.dto'
+import { CreateSubUserDto, EditUserDetailsByIdDto, GetUserProfileByIdDto, UserInformationFormDto } from '@dtos/user/user.dto'
 
 export const createUser = async (
 	IUserInformationDto: UserInformationFormDto,
 	tempToken: string,
-): Promise<any> => {
+): Promise<IResponse<any>> => {
 	try {
 		const [success, response] = await GlobalHandler({
 			path: listUrl.user.createUser.path,
@@ -29,6 +29,34 @@ export const createUser = async (
 		return result
 	}
 }
+
+export const createSubUser = async (
+	createSubUserDto: CreateSubUserDto,
+): Promise<IResponse<any>> => {
+	try {
+		const token = await AsyncStorage.getItem('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.user.createSubUser.path,
+			type: listUrl.user.createSubUser.type,
+			data: createSubUserDto,
+			_token: token,
+		})
+		const result: IResponse<any> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
+}
+
 
 export const getUserProfileById = async (): Promise<IResponse<GetUserProfileByIdDto>> => {
 	try {

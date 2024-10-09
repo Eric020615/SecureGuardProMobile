@@ -33,6 +33,9 @@ export const useVisitor = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await createVisitor(createVisitorDto)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'Visitor created successfully!',
@@ -43,6 +46,9 @@ export const useVisitor = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await editVisitorById(editVisitorByIdDto, visitorGuid)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'Visitor updated successfully!',
@@ -54,6 +60,9 @@ export const useVisitor = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getVisitors(isPast, page, limit)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				set((state) => ({
 					visitors: [...state.visitors, ...response.data.list],
 				}))
@@ -73,6 +82,9 @@ export const useVisitor = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getVisitorDetailsById(visitorGuid)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				set({ visitorDetails: response.data })
 				return response
 			},

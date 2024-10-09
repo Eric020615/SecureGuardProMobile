@@ -38,6 +38,9 @@ export const useFacility = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await submitBooking(facilityBookingForm)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'Booking successfully submitted!',
@@ -48,6 +51,9 @@ export const useFacility = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getFacilityBookingHistory(isPast, page, limit)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				set((state) => ({
 					facilityBookingHistory: [...state.facilityBookingHistory, ...response.data.list],
 				}))
@@ -65,6 +71,9 @@ export const useFacility = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await cancelBooking(bookingGuid)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				return response
 			},
 			'Booking successfully canceled!',
@@ -76,6 +85,9 @@ export const useFacility = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
 				set({ availabilitySlot: response.data })
 				return response
 			},

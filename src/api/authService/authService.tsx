@@ -1,10 +1,9 @@
 import GlobalHandler, { IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { RoleEnum } from '@config/constant/user'
 import { SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 
-export const signUp = async (ISignUp: UserSignUpFormDto): Promise<any> => {
+export const signUp = async (ISignUp: UserSignUpFormDto): Promise<IResponse<any>> => {
 	try {
 		const [success, response] = await GlobalHandler({
 			path: listUrl.auth.signUp.path,
@@ -52,7 +51,7 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> =>
 	}
 }
 
-export const checkAuth = async (token: string): Promise<any> => {
+export const checkAuth = async (token: string): Promise<IResponse<any>> => {
 	try {
 		const [success, response] = await GlobalHandler({
 			path: listUrl.auth.checkJwtAuth.path,

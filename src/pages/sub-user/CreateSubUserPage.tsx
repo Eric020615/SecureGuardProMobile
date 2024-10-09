@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import CustomFormField from '@components/form/CustomFormField'
 import { useFormik } from 'formik'
 import { useApplication } from '@store/application/useApplication'
+import { useUser } from '@store/user/useUser'
 
 interface CreateSubUser {
 	email: string
@@ -16,6 +17,7 @@ interface CreateSubUser {
 
 const CreateSubUserPage = () => {
     const isLoading = useApplication((state) => state.isLoading)
+    const createSubUserAction = useUser((state) => state.createSubUserAction)
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 	})
@@ -27,6 +29,11 @@ const CreateSubUserPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+            await createSubUserAction({
+                email: values.email,
+			})
+			formik.resetForm()
+			router.push('/sub-user')
         },
 	})
 	return (

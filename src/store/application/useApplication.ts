@@ -38,14 +38,13 @@ export const generalAction = async <T>(
 		return result
 	} catch (error: Error | any) {
 		if (errorMessage) {
-			const errorMsg = error?.message || errorMessage
+			// const errorMsg = error?.message || errorMessage
 			setCustomConfirmModalAction({
 				title: 'Error',
-				subtitle: errorMsg,
+				subtitle: errorMessage,
 				isError: true,
 			})
 		}
-		throw error
 	} finally {
 		setIsLoading(false)
 	}

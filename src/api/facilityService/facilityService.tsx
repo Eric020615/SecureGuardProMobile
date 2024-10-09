@@ -7,7 +7,7 @@ import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<any> => {
+export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<IResponse<any>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -68,7 +68,7 @@ export const getFacilityBookingHistory = async (
 	}
 }
 
-export const cancelBooking = async (bookingGuid: string): Promise<any> => {
+export const cancelBooking = async (bookingGuid: string): Promise<IResponse<any>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({

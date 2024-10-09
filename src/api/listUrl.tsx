@@ -33,7 +33,11 @@ export const listUrl = {
         editUserProfileById: {
             path: 'user/profile/',
             type: IType.put
-        }
+        },
+        createSubUser: {
+            path: 'user/sub-user/create/',
+            type: IType.post
+        },
     },
     facility: {
         facilityBooking: {
