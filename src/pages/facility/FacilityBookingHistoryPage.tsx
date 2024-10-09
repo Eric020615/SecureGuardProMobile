@@ -1,70 +1,54 @@
-import { View, Text, Alert, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useFacility } from '@zustand/facility/useFacility'
-import { getFacilityBookingHistoryDto } from '@zustand/types'
 import { FacilityConst } from '@config/constant/facilities'
-import { useApplication } from '@zustand/index'
 import {
 	convertUTCStringToLocalDate,
 	convertUTCStringToLocalDateString,
 	getTodayDate,
-} from '../../helpers/time'
+} from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomFlatList from '@components/list/CustomFlatList'
+import { useApplication } from '@store/application/useApplication'
+import { useFacility } from '@store/facility/useFacility'
+import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
+import CustomModal from '@components/modals/CustomModal'
 
 const FacilityBookingHistoryPage = () => {
-	const { getFacilityBookingHistory } = useFacility()
-	const { cancelBooking } = useFacility()
-	const { isLoading, setIsLoading } = useApplication()
+	const {
+		facilityBookingHistory,
+		totalFacilityBookingHistory,
+		resetFacilityBookingHistory,
+		getFacilityBookingHistoryAction,
+		cancelBookingAction,
+	} = useFacility()
+	const { isLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
-	const [bookingHistory, setBookingHistory] = useState<getFacilityBookingHistoryDto[]>([])
 	const [page, setPage] = useState(0)
-	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
-		setBookingHistory([]) // Reset the booking history
 		setPage(0)
+		resetFacilityBookingHistory()
 		fetchFacilityBookingHistory()
-	}, [isPast]) // Dependency on isPast to refetch data
+	}, [isPast])
 
 	const fetchFacilityBookingHistory = async () => {
-		try {
-			if (isLoading) return
-			setIsLoading(true)
-			const response = await getFacilityBookingHistory(isPast, page, 10)
-			if (response.success) {
-				setBookingHistory((prev) => [...prev, ...response.data.list])
-				setTotalRecords(response.data.count) // Update total records from response
-			}
-		} catch (error) {
-			console.log(error)
-		} finally {
-			setIsLoading(false)
-		}
+		await getFacilityBookingHistoryAction(isPast, page, 10)
 	}
 
 	const cancel = async (bookingGuid: string) => {
-		try {
-			setIsLoading(true)
-			const response = await cancelBooking(bookingGuid)
-			if (response.success) {
-				router.push('/facility/history')
-			} else {
-				Alert.alert(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
+		const response = await cancelBookingAction(bookingGuid)
+		if (response.success) {
+			router.push('/facility/history')
 		}
 	}
 
 	const fetchNextPage = async () => {
-		if (isLoading || bookingHistory.length >= totalRecords) return
-		if (bookingHistory.length % 10 !== 0) return
+		if (isLoading || facilityBookingHistory.length >= totalFacilityBookingHistory) return
+		if (facilityBookingHistory.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
 		// Logic to fetch the next page
 		fetchFacilityBookingHistory() // Fetch the first page again
@@ -73,11 +57,11 @@ const FacilityBookingHistoryPage = () => {
 		if (isLoading == true) return
 		// Logic to refresh data
 		setPage(0)
-		setBookingHistory([]) // Clear existing data
+		resetFacilityBookingHistory()
 		fetchFacilityBookingHistory() // Fetch the first page again
 	}
 
-	const renderItem: ListRenderItem<getFacilityBookingHistoryDto> = ({ item, index }) => (
+	const renderItem: ListRenderItem<GetFacilityBookingHistoryDto> = ({ item, index }) => (
 		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
 			<View>
 				<Text className="font-bold">{FacilityConst[item.facilityId]}</Text>
@@ -104,7 +88,7 @@ const FacilityBookingHistoryPage = () => {
 							handlePress={() => {
 								cancel(item.bookingGuid)
 							}}
-							rightReactNativeIcons={<Iconicons name="close-circle" color={'#ff0000'} size={16} />}
+							rightReactNativeIcons={<Ionicons name="close-circle" color={'#ff0000'} size={16} />}
 						/>
 					)
 				)}
@@ -114,15 +98,16 @@ const FacilityBookingHistoryPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<View className="flex-1">
 				<View className="w-full px-4 my-6 flex-1">
 					<View className="flex flex-row items-center">
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
-								router.push("/facility/create")
+								router.push('/facility/create')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">Booking History</Text>
@@ -145,8 +130,8 @@ const FacilityBookingHistoryPage = () => {
 						/>
 					</View>
 					<View className="flex-1 mt-4">
-						<CustomFlatList<getFacilityBookingHistoryDto>
-							data={bookingHistory}
+						<CustomFlatList<GetFacilityBookingHistoryDto>
+							data={facilityBookingHistory}
 							renderItem={renderItem}
 							fetchNextPage={fetchNextPage}
 							onRefresh={onRefresh}
@@ -158,7 +143,7 @@ const FacilityBookingHistoryPage = () => {
 									{isLoading && page > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
-									) : bookingHistory.length < totalRecords ? (
+									) : facilityBookingHistory.length < totalFacilityBookingHistory ? (
 										<Text className="text-gray-500">Load More</Text>
 									) : (
 										// Show a message when all data is loaded

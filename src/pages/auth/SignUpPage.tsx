@@ -7,15 +7,12 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
 import { signUpformDataJson } from '@config/constant/auth/index'
-import { useAuth } from '@zustand/auth/useAuth'
-import { UserSignUpFormDto } from '@zustand/types'
-import { useModal } from '@zustand/modal/useModal'
 import CustomModal from '@components/modals/CustomModal'
-import { useApplication } from '@zustand/index'
+import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { useAuth } from '@store/auth/useAuth'
+import { useApplication } from '@store/application/useApplication'
 
 const SignUpPage = () => {
-	const { setCustomConfirmModal } = useModal()
-	const { setIsLoading } = useApplication()
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string()
@@ -34,35 +31,20 @@ const SignUpPage = () => {
 			signUp(values)
 		},
 	})
-	const {signUpAction, isLoading, setTempToken} = useAuth()
+	const signUpAction = useAuth((state) => state.signUpAction)
+	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
-		try {
-			setIsLoading(true)
-			const response = await signUpAction(values)
-			if (response.success) {
-				setTempToken(response.data)
-				router.replace('/user-information')
-			} else {
-				setCustomConfirmModal({
-					title: 'Account Created Failed',
-					subtitle: response.msg,
-				})
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-			setCustomConfirmModal({
-				title: 'Account Created Failed',
-				subtitle: "Please Retry It Again",
-			})
+		const response = await signUpAction(values)
+		if (response.success) {
+			router.replace('/user-information')
 		}
 	}
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
-				<CustomModal />
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
 					<Text className="text-7xl w-full font-bold text-primary">Sign Up</Text>
@@ -75,7 +57,7 @@ const SignUpPage = () => {
 						}}
 						onBlur={formik.handleBlur('email')}
 						errorMessage={formik.errors.email}
-						placeholder={"Enter your email"}
+						placeholder={'Enter your email'}
 					/>
 					<CustomFormField
 						title="Password"
@@ -88,7 +70,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('password')}
 						errorMessage={formik.errors.password}
-						placeholder={"Enter your password"}
+						placeholder={'Enter your password'}
 					/>
 					<CustomFormField
 						title="Confirm Password"
@@ -101,7 +83,7 @@ const SignUpPage = () => {
 						containerStyle="mt-3"
 						onBlur={formik.handleBlur('confirmPassword')}
 						errorMessage={formik.errors.confirmPassword}
-						placeholder={"Enter your confirm password"}
+						placeholder={'Enter your confirm password'}
 					/>
 					<CustomButton
 						title="Sign Up"

@@ -1,9 +1,9 @@
-import { View, Text, ScrollView, Alert } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import CustomButton from '@components/buttons/CustomButton'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
@@ -11,10 +11,11 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { useVisitor } from '@zustand/visitor/useVisitor'
-import { useApplication } from '@zustand/index'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '../../helpers/time'
+import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
+import { useApplication } from '@store/application/useApplication'
+import { useVisitor } from '@store/visitor/useVisitor'
+import CustomModal from '@components/modals/CustomModal'
 
 interface CreateVisitor {
 	visitDateTime: Date
@@ -26,8 +27,8 @@ interface CreateVisitor {
 
 const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const { createVisitor } = useVisitor()
-	const { isLoading, setIsLoading } = useApplication()
+	const { createVisitorAction } = useVisitor()
+	const { isLoading } = useApplication()
 
 	const validationSchema = Yup.object().shape({
 		visitDateTime: Yup.date().required('Visit date is required'),
@@ -51,20 +52,14 @@ const CreateVisitorPage = () => {
 		initialValues: createVisitorConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			const response = await createVisitor({
+			await createVisitorAction({
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
 			})
-			if (response.success) {
-				formik.resetForm()
-				router.push('/home')
-			} else {
-				Alert.alert(response.msg)
-			}
-			setIsLoading(false)
+			formik.resetForm()
+			router.push('/home')
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -74,6 +69,7 @@ const CreateVisitorPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">
@@ -83,7 +79,7 @@ const CreateVisitorPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Register Visitor</Text>

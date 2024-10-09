@@ -1,21 +1,17 @@
 import { View, Text, ScrollView, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useUser } from '@zustand/user/useUser'
 import { RoleConst } from '@config/constant/user'
-import { useApplication } from '@zustand/index'
-import { GetUserProfileByIdDto } from '@zustand/types'
 import { images } from '@assets/index'
 import CustomButton from '@components/buttons/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { router, usePathname } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useUser } from '@store/user/useUser'
 
-const ProfileDetailsViewPage = () => {
-	const { getUserProfileByIdAction } = useUser()
-	const [profileDetails, setProfileDetails] = useState<GetUserProfileByIdDto>()
-	const { setIsLoading } = useApplication()
+const userProfileViewPage = () => {
+	const { userProfile, getUserProfileByIdAction } = useUser()
 	const currentPath = usePathname()
 	const handlePress = () => {
 		if (currentPath.includes('view')) {
@@ -34,22 +30,11 @@ const ProfileDetailsViewPage = () => {
 	}
 
 	useEffect(() => {
-		getData()
+		fetchUserProfileByUserId()
 	}, [])
 
-	const getData = async () => {
-		try {
-			setIsLoading(true)
-			const response = await getUserProfileByIdAction()
-			if (response.success) {
-				setProfileDetails(response.data)
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-		}
+	const fetchUserProfileByUserId = async () => {
+		await getUserProfileByIdAction()
 	}
 
 	return (
@@ -59,21 +44,21 @@ const ProfileDetailsViewPage = () => {
 					<View>
 						<Image source={images.sampleAvatar} className="w-24 h-24" />
 					</View>
-					{profileDetails && (
+					{userProfile && (
 						<>
 							<View className="mt-3">
 								<Text className="text-3xl text-black font-semibold">
-									{profileDetails.userName ? profileDetails.userName : ''}
+									{userProfile.userName ? userProfile.userName : ''}
 								</Text>
 							</View>
 							<View>
 								<Text className="text-base text-gray-500 font-semibold">
-									{profileDetails.email ? profileDetails.email : ''}
+									{userProfile.email ? userProfile.email : ''}
 								</Text>
 							</View>
 							<View>
 								<Text className="text-base text-gray-500 font-semibold">
-									{RoleConst[profileDetails.role]}
+									{RoleConst[userProfile.role]}
 								</Text>
 							</View>
 						</>
@@ -89,12 +74,14 @@ const ProfileDetailsViewPage = () => {
 					<View className="mt-2 w-full">
 						<Text className="text-base text-gray-500 font-semibold">Preferences</Text>
 						<CustomButton
-							title="Settings"
-							handlePress={() => {}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							title="Sub-user"
+							handlePress={() => {
+								router.push('/sub-user')
+							}}
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<Ionicons name="settings" color={'#000000'} size={24} />
 								</View>
 							}
@@ -107,10 +94,10 @@ const ProfileDetailsViewPage = () => {
 							handlePress={() => {
 								router.push('/camera')
 							}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<MaterialCommunityIcons name="face-recognition" color={'#000000'} size={24} />
 								</View>
 							}
@@ -121,11 +108,15 @@ const ProfileDetailsViewPage = () => {
 						<CustomButton
 							title="Password"
 							handlePress={() => {}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
-									<MaterialCommunityIcons name="form-textbox-password" color={'#000000'} size={24} />
+								<View className="mr-4 bg-white p-1 rounded-xl">
+									<MaterialCommunityIcons
+										name="form-textbox-password"
+										color={'#000000'}
+										size={24}
+									/>
 								</View>
 							}
 							rightReactNativeIcons={
@@ -137,10 +128,10 @@ const ProfileDetailsViewPage = () => {
 							handlePress={() => {
 								logOut()
 							}}
-							containerStyles="bg-gray-200 p-4 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-red-600 flex-1"
 							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-2 rounded-xl">
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<Ionicons name="exit-outline" color={'#FF0000'} size={24} />
 								</View>
 							}
@@ -152,4 +143,4 @@ const ProfileDetailsViewPage = () => {
 	)
 }
 
-export default ProfileDetailsViewPage
+export default userProfileViewPage

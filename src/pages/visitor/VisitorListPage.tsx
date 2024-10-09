@@ -1,49 +1,37 @@
 import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useVisitor } from '@zustand/visitor/useVisitor'
-import { GetVisitorDto } from '@zustand/types'
 import CustomButton from '@components/buttons/CustomButton'
 import { VisitorEnum } from '@config/constant/visitor'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
-import { useApplication } from '@zustand/index'
 import { ITimeFormat } from '@config/constant'
-import { convertUTCStringToLocalDateString } from '../../helpers/time'
+import { convertUTCStringToLocalDateString } from '@helpers/time'
 import CustomFlatList from '@components/list/CustomFlatList'
+import { useVisitor } from '@store/visitor/useVisitor'
+import { useApplication } from '@store/application/useApplication'
+import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import CustomModal from '@components/modals/CustomModal'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
-	const { getVisitorsAction } = useVisitor()
-	const { isLoading, setIsLoading } = useApplication()
-	const [visitor, setVisitor] = useState<GetVisitorDto[]>([])
+	const { visitors, totalVisitors, getVisitorsAction, resetVisitorAction } = useVisitor()
+	const { isLoading } = useApplication()
 	const [page, setPage] = useState(0)
-	const [totalRecords, setTotalRecords] = useState(0) // Track total records
 
 	useEffect(() => {
-		setVisitor([]) // Reset the booking history
 		setPage(0)
+		resetVisitorAction()
 		fetchVisitor()
 	}, [isPast]) // Dependency on isPast to refetch data
 
 	const fetchVisitor = async () => {
-		try {
-			setIsLoading(true)
-			const response = await getVisitorsAction(isPast, page, 10)
-			if (response.success) {
-				setVisitor((prev) => [...prev, ...response.data.list])
-				setTotalRecords(response.data.count) // Update total records from response
-			}
-		} catch (error) {
-			console.log(error)
-		} finally {
-			setIsLoading(false)
-		}
+		await getVisitorsAction(isPast, page, 10)
 	}
 
 	const fetchNextPage = async () => {
-		if (isLoading || visitor.length >= totalRecords) return
-		if (visitor.length % 10 !== 0) return
+		if (isLoading || visitors.length >= totalVisitors) return
+		if (visitors.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
 		// Logic to fetch the next page
 		fetchVisitor() // Fetch the first page again
@@ -52,7 +40,7 @@ const VisitorListPage = () => {
 		if (isLoading == true) return
 		// Logic to refresh data
 		setPage(0)
-		setVisitor([]) // Clear existing data
+		resetVisitorAction()
 		fetchVisitor() // Fetch the first page again
 	}
 
@@ -61,7 +49,7 @@ const VisitorListPage = () => {
 			className="bg-white p-4 rounded-lg flex flex-row justify-between"
 			key={index}
 			onPress={() => {
-				router.replace(`/visitorDetails/${item.visitorGuid}/view`)
+				router.replace(`/visitor/visitorDetails/${item.visitorGuid}/view`)
 			}}
 		>
 			<View className="grid gap-1">
@@ -81,6 +69,7 @@ const VisitorListPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<Text className="text-4xl text-black font-bold mt-6">My Visitor</Text>
@@ -104,7 +93,7 @@ const VisitorListPage = () => {
 					</View>
 					<View className="flex-1 mt-4">
 						<CustomFlatList<GetVisitorDto>
-							data={visitor}
+							data={visitors}
 							renderItem={renderItem}
 							fetchNextPage={fetchNextPage}
 							onRefresh={onRefresh}
@@ -116,7 +105,7 @@ const VisitorListPage = () => {
 									{isLoading && page > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
-									) : visitor.length < totalRecords ? (
+									) : visitors.length < totalVisitors ? (
 										<Text className="text-gray-500">Load More</Text>
 									) : (
 										// Show a message when all data is loaded

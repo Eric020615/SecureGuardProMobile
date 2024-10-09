@@ -1,6 +1,6 @@
-import { CreateUserFaceAuthDto } from '@zustand/types'
-import GlobalHandler, { IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import { CreateUserFaceAuthDto } from '@dtos/faceAuth/faceAuth.dto'
+import GlobalHandler, { IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const uploadUserFaceAuth = async (

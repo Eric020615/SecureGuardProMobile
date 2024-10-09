@@ -1,9 +1,9 @@
 import CreateFacilityBookingPage from "@pages/facility/CreateFacilityBookingPage";
 
-const createFacility = () => {
+const CreateFacility = () => {
   return (
     <CreateFacilityBookingPage/>
   );
 };
 
-export default createFacility;
+export default CreateFacility;

@@ -6,24 +6,27 @@ interface CustomModal {
 	isError?: boolean
 }
 
-interface ModalState {
+interface State {
 	isOpen: boolean
 	content: CustomModal
 	isError: boolean
-	toogleModal: () => void
-	setCustomConfirmModal: (e: CustomModal) => void
 }
 
-export const useModal = create<ModalState>((set) => ({
+interface Actions {
+	toogleModalAction: () => void
+	setCustomConfirmModalAction: (e: CustomModal) => void
+}
+
+export const useModal = create<State & Actions>((set) => ({
 	isOpen: false,
 	content: {} as CustomModal,
 	isError: false,
-	toogleModal: () =>
+	toogleModalAction: () =>
 		set((state) => ({
 			isOpen: !state.isOpen,
 		})),
-	setCustomConfirmModal: ({ title, subtitle, isError = false }: CustomModal) =>
-		set((state) => ({
+	setCustomConfirmModalAction: ({ title, subtitle, isError = false }: CustomModal) =>
+		set(() => ({
 			isOpen: true,
 			content: {
 				title,

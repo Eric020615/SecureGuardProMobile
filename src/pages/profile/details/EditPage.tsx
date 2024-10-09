@@ -3,26 +3,26 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router, usePathname } from 'expo-router'
-import { useApplication } from '@zustand/index'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { GetUserProfileByIdDto } from '@zustand/types'
 import { Gender } from '@config/constant/user'
 import {
 	convertUTCStringToLocalDate,
 	getLocalDateString,
 	getTodayDate,
 	getUTCDateString,
-} from '../../../helpers/time'
+} from '@helpers/time'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
-import { useUser } from '@zustand/user/useUser'
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import { useApplication } from '@store/application/useApplication'
+import { useUser } from '@store/user/useUser'
+import CustomModal from '@components/modals/CustomModal'
 
-interface UserDetails {
+interface UserProfile {
 	firstName: string
 	lastName: string
 	userName: string
@@ -35,9 +35,9 @@ interface UserDetails {
 
 const ProfileDetailsEditPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
-	const {isLoading, setIsLoading} = useApplication()
-	const [userDetails, setUserDetails] = useState<GetUserProfileByIdDto>()
-	const {getUserProfileByIdAction, editUserProfileByIdAction} = useUser()
+	const { isLoading } = useApplication()
+	const { userProfile, getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
+	const [formInitialValue, setFormInitialValue] = useState<UserProfile>({} as UserProfile)
 	const currentPath = usePathname()
 	const handlePress = () => {
 		if (currentPath.includes('edit')) {
@@ -47,22 +47,31 @@ const ProfileDetailsEditPage = () => {
 		router.push(currentPath.concat('/view'))
 	}
 	useEffect(() => {
-		getData()
+		fetchUserProfileByUserId()
 	}, [])
-	const getData = async () => {
-		try {
-			setIsLoading(true)
-			const response = await getUserProfileByIdAction()
-			if (response.success) {
-				setUserDetails(response.data)
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
-		} catch (error) {
-			setIsLoading(false)
-		}
+	const fetchUserProfileByUserId = async () => {
+		await getUserProfileByIdAction()
 	}
+	useEffect(() => {
+		if (userProfile) {
+			setFormInitialValue({
+				firstName: userProfile?.firstName ? userProfile.firstName : '',
+				lastName: userProfile?.lastName ? userProfile.lastName : '',
+				userName: userProfile?.userName ? userProfile.userName : '',
+				email: userProfile?.email ? userProfile.email : '',
+				userCountryCode: userProfile?.contactNumber
+					? getCountriesByCallingCode(
+							parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode,
+					  )[0]
+					: null,
+				userPhoneNumber: userProfile?.contactNumber
+					? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
+					: '',
+				gender: userProfile?.gender ? userProfile.gender : null,
+				dateOfBirth: convertUTCStringToLocalDate(userProfile?.dateOfBirth),
+			})
+		}
+	}, [userProfile])
 
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().min(1).required('First name is required'),
@@ -80,29 +89,13 @@ const ProfileDetailsEditPage = () => {
 				return phone ? phone.isValid() : false
 			}),
 	})
-	const formik = useFormik<UserDetails>({
+	const formik = useFormik<UserProfile>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: {
-			firstName: userDetails?.firstName ? userDetails.firstName : '',
-			lastName: userDetails?.lastName ? userDetails.lastName : '',
-			userName: userDetails?.userName ? userDetails.userName : '',
-			email: userDetails?.email ? userDetails.email : '',
-			userCountryCode: userDetails?.contactNumber
-				? getCountriesByCallingCode(
-						parsePhoneNumberFromString(userDetails.contactNumber).countryCallingCode,
-				  )[0]
-				: null,
-			userPhoneNumber: userDetails?.contactNumber
-				? parsePhoneNumberFromString(userDetails?.contactNumber).nationalNumber
-				: '',
-			gender: userDetails?.gender ? userDetails.gender : null,
-			dateOfBirth: convertUTCStringToLocalDate(userDetails?.dateOfBirth),
-		},
+		initialValues: formInitialValue,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			setIsLoading(true)
-			const response = await editUserProfileByIdAction({
+			await editUserProfileByIdAction({
 				firstName: values.firstName,
 				lastName: values.lastName,
 				userName: values.userName,
@@ -111,13 +104,8 @@ const ProfileDetailsEditPage = () => {
 				gender: values.gender,
 				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
 			})
-			if (response.success) {
-				formik.resetForm()
-				router.push(currentPath.replace('edit', 'view'))
-			} else {
-				console.log(response.msg)
-			}
-			setIsLoading(false)
+			formik.resetForm()
+			router.push(currentPath.replace('edit', 'view'))
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -127,19 +115,20 @@ const ProfileDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
-				<View className="flex flex-row items-center">
+					<View className="flex flex-row items-center">
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
 								handlePress()
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 					</View>
 					<Text className="text-4xl text-black font-bold mt-6">User Details</Text>
-					{userDetails && (
+					{userProfile && (
 						<>
 							<View>
 								<CustomFormField

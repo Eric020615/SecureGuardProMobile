@@ -1,6 +1,6 @@
-import { CreateVisitorDto, GetVisitorDto, EditVisitorByIdDto } from '@zustand/types'
-import GlobalHandler, { IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const createVisitor = async (IVisitor: CreateVisitorDto): Promise<any> => {
@@ -59,7 +59,11 @@ export const editVisitorById = async (
 	}
 }
 
-export const getVisitors = async (isPast: boolean, page: number, limit: number): Promise<IResponse<GetVisitorDto[]>> => {
+export const getVisitors = async (
+	isPast: boolean,
+	page: number,
+	limit: number,
+): Promise<IPaginatedResponse<GetVisitorDto>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -68,27 +72,35 @@ export const getVisitors = async (isPast: boolean, page: number, limit: number):
 			data: {
 				isPast: isPast,
 				page: page,
-				limit: limit
+				limit: limit,
 			},
 			_token: token,
 		})
-		const result: IResponse<GetVisitorDto[]> = {
+		const result: IPaginatedResponse<GetVisitorDto> = {
 			success,
 			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
+			data: {
+				list: success ? response?.data.list : undefined,
+				count: success ? response?.data.count : 0,
+			},
 		}
 		return result
 	} catch (error) {
 		const result: IResponse<any> = {
 			success: false,
 			msg: error,
-			data: null,
+			data: {
+				list: null,
+				count: 0,
+			},
 		}
 		return result
 	}
 }
 
-export const getVisitorDetailsById = async (visitorGuid: string) => {
+export const getVisitorDetailsById = async (
+	visitorGuid: string,
+): Promise<IResponse<GetVisitorDto>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({

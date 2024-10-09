@@ -4,7 +4,7 @@ import { icons } from '@assets/index'
 import PhoneInput, { ICountry } from 'react-native-international-phone-number'
 import DatePicker from 'react-native-date-picker'
 import CustomButton from '@components/buttons/CustomButton'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import { Picker } from '@react-native-picker/picker'
 import { listOptions } from '@config/listOption'
 import { DocumentPickerResponse } from 'react-native-document-picker'
@@ -133,7 +133,7 @@ const CustomFormField = (
 							containerStyles={`${CustomFormFieldStyled.button} ${props.buttonContainerStyles}`}
 							handlePress={() => props.setShowDateTime(!props.showDateTime)}
 							title={props.buttonTitle ? props.buttonTitle : props.placeholder}
-							rightReactNativeIcons={<Iconicons name="caret-down" color={'#000000'} size={14} />}
+							rightReactNativeIcons={<Ionicons name="caret-down" color={'#000000'} size={14} />}
 							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-psemibold`}
 						/>
 						<DatePicker
@@ -173,7 +173,7 @@ const CustomFormField = (
 									handlePress={props.clearFile}
 									containerStyles="mx-5"
 									rightReactNativeIcons={
-										<Iconicons name="close-circle" color={'#10312b'} size={30} />
+										<Ionicons name="close-circle" color={'#10312b'} size={30} />
 									}
 								/>
 								<View className="flex flex-col">

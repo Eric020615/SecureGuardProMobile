@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import Iconicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import { BookingDurationList, FacilityList, GuestList } from '@config/listOption/facility'
@@ -10,10 +10,12 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { facilityBookingSlotCheckConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
-import { useApplication } from '@zustand/index'
-import { getLocalDateString, getTodayDate } from '../../helpers/time'
+import { getLocalDateString, getTodayDate } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
+import { useApplication } from '@store/application/useApplication'
+import CustomModal from '@components/modals/CustomModal'
+import { useModal } from '@store/modal/useModal'
 
 interface FacilityBooking {
 	facilityId: string
@@ -26,6 +28,7 @@ const CreateFacilityBookingPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
+	const { setCustomConfirmModalAction } = useModal()
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Date is required'),
 		startDate: Yup.date()
@@ -50,7 +53,11 @@ const CreateFacilityBookingPage = () => {
 					)}/${values.duration}/${values.numOfGuest}/check`,
 				)
 			} catch (error) {
-				console.log(error)
+				setCustomConfirmModalAction({
+					title: 'Error',
+					subtitle: 'An error occurred while processing your request',
+					isError: true,
+				})
 			} finally {
 				setIsLoading(false)
 			}
@@ -68,6 +75,7 @@ const CreateFacilityBookingPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<CustomModal />
 			<ScrollView className="px-4">
 				{/* Adding horizontal padding */}
 				<View className="w-full min-h-[85vh] my-6">
@@ -77,7 +85,7 @@ const CreateFacilityBookingPage = () => {
 							handlePress={() => {
 								router.push('/home')
 							}}
-							rightReactNativeIcons={<Iconicons name="arrow-back" color={'#000000'} size={24} />}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							containerStyles="items-center h-fit"

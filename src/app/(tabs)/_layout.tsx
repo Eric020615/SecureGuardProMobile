@@ -1,7 +1,7 @@
 import { View, Text } from "react-native";
 import { Tabs } from "expo-router";
 import Entypo from "react-native-vector-icons/Entypo";
-import Iconicons from "react-native-vector-icons/Ionicons";
+import Ionicons from "react-native-vector-icons/Ionicons";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 
 interface TabIconProps {
@@ -63,7 +63,7 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={<Iconicons name="people" color={color} size={24} />}
+                icon={<Ionicons name="people" color={color} size={24} />}
                 color={color}
                 name="Visitor"
                 focused={focused}
@@ -96,7 +96,7 @@ const TabsLayout = () => {
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon={
-                  <Iconicons name="notifications" color={color} size={24} />
+                  <Ionicons name="notifications" color={color} size={24} />
                 }
                 color={color}
                 name="Notification"
@@ -112,7 +112,7 @@ const TabsLayout = () => {
             headerShown: false,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
-                icon={<Iconicons name="person" color={color} size={24} />}
+                icon={<Ionicons name="person" color={color} size={24} />}
                 color={color}
                 name="Profile"
                 focused={focused}

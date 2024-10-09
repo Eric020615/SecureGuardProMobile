@@ -6,5 +6,9 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 	name: 'SecureGuardPro',
 	android: {
 		package: 'com.secure.guard.pro',
+		adaptiveIcon: {
+			foregroundImage: './src/assets/adaptive-icon.png',
+			backgroundColor: '#ffffff',
+		},
 	},
 })

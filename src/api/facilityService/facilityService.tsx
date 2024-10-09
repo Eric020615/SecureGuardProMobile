@@ -1,13 +1,13 @@
 import {
 	FacilityBookingFormDto,
-	getFacilityBookingHistoryDto,
+	GetFacilityBookingHistoryDto,
 	SpaceAvailabilityDto,
-} from '@zustand/types'
-import GlobalHandler, { IResponse } from '../globalHandler'
-import { listUrl } from '../listUrl'
+} from '@dtos/facility/facility.dto'
+import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<any> => {
+export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<IResponse<any>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -36,7 +36,7 @@ export const getFacilityBookingHistory = async (
 	isPast: boolean,
 	page: number,
 	limit: number,
-): Promise<IResponse<getFacilityBookingHistoryDto[]>> => {
+): Promise<IPaginatedResponse<GetFacilityBookingHistoryDto>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -49,14 +49,17 @@ export const getFacilityBookingHistory = async (
 			},
 			_token: token,
 		})
-		const result: IResponse<getFacilityBookingHistoryDto[]> = {
+		const result: IPaginatedResponse<GetFacilityBookingHistoryDto> = {
 			success,
 			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
+			data: {
+				list: success ? response?.data.list : undefined,
+				count: success ? response?.data.count : 0,
+			},
 		}
 		return result
 	} catch (error) {
-		const result: IResponse<any> = {
+		const result: IPaginatedResponse<any> = {
 			success: false,
 			msg: error,
 			data: null,
@@ -65,7 +68,7 @@ export const getFacilityBookingHistory = async (
 	}
 }
 
-export const cancelBooking = async (bookingGuid: string): Promise<any> => {
+export const cancelBooking = async (bookingGuid: string): Promise<IResponse<any>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({

@@ -18,6 +18,15 @@ export interface IResponse<T> {
 	data: T
 }
 
+export interface IPaginatedResponse<T> {
+	success: boolean
+	msg: string
+	data: {
+		list: T[]
+		count: number
+	}
+}
+
 export interface IServerResponse {
 	message: string
 	status: string
