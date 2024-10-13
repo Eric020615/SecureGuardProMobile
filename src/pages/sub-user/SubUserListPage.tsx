@@ -7,33 +7,51 @@ import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useApplication } from '@store/application/useApplication'
+import { useUser } from '@store/user/useUser'
+import { GetSubUserDto } from '@dtos/user/user.dto'
 
 const SubUserListPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
+	const { subUsers, totalSubUsers, getSubUserListAction, resetSubUserListAction } = useUser()
 	const [page, setPage] = useState(0)
 
 	useEffect(() => {
 		setPage(0)
+		resetSubUserListAction()
+		fetchSubUser()
 	}, [])
 
-	const renderItem: ListRenderItem<any> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}></View>
+	const renderItem: ListRenderItem<GetSubUserDto> = ({ item, index }) => (
+		<View className="bg-white p-4 rounded-lg flex flex-row justify-between mb-2" key={index}>
+			<View>
+				{/* Sub-user information */}
+				<Text className="font-bold text-lg">{item.userName}</Text>
+				<Text className="text-gray-600">
+					{item.firstName} {item.lastName}
+				</Text>
+				<Text className="text-gray-500">Contact: {item.contactNumber}</Text>
+			</View>
+		</View>
 	)
 
-	const fetchSubUser = async () => {}
-	const fetchNextPage = async () => {
-		// if (isLoading || notices.length >= totalNotices) return
-		// if (notices.length % 10 !== 0) return
-		// setPage((prev) => prev + 1)
-		// // Logic to fetch the next page
-		// fetchNotice() // Fetch the first page again
+	const fetchSubUser = async () => {
+		await getSubUserListAction(page, 10)
 	}
+
+	const fetchNextPage = async () => {
+		if (isLoading || subUsers.length >= totalSubUsers) return
+		if (subUsers.length % 10 !== 0) return
+		setPage((prev) => prev + 1)
+		// Logic to fetch the next page
+		fetchSubUser() // Fetch the first page again
+	}
+
 	const onRefresh = async () => {
 		if (isLoading == true) return
 		// Logic to refresh data
 		setPage(0)
-		// resetNotice()
-		// fetchNotice() // Fetch the first page again
+		resetSubUserListAction()
+		fetchSubUser() // Fetch the first page again
 	}
 
 	return (
@@ -59,27 +77,27 @@ const SubUserListPage = () => {
 					</View>
 					<Text className="text-3xl text-black font-bold mt-6">Sub-user</Text>
 					<View className="flex-1 mt-4">
-						<CustomFlatList<any>
-							data={[]}
+						<CustomFlatList<GetSubUserDto>
+							data={subUsers}
 							renderItem={renderItem}
 							fetchNextPage={fetchNextPage}
 							onRefresh={onRefresh}
 							loading={isLoading}
 							numColumns={1}
 							itemHeight={80} // Customize the item height if needed
-							// listFooterComponent={
-							// 	<View className="py-4 items-center">
-							// 		{isLoading && page > 0 ? (
-							// 			// Show a loading indicator while fetching more data
-							// 			<ActivityIndicator size="large" color="#0000ff" />
-							// 		) : notices.length < totalNotices ? (
-							// 			<Text className="text-gray-500">Load More</Text>
-							// 		) : (
-							// 			// Show a message when all data is loaded
-							// 			<Text className="text-gray-500">You've reached the end of the list.</Text>
-							// 		)}
-							// 	</View>
-							// }
+							listFooterComponent={
+								<View className="py-4 items-center">
+									{isLoading && page > 0 ? (
+										// Show a loading indicator while fetching more data
+										<ActivityIndicator size="large" color="#0000ff" />
+									) : subUsers.length < totalSubUsers ? (
+										<Text className="text-gray-500">Load More</Text>
+									) : (
+										// Show a message when all data is loaded
+										<Text className="text-gray-500">You've reached the end of the list.</Text>
+									)}
+								</View>
+							}
 						/>
 					</View>
 				</View>

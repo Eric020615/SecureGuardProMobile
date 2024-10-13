@@ -50,3 +50,19 @@ export interface ResidentInformationDto {
 export interface CreateSubUserDto {
 	email: string
 }
+
+export interface GetSubUserDto {
+	userId: number
+	userGuid: string
+	firstName: string
+	lastName: string
+	userName: string
+	contactNumber: string
+	gender: string
+	role: RoleEnum
+	dateOfBirth: string
+	createdBy: string
+	createdDateTime: string
+	updatedBy: string
+	updatedDateTime: string
+}

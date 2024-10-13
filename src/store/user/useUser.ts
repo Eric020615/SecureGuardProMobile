@@ -1,15 +1,18 @@
 import { create } from 'zustand'
-import { createSubUser, createUser, editUserProfileById, getUserProfileById } from '@api/userService/userService'
+import { createSubUser, createUser, editUserProfileById, getSubUserList, getUserProfileById } from '@api/userService/userService'
 import { generalAction } from '@store/application/useApplication' // Import generalAction
 import {
 	CreateSubUserDto,
 	EditUserDetailsByIdDto,
+	GetSubUserDto,
 	GetUserProfileByIdDto,
 	UserInformationFormDto,
 } from '@dtos/user/user.dto'
 
 interface State {
 	userProfile: GetUserProfileByIdDto
+	subUsers: GetSubUserDto[]
+	totalSubUsers: number
 }
 
 interface Actions {
@@ -18,13 +21,16 @@ interface Actions {
 		tempToken: string,
 	) => Promise<any>
 	getUserProfileByIdAction: () => Promise<any>
+	getSubUserListAction: (page: number, limit: number) => Promise<any>
+	resetSubUserListAction: () => void
 	editUserProfileByIdAction: (IEditUserDetailsByIdDto: EditUserDetailsByIdDto) => Promise<any>
 	createSubUserAction: (createSubUserDto: CreateSubUserDto) => Promise<any>
 }
 
 export const useUser = create<State & Actions>((set) => ({
 	userProfile: {} as GetUserProfileByIdDto,
-
+	subUsers: [],
+	totalSubUsers: 0,
 	createUserAction: async (IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
 		return generalAction(
 			async () => {
@@ -50,6 +56,27 @@ export const useUser = create<State & Actions>((set) => ({
 			'',
 			'Failed to retrieve user profile.',
 		)
+	},
+
+	getSubUserListAction: async (page: number, limit: number) => {
+		return generalAction(
+			async () => {
+				const response = await getSubUserList(page, limit)
+				if(!response.success){
+					throw new Error(response.msg)
+				}
+				set((state) => ({
+					subUsers: [...state.subUsers, ...response.data.list],
+				}))
+				set({ totalSubUsers: response.data.count })
+			},
+			'',
+			'Failed to retrieve sub user list.',
+		)
+	},
+
+	resetSubUserListAction() {
+		set({ subUsers: [], totalSubUsers: 0 })
 	},
 
 	editUserProfileByIdAction: async (IEditUserDetailsByIdDto: EditUserDetailsByIdDto) => {

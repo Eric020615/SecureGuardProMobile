@@ -1,4 +1,5 @@
 import { IType } from "@config/constant"
+import { getSubUserList } from "./userService/userService"
 
 export const listUrl = {
     auth: {
@@ -38,6 +39,10 @@ export const listUrl = {
             path: 'user/sub-user/create/',
             type: IType.post
         },
+        getSubUserList: {
+            path: 'user/sub-user/list/',
+            type: IType.get
+        }
     },
     facility: {
         facilityBooking: {
