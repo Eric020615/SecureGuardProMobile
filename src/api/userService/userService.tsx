@@ -1,7 +1,14 @@
 import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { CreateSubUserDto, EditUserDetailsByIdDto, GetSubUserDto, GetUserProfileByIdDto, UserInformationFormDto } from '@dtos/user/user.dto'
+import {
+	CreateSubUserDto,
+	DeleteSubUserByIdDto,
+	EditUserDetailsByIdDto,
+	GetSubUserDto,
+	GetUserProfileByIdDto,
+	UserInformationFormDto,
+} from '@dtos/user/user.dto'
 
 export const createUser = async (
 	IUserInformationDto: UserInformationFormDto,
@@ -85,7 +92,7 @@ export const getSubUserList = async (
 		const result: IPaginatedResponse<any> = {
 			success: false,
 			msg: error,
-            data: {
+			data: {
 				list: null,
 				count: 0,
 			},
@@ -93,8 +100,6 @@ export const getSubUserList = async (
 		return result
 	}
 }
-
-
 
 export const getUserProfileById = async (): Promise<IResponse<GetUserProfileByIdDto>> => {
 	try {
@@ -130,6 +135,61 @@ export const editUserProfileById = async (
 			type: listUrl.user.editUserProfileById.type,
 			_token: token,
 			data: IEditUserDetailsByIdDto,
+		})
+		const result: IResponse<any> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
+}
+
+export const editSubUserStatusById = async (subUserGuid: string, status: boolean): Promise<any> => {
+	try {
+		const token = await AsyncStorage.getItem('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.user.editSubUserStatusById.path,
+			type: listUrl.user.editSubUserStatusById.type,
+			_token: token,
+			params: {
+				subUserGuid,
+				status,
+			},
+		})
+		const result: IResponse<any> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
+}
+
+export const deleteSubUserById = async (subUserGuid: string): Promise<any> => {
+	try {
+		const token = await AsyncStorage.getItem('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.user.deleteSubUserById.path,
+			type: listUrl.user.deleteSubUserById.type,
+			_token: token,
+			data: {
+				subUserGuid,
+			} as DeleteSubUserByIdDto,
 		})
 		const result: IResponse<any> = {
 			success,

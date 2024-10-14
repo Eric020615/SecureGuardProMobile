@@ -1,5 +1,4 @@
 import { IType } from "@config/constant"
-import { getSubUserList } from "./userService/userService"
 
 export const listUrl = {
     auth: {
@@ -42,6 +41,14 @@ export const listUrl = {
         getSubUserList: {
             path: 'user/sub-user/list/',
             type: IType.get
+        },
+        editSubUserStatusById: {
+            path: 'user/sub-user/',
+            type: IType.put
+        },
+        deleteSubUserById: {
+            path: 'user/sub-user/',
+            type: IType.delete
         }
     },
     facility: {

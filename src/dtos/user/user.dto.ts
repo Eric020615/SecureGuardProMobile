@@ -1,5 +1,5 @@
-import { Gender, RoleEnum } from "@config/constant/user"
-import { GeneralFile } from "@dtos/application/application.dto"
+import { Gender, RoleEnum } from '@config/constant/user'
+import { GeneralFile } from '@dtos/application/application.dto'
 
 export interface UserInformationFormDto {
 	firstName: string
@@ -59,10 +59,10 @@ export interface GetSubUserDto {
 	userName: string
 	contactNumber: string
 	gender: string
-	role: RoleEnum
 	dateOfBirth: string
-	createdBy: string
-	createdDateTime: string
-	updatedBy: string
-	updatedDateTime: string
+	status: boolean
+}
+
+export interface DeleteSubUserByIdDto {
+	subUserGuid: string
 }

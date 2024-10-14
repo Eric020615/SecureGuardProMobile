@@ -1,4 +1,4 @@
-import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, ListRenderItem, ActivityIndicator, Switch } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomModal from '@components/modals/CustomModal'
@@ -12,8 +12,16 @@ import { GetSubUserDto } from '@dtos/user/user.dto'
 
 const SubUserListPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
-	const { subUsers, totalSubUsers, getSubUserListAction, resetSubUserListAction } = useUser()
+	const {
+		subUsers,
+		totalSubUsers,
+		getSubUserListAction,
+		resetSubUserListAction,
+		deleteSubUserByIdAction,
+		editSubUserStatusByIdAction,
+	} = useUser()
 	const [page, setPage] = useState(0)
+	const [switchStates, setSwitchStates] = useState<{ [key: string]: boolean }>({})
 
 	useEffect(() => {
 		setPage(0)
@@ -21,18 +29,65 @@ const SubUserListPage = () => {
 		fetchSubUser()
 	}, [])
 
-	const renderItem: ListRenderItem<GetSubUserDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg flex flex-row justify-between mb-2" key={index}>
-			<View>
-				{/* Sub-user information */}
-				<Text className="font-bold text-lg">{item.userName}</Text>
-				<Text className="text-gray-600">
-					{item.firstName} {item.lastName}
-				</Text>
-				<Text className="text-gray-500">Contact: {item.contactNumber}</Text>
+	useEffect(() => {
+		const initialStatuses = subUsers.reduce((acc, user) => {
+			acc[user.userGuid] = user.status
+			return acc
+		}, {} as { [key: string]: boolean })
+		setSwitchStates(initialStatuses)
+	}, [subUsers])
+
+	const toggleSwitch = async (userGuid: string) => {
+		setSwitchStates((prev) => ({
+			...prev,
+			[userGuid]: !prev[userGuid], // Toggle the state for the specific user
+		}))
+		const response = await editSubUserStatusByIdAction(userGuid, !switchStates[userGuid])
+		if (response?.success) {
+			setPage(0)
+			resetSubUserListAction()
+			fetchSubUser()
+		}
+	}
+
+	const renderItem: ListRenderItem<GetSubUserDto> = ({ item, index }) => {
+		return (
+			<View className="bg-white p-4 rounded-lg flex flex-row justify-between mb-2" key={index}>
+				<View>
+					{/* Sub-user information */}
+					<Text className="font-bold text-lg">{item.userName}</Text>
+					<Text className="text-gray-600">
+						{item.firstName} {item.lastName}
+					</Text>
+					<Text className="text-gray-500">Contact: {item.contactNumber}</Text>
+				</View>
+				<View className="grid justify-between">
+					<CustomButton
+						handlePress={() => {
+							deleteSubUserById(item.userGuid)
+						}}
+						rightReactNativeIcons={<Ionicons name="trash" color={'#000000'} size={24} />} // Trigger edit action
+					/>
+					<Switch
+						trackColor={{ false: '#cccccc', true: '#1f5d50' }} // Neutral gray for off, lighter green for on
+						thumbColor={switchStates[item.userGuid] ? '#d4f0e7' : '#f4f3f4'} // Light green or white when on, neutral when off
+						ios_backgroundColor="#3e3e3e"
+						onValueChange={() => toggleSwitch(item.userGuid)}
+						value={switchStates[item.userGuid] || false}
+					/>
+				</View>
 			</View>
-		</View>
-	)
+		)
+	}
+
+	const deleteSubUserById = async (subUserGuid: string) => {
+		const response = await deleteSubUserByIdAction(subUserGuid)
+		if (response?.success) {
+			setPage(0)
+			resetSubUserListAction()
+			fetchSubUser()
+		}
+	}
 
 	const fetchSubUser = async () => {
 		await getSubUserListAction(page, 10)
