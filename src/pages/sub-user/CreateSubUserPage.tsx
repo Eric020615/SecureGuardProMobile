@@ -16,8 +16,8 @@ interface CreateSubUser {
 }
 
 const CreateSubUserPage = () => {
-    const isLoading = useApplication((state) => state.isLoading)
-    const createSubUserAction = useUser((state) => state.createSubUserAction)
+	const isLoading = useApplication((state) => state.isLoading)
+	const createSubUserAction = useUser((state) => state.createSubUserAction)
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 	})
@@ -29,16 +29,19 @@ const CreateSubUserPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-            await createSubUserAction({
-                email: values.email,
+			await createSubUserAction({
+				email: values.email,
 			})
-			formik.resetForm()
-			router.push('/sub-user')
-        },
+		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomModal
+				onSuccessConfirm={() => {
+					formik.resetForm()
+					router.push('/sub-user')
+				}}
+			/>
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

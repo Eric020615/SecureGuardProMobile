@@ -35,15 +35,16 @@ const SignUpPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
-		const response = await signUpAction(values)
-		if (response?.success) {
-			router.replace('/user-information')
-		}
+		await signUpAction(values)
 	}
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomModal
+				onSuccessConfirm={() => {
+					router.replace('/user-information')
+				}}
+			/>
 			<ScrollView>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>

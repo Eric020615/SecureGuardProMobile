@@ -86,7 +86,7 @@ const UserInformationPage = () => {
 		initialValues: userInforformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			const response = await createUserAction(
+			await createUserAction(
 				{
 					firstName: values.firstName,
 					lastName: values.lastName,
@@ -108,13 +108,16 @@ const UserInformationPage = () => {
 				},
 				tempToken,
 			)
-			formik.resetForm()
-			router.push('/')
 		},
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomModal
+				onSuccessConfirm={() => {
+					formik.resetForm()
+					router.push('/')
+				}}
+			/>
 			<ScrollView>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-8">
 					<View className="items-center mb-7">

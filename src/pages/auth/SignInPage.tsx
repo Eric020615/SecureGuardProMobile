@@ -30,14 +30,12 @@ const SignInPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 
 	const signInWithPassword = async (values: SignInFormDto) => {
-		const response = await signInAction(values)
-		if (response?.success) {
-			router.replace('/home')
-		}
+		await signInAction(values)
 	}
+	
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomModal onSuccessConfirm={() => {router.replace("/home")}}/>
 			<ScrollView>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>

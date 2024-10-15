@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import CustomButton from '@components/buttons/CustomButton'
@@ -16,6 +16,7 @@ import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@store/application/useApplication'
 import { useVisitor } from '@store/visitor/useVisitor'
 import CustomModal from '@components/modals/CustomModal'
+import { useModal } from '@store/modal/useModal'
 
 interface CreateVisitor {
 	visitDateTime: Date
@@ -29,6 +30,11 @@ const CreateVisitorPage = () => {
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { createVisitorAction } = useVisitor()
 	const { isLoading } = useApplication()
+	const { resetModalAction } = useModal()
+
+	useEffect(() => {
+		resetModalAction()
+	}, [])
 
 	const validationSchema = Yup.object().shape({
 		visitDateTime: Yup.date().required('Visit date is required'),
@@ -58,8 +64,6 @@ const CreateVisitorPage = () => {
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
 			})
-			formik.resetForm()
-			router.push('/home')
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -69,7 +73,12 @@ const CreateVisitorPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomModal
+				onSuccessConfirm={() => {
+					formik.resetForm()
+					router.push('/home')
+				}}
+			/>
 			<ScrollView>
 				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">

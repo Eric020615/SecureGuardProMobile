@@ -5,17 +5,15 @@ import CustomButton from '@components/buttons/CustomButton'
 import { useModal } from '@store/modal/useModal'
 
 interface CustomModalProps {
-	customConfirmButtonPressSuccess?: () => void
-	customConfirmButtonPressError?: () => void
+	onSuccessConfirm?: () => void
+	onFailedConfirm?: () => void
 }
 
 const CustomModal = ({
-	customConfirmButtonPressSuccess,
-	customConfirmButtonPressError,
+	onSuccessConfirm = () => {},
+	onFailedConfirm = () => {},
 }: CustomModalProps) => {
 	const { isOpen, toogleModalAction, content } = useModal()
-	customConfirmButtonPressSuccess = customConfirmButtonPressSuccess || (() => {})
-	customConfirmButtonPressError = customConfirmButtonPressError || (() => {})
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={toogleModalAction} className="bg-transparent">
 			<View className="bg-white p-5 rounded-lg items-center">
@@ -27,10 +25,10 @@ const CustomModal = ({
 					title="Close"
 					handlePress={() => {
 						toogleModalAction()
-						if (!content.isError) {
-							customConfirmButtonPressSuccess()
+						if (content?.isError) {
+							onFailedConfirm()
 						} else {
-							customConfirmButtonPressError()
+							onSuccessConfirm()
 						}
 					}}
 					containerStyles="bg-primary p-2 w-[30%] self-center"

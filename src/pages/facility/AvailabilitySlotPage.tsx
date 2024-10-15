@@ -93,17 +93,13 @@ const AvailabilitySlotPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			const response = await submitBookingAction({
+			await submitBookingAction({
 				facilityId: values.facilityId,
 				startDate: getUTCDateString(values.startDate, ITimeFormat.dateTime),
 				endDate: getUTCDateString(values.endDate, ITimeFormat.dateTime),
 				numOfGuest: values.numOfGuest,
 				spaceId: values.space,
 			})
-			if (response?.success) {
-				formik.resetForm()
-				router.push('/facility/history')
-			}
 		},
 	})
 
@@ -150,7 +146,12 @@ const AvailabilitySlotPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full px-4">
-			<CustomModal />
+			<CustomModal
+				onSuccessConfirm={() => {
+					formik.resetForm()
+					router.push('/facility/history')
+				}}
+			/>
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] my-6">
 					<View className="flex flex-row items-center">
