@@ -36,7 +36,7 @@ const SignUpPage = () => {
 
 	const signUp = async (values: UserSignUpFormDto) => {
 		const response = await signUpAction(values)
-		if (response.success) {
+		if (response?.success) {
 			router.replace('/user-information')
 		}
 	}

@@ -100,7 +100,7 @@ const AvailabilitySlotPage = () => {
 				numOfGuest: values.numOfGuest,
 				spaceId: values.space,
 			})
-			if (response.success) {
+			if (response?.success) {
 				formik.resetForm()
 				router.push('/facility/history')
 			}

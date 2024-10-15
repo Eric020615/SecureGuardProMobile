@@ -1,11 +1,13 @@
 export enum RoleEnum {
     'SYSTEM_ADMIN' = 'SA',
     'RESIDENT' = 'RES',
+    'RESIDENT_SUBUSER' = 'SUB'
 }
 
 export enum RoleConst {
     'RES' = 'Resident',
-    "SA" = "System Admin"
+    "SA" = "System Admin",
+    'SUB' = 'Sub-user'
 }
 
 export enum Gender {

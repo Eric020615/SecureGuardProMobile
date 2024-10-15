@@ -90,7 +90,7 @@ const CameraPage = () => {
 				const response = await uploadUserFaceAuthAction({
 					faceData: base64,
 				})
-				if (response.success) {
+				if (response?.success) {
 					router.replace('/profile/view')
 				} else {
 					router.replace('/camera')

@@ -37,7 +37,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await createUser(IUserInformationFormDto, tempToken)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 			},
@@ -50,7 +50,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getUserProfileById()
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				set({ userProfile: response.data })
@@ -64,7 +64,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getSubUserList(page, limit)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				set((state) => ({
@@ -85,7 +85,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await editUserProfileById(IEditUserDetailsByIdDto)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 			},
@@ -98,7 +98,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await createSubUser(createSubUserDto)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 			},
@@ -111,7 +111,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await editSubUserStatusById(subUserGuid, status)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 			},
@@ -124,7 +124,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await deleteSubUserById(subUserGuid)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 			},

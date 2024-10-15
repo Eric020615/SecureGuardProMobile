@@ -31,7 +31,7 @@ const SignInPage = () => {
 
 	const signInWithPassword = async (values: SignInFormDto) => {
 		const response = await signInAction(values)
-		if (response.success) {
+		if (response?.success) {
 			router.replace('/home')
 		}
 	}

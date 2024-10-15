@@ -20,7 +20,7 @@ export const useNotice = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getNotices(page, limit)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				set((state) => ({

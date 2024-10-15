@@ -41,7 +41,7 @@ const FacilityBookingHistoryPage = () => {
 
 	const cancel = async (bookingGuid: string) => {
 		const response = await cancelBookingAction(bookingGuid)
-		if (response.success) {
+		if (response?.success) {
 			router.push('/facility/history')
 		}
 	}

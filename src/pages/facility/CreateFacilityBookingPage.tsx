@@ -165,7 +165,7 @@ const CreateFacilityBookingPage = () => {
 							placeholder={'Select number of guests'}
 						/>
 						<CustomButton
-							title="Submit"
+							title="Check"
 							handlePress={formik.handleSubmit}
 							containerStyles="border-primary border bg-primary p-3 w-full mt-2 flex flex-row self-center"
 							isLoading={isLoading}

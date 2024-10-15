@@ -23,7 +23,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signUp(userSignUpForm)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				set({ isLogged: true, tempToken: response.data })
@@ -38,7 +38,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signIn(userSignInForm)
-				if (response.success) {
+				if (response?.success) {
 					await AsyncStorage.setItem('token', response?.data)
 					set({ isLogged: true })
 				} else {
@@ -55,7 +55,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAuth(token)
-				if(!response.success){
+				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				return response

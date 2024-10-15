@@ -116,6 +116,7 @@ export const getUserProfileById = async (): Promise<IResponse<GetUserProfileById
 		}
 		return result
 	} catch (error) {
+		console.log('error', error)
 		const result: IResponse<GetUserProfileByIdDto> = {
 			success: false,
 			msg: error,
