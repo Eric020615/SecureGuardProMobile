@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { checkAuth, forgotPassword, signIn, signUp } from '@api/authService/authService'
+import { checkAuth, forgotPassword, resetPassword, signIn, signUp } from '@api/authService/authService'
 import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
-import { ForgotPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface State {
@@ -12,6 +12,7 @@ interface State {
 interface Actions {
 	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
+	resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
 	forgotPasswordAction: (ForgotPasswordDto: ForgotPasswordDto) => Promise<any>
 	checkJwtAuthAction: (token: string) => Promise<any>
 	setTempTokenAction: (token: string) => void
@@ -63,6 +64,20 @@ export const useAuth = create<State & Actions>((set) => ({
 			},
 			'Password reset email sent! Please check your email', // Custom success message
 			'Failed to send password reset email. Please try again.', // Custom error message
+		)
+	},
+
+	resetPasswordAction: async (resetPasswordDto: ResetPasswordDto) => {
+		return generalAction(
+			async () => {
+				const response = await resetPassword(resetPasswordDto)
+				if(!response?.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Password reset successful!', // Custom success message
+			'Failed to reset password. Please try again.', // Custom error message
 		)
 	},
 

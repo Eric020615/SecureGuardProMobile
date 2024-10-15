@@ -10,6 +10,10 @@ export const listUrl = {
             path: 'auth/sign-up/',
             type: IType.post
         },
+        resetPassword: {
+            path: 'auth/reset-password/',
+            type: IType.post
+        },
         forgotPassword: {
             path: 'auth/reset-password/request',
             type: IType.post

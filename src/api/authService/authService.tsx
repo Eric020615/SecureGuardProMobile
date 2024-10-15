@@ -1,7 +1,8 @@
 import GlobalHandler, { IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { RoleEnum } from '@config/constant/user'
-import { ForgotPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<IResponse<any>> => {
 	try {
@@ -79,6 +80,31 @@ export const checkAuth = async (token: string): Promise<IResponse<any>> => {
 			path: listUrl.auth.checkJwtAuth.path,
 			type: listUrl.auth.checkJwtAuth.type,
 			_token: token,
+		})
+		const result: IResponse<any> = {
+			success,
+			msg: success ? 'success' : response?.message,
+			data: success ? response?.data : undefined,
+		}
+		return result
+	} catch (error) {
+		const result: IResponse<any> = {
+			success: false,
+			msg: error,
+			data: null,
+		}
+		return result
+	}
+}
+
+export const resetPassword = async (resetPasswordDto: ResetPasswordDto): Promise<IResponse<any>> => {
+	try {
+		const token = await AsyncStorage.getItem('token')
+		const [success, response] = await GlobalHandler({
+			path: listUrl.auth.resetPassword.path,
+			type: listUrl.auth.resetPassword.type,
+			data: resetPasswordDto,
+			_token: token ? token : '',
 		})
 		const result: IResponse<any> = {
 			success,

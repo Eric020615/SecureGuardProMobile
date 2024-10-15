@@ -9,6 +9,7 @@ import * as Yup from 'yup'
 import CustomFormField from '@components/form/CustomFormField'
 import { useFormik } from 'formik'
 import { useApplication } from '@store/application/useApplication'
+import { useAuth } from '@store/auth/useAuth'
 
 interface ResetPassword {
 	currentPassword: string
@@ -17,6 +18,7 @@ interface ResetPassword {
 
 const ResetPasswordPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
+    const resetPasswordAction = useAuth((state) => state.resetPasswordAction)
 
 	const validationSchema = Yup.object().shape({
 		currentPassword: Yup.string().required('Current Password is required'),
@@ -34,9 +36,7 @@ const ResetPasswordPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			// Handle password reset logic here
-			console.log('Reset Password Values:', values)
-			// Call your reset password API here
+            await resetPasswordAction(values)
 		},
 	})
 
@@ -45,7 +45,7 @@ const ResetPasswordPage = () => {
 			<CustomModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
-					router.push('/profile') // Navigate to a profile or success page
+                    router.push('/profile/view') // Navigate back to the profile page
 				}}
 			/>
 			<View className="flex-1">
@@ -54,7 +54,7 @@ const ResetPasswordPage = () => {
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
-								router.push('/profile') // Navigate back to the profile page
+								router.push('/profile/view') // Navigate back to the profile page
 							}}
 							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>

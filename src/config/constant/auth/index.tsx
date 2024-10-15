@@ -1,3 +1,5 @@
+import { RoleEnum } from "../user"
+
 export const signUpformDataJson = {
     email: "",
     password: "",
@@ -18,5 +20,6 @@ export const userInforformDataJson = {
 
 export const signInformDataJson = {
     email: "",
-    password: ""
+    password: "",
+    role: [RoleEnum.RESIDENT, RoleEnum.RESIDENT_SUBUSER], // Default value
 }
