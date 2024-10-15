@@ -107,7 +107,9 @@ const userProfileViewPage = () => {
 						/>
 						<CustomButton
 							title="Password"
-							handlePress={() => {}}
+							handlePress={() => {
+								router.push('/reset-password')
+							}}
 							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={

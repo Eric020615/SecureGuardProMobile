@@ -1,5 +1,5 @@
 import React from 'react'
-import ResetPasswordPage from '@pages/auth/ResetPasswordPage'
+import ResetPasswordPage from '@pages/profile/ResetPasswordPage'
 
 const ResetPassword = () => {
   return (

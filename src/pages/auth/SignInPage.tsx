@@ -67,7 +67,7 @@ const SignInPage = () => {
 						placeholder={'Enter your password'}
 					/>
 					<View className="justify-end flex-row pt-2">
-						<Link href="/reset-password" className="text-sm font-psemibold text-primary">
+						<Link href="/forgot-password" className="text-sm font-psemibold text-primary">
 							Forgot your password?
 						</Link>
 					</View>

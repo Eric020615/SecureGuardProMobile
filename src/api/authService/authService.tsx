@@ -1,7 +1,7 @@
 import GlobalHandler, { IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { RoleEnum } from '@config/constant/user'
-import { ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { ForgotPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<IResponse<any>> => {
 	try {
@@ -50,12 +50,12 @@ export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> =>
 	}
 }
 
-export const requestResetPassword = async (resetPasswordDto: ResetPasswordDto): Promise<IResponse<any>> => {
+export const forgotPassword = async (forgotPasswordDto: ForgotPasswordDto): Promise<IResponse<any>> => {
 	try {
 		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.requestResetPassword.path,
-			type: listUrl.auth.requestResetPassword.type,
-			data: resetPasswordDto,
+			path: listUrl.auth.forgotPassword.path,
+			type: listUrl.auth.forgotPassword.type,
+			data: forgotPasswordDto,
 		})
 		const result: IResponse<any> = {
 			success,

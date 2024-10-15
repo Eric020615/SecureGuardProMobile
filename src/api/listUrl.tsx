@@ -10,7 +10,7 @@ export const listUrl = {
             path: 'auth/sign-up/',
             type: IType.post
         },
-        requestResetPassword: {
+        forgotPassword: {
             path: 'auth/reset-password/request',
             type: IType.post
         },

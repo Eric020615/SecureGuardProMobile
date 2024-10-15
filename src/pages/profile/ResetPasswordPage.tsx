@@ -4,59 +4,90 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomModal from '@components/modals/CustomModal'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
+import Ionicons from 'react-native-vector-icons/Ionicons'
 import * as Yup from 'yup'
 import CustomFormField from '@components/form/CustomFormField'
 import { useFormik } from 'formik'
 import { useApplication } from '@store/application/useApplication'
-import { useAuth } from '@store/auth/useAuth'
 
 interface ResetPassword {
-	email: string
+	currentPassword: string
+	newPassword: string
 }
 
 const ResetPasswordPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
-	const { requestResetPasswordAction } = useAuth()
+
 	const validationSchema = Yup.object().shape({
-		email: Yup.string().email('Invalid Email').required('Email is required'),
+		currentPassword: Yup.string().required('Current Password is required'),
+		newPassword: Yup.string()
+			.required('New Password is required')
+			.min(6, 'New Password must be at least 6 characters long'),
 	})
+
 	const formik = useFormik<ResetPassword>({
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			email: '',
+			currentPassword: '',
+			newPassword: '',
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			await requestResetPasswordAction(values)
+			// Handle password reset logic here
+			console.log('Reset Password Values:', values)
+			// Call your reset password API here
 		},
 	})
+
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<CustomModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
-					router.push('/sign-in')
+					router.push('/profile') // Navigate to a profile or success page
 				}}
 			/>
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] px-4 my-6">
+					<View className="flex flex-row items-center">
+						<CustomButton
+							containerStyles="items-center h-fit"
+							handlePress={() => {
+								router.push('/profile') // Navigate back to the profile page
+							}}
+							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
+						/>
+					</View>
 					<View className="grid justify-center flex-1">
 						<View className="mb-5 gap-2">
 							<Text className="text-3xl text-black font-bold text-center">Reset Password</Text>
 							<Text className="text-xl text-gray-600 font-normal text-center">
-								Please enter your email address to request reset password link.
+								Please enter your current password and new password.
 							</Text>
 						</View>
 						<CustomFormField
-							title="Email"
+							title="Current Password"
 							type="Text"
-							textValue={formik.values.email}
+							textValue={formik.values.currentPassword}
 							onChangeText={(e) => {
-								formik.setFieldValue('email', e)
+								formik.setFieldValue('currentPassword', e)
 							}}
-							errorMessage={formik.errors.email}
-							placeholder={'Enter your email'}
+							errorMessage={formik.errors.currentPassword}
+							placeholder={'Enter your current password'}
+							isSecureTextEntry={true}
+						/>
+						<CustomFormField
+							title="New Password"
+							type="Text"
+							textValue={formik.values.newPassword}
+							onChangeText={(e) => {
+								formik.setFieldValue('newPassword', e)
+							}}
+							errorMessage={formik.errors.newPassword}
+							placeholder={'Enter your new password'}
+							isSecureTextEntry={true}
+                            containerStyle='mt-3'
 						/>
 						<CustomButton
 							title="Submit"

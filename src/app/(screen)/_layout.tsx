@@ -66,6 +66,12 @@ const ScreenLayout = () => {
 						headerShown: false,
 					}}
 				/>
+				<Stack.Screen
+					name="reset-password"
+					options={{
+						headerShown: false,
+					}}
+				/>
 			</Stack>
 
 			<StatusBar backgroundColor="#10312B" style="light" />

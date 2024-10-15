@@ -9,6 +9,6 @@ export interface SignInFormDto {
 	password: string
 }
 
-export interface ResetPasswordDto {
+export interface ForgotPasswordDto {
 	email: string
 }
