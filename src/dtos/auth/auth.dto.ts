@@ -8,3 +8,7 @@ export interface SignInFormDto {
 	email: string
 	password: string
 }
+
+export interface ResetPasswordDto {
+	email: string
+}

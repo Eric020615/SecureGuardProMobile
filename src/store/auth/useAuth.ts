@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { checkAuth, signIn, signUp } from '@api/authService/authService'
+import { checkAuth, requestResetPassword, signIn, signUp } from '@api/authService/authService'
 import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
-import { SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 interface State {
@@ -12,6 +12,7 @@ interface State {
 interface Actions {
 	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
+	requestResetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
 	checkJwtAuthAction: (token: string) => Promise<any>
 	setTempTokenAction: (token: string) => void
 }
@@ -48,6 +49,20 @@ export const useAuth = create<State & Actions>((set) => ({
 			},
 			'', // Custom success message
 			'Sign-in failed. Please check your credentials and try again.', // Custom error message
+		)
+	},
+
+	requestResetPasswordAction: async (resetPasswordDto: ResetPasswordDto) => {
+		return generalAction(
+			async () => {
+				const response = await requestResetPassword(resetPasswordDto)
+				if(!response?.success){
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Password reset email sent! Please check your email', // Custom success message
+			'Failed to send password reset email. Please try again.', // Custom error message
 		)
 	},
 

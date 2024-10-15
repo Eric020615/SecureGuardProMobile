@@ -32,10 +32,14 @@ const SignInPage = () => {
 	const signInWithPassword = async (values: SignInFormDto) => {
 		await signInAction(values)
 	}
-	
+
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal onSuccessConfirm={() => {router.replace("/home")}}/>
+			<CustomModal
+				onSuccessConfirm={() => {
+					router.replace('/home')
+				}}
+			/>
 			<ScrollView>
 				<View className="w-full justify-center min-h-[85vh] px-4 my-6">
 					<Text className="text-3xl text-black">Gate Mate</Text>
@@ -62,10 +66,15 @@ const SignInPage = () => {
 						errorMessage={formik.errors.password}
 						placeholder={'Enter your password'}
 					/>
+					<View className="justify-end flex-row pt-2">
+						<Link href="/reset-password" className="text-sm font-psemibold text-primary">
+							Forgot your password?
+						</Link>
+					</View>
 					<CustomButton
 						title="Log In"
 						handlePress={formik.handleSubmit}
-						containerStyles="bg-primary p-3 w-full mt-7"
+						containerStyles="bg-primary p-3 w-full mt-4"
 						isLoading={isLoading}
 					/>
 					<View className="justify-center pt-5 flex-row gap-2">
