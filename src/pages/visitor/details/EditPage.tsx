@@ -21,7 +21,7 @@ import {
 } from '@helpers/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { useApplication } from '@store/application/useApplication'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 interface VisitorDetails {
 	visitDateTime: Date
@@ -104,7 +104,7 @@ const VisitorDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<ActionConfirmationModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

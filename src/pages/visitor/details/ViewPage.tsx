@@ -8,7 +8,7 @@ import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
 import { convertUTCStringToLocalDateString } from '@helpers/time'
 import { useVisitor } from '@store/visitor/useVisitor'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 const VisitorDetailsViewPage = () => {
 	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
@@ -24,7 +24,7 @@ const VisitorDetailsViewPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<ActionConfirmationModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

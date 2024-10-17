@@ -7,7 +7,7 @@ import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
 import { convertImageToBase64 } from '@helpers/file'
 import { router } from 'expo-router'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 
 const CameraPage = () => {
@@ -73,7 +73,7 @@ const CameraPage = () => {
 
 	return (
 		<SafeAreaView className="h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					router.replace('/profile/view')
 				}}

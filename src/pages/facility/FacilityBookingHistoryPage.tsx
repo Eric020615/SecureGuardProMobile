@@ -15,7 +15,8 @@ import CustomFlatList from '@components/list/CustomFlatList'
 import { useApplication } from '@store/application/useApplication'
 import { useFacility } from '@store/facility/useFacility'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import CustomConfirmModal from '@components/modals/CustomConfirmationModal'
 
 const FacilityBookingHistoryPage = () => {
 	const {
@@ -28,6 +29,8 @@ const FacilityBookingHistoryPage = () => {
 	const { isLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
 	const [page, setPage] = useState(0)
+	const [open, setOpen] = useState(false)
+	const [selectedFacilityBookingId, setSelectedFacilityBookingId] = useState('')
 
 	useEffect(() => {
 		setPage(0)
@@ -37,13 +40,6 @@ const FacilityBookingHistoryPage = () => {
 
 	const fetchFacilityBookingHistory = async () => {
 		await getFacilityBookingHistoryAction(isPast, page, 10)
-	}
-
-	const cancel = async (bookingGuid: string) => {
-		const response = await cancelBookingAction(bookingGuid)
-		if (response?.success) {
-			router.push('/facility/history')
-		}
 	}
 
 	const fetchNextPage = async () => {
@@ -86,7 +82,8 @@ const FacilityBookingHistoryPage = () => {
 						<CustomButton
 							containerStyles="flex flex-row self-end h-fit mt-1"
 							handlePress={() => {
-								cancel(item.bookingGuid)
+								setOpen(!open)
+								setSelectedFacilityBookingId(item.bookingGuid)
 							}}
 							rightReactNativeIcons={<Ionicons name="close-circle" color={'#ff0000'} size={16} />}
 						/>
@@ -96,9 +93,32 @@ const FacilityBookingHistoryPage = () => {
 		</View>
 	)
 
+	const onConfirm = () => {
+		cancelFacilityBooking(selectedFacilityBookingId)
+	}
+
+	const cancelFacilityBooking = async (bookingGuid: string) => {
+		await cancelBookingAction(bookingGuid)
+	}
+
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<CustomConfirmModal
+				isOpen={open}
+				setOpen={() => {
+					setOpen(!open)
+				}}
+				content={{
+					title: 'Are you sure you want to cancel this booking?',
+					subtitle: 'This action cannot be undone',
+				}}
+				onConfirm={onConfirm}
+			/>
+			<ActionConfirmationModal
+				onSuccessConfirm={() => {
+					router.push('/facility/history')
+				}}
+			/>
 			<View className="flex-1">
 				<View className="w-full px-4 my-6 flex-1">
 					<View className="flex flex-row items-center">

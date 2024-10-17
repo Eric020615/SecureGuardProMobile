@@ -22,14 +22,14 @@ export const generalAction = async <T>(
 	errorMessage?: string,
 ): Promise<T | undefined> => {
 	const { setIsLoading } = useApplication.getState()
-	const { setCustomConfirmModalAction } = useModal.getState()
+	const { setActionConfirmModalAction } = useModal.getState()
 
 	setIsLoading(true)
 
 	try {
 		const result = await action()
 		if (successMessage) {
-			setCustomConfirmModalAction({
+			setActionConfirmModalAction({
 				title: 'Success',
 				subtitle: successMessage,
 				isError: false,
@@ -39,7 +39,7 @@ export const generalAction = async <T>(
 	} catch (error: Error | any) {
 		if (errorMessage) {
 			const errorMsg = error?.message || errorMessage
-			setCustomConfirmModalAction({
+			setActionConfirmModalAction({
 				title: 'Error',
 				subtitle: errorMsg,
 				isError: true,

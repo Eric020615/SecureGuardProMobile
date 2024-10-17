@@ -15,7 +15,7 @@ interface State {
 interface Actions {
 	resetModalAction: () => void
 	toogleModalAction: () => void
-	setCustomConfirmModalAction: (e: CustomModal) => void
+	setActionConfirmModalAction: (e: CustomModal) => void
 }
 
 export const useModal = create<State & Actions>((set) => ({
@@ -33,7 +33,7 @@ export const useModal = create<State & Actions>((set) => ({
 		set((state) => ({
 			isOpen: !state.isOpen,
 		})),
-	setCustomConfirmModalAction: ({ title, subtitle, isError = false }: CustomModal) =>
+	setActionConfirmModalAction: ({ title, subtitle, isError = false }: CustomModal) =>
 		set(() => ({
 			isOpen: true,
 			content: {

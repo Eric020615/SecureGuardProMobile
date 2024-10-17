@@ -15,7 +15,7 @@ import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/tim
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@store/application/useApplication'
 import { useVisitor } from '@store/visitor/useVisitor'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useModal } from '@store/modal/useModal'
 
 interface CreateVisitor {
@@ -73,14 +73,14 @@ const CreateVisitorPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
 					router.push('/home')
 				}}
 			/>
 			<ScrollView>
-				{/* <CustomModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
+				{/* <ActionConfirmationModal title="Hi" isVisible={isModalVisible} onCloseModal={toggleModal} /> */}
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">
 						<CustomButton

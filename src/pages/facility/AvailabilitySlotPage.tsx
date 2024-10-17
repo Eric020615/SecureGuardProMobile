@@ -15,7 +15,7 @@ import { convertDateStringToDate, getTodayDate, getUTCDateString } from '@helper
 import { SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 import { useFacility } from '@store/facility/useFacility'
 import { useApplication } from '@store/application/useApplication'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 interface FacilityBooking {
 	facilityId: string
@@ -146,7 +146,7 @@ const AvailabilitySlotPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full px-4">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
 					router.push('/facility/history')

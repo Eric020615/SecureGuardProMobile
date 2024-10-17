@@ -10,7 +10,7 @@ import { ICountry } from 'react-native-international-phone-number'
 import { GenderList } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import * as DocumentPicker from 'react-native-document-picker'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { router } from 'expo-router'
 import { getFile } from '@helpers/file'
 import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/time'
@@ -35,7 +35,7 @@ interface UserInformationForm {
 const UserInformationPage = () => {
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
-	const setCustomConfirmModal = useModal((state) => state.setCustomConfirmModalAction)
+	const setActionConfirmModal = useModal((state) => state.setActionConfirmModalAction)
 	const createUserAction = useUser((state) => state.createUserAction)
 	const tempToken = useAuth((state) => state.tempToken)
 	const isLoading = useApplication((state) => state.isLoading)
@@ -73,7 +73,7 @@ const UserInformationPage = () => {
 			if (DocumentPicker.isCancel(error)) {
 				console.log(error)
 			} else {
-				setCustomConfirmModal({
+				setActionConfirmModal({
 					title: 'File Selection Failed',
 					subtitle: 'Please try again or contact support if the issue persists.',
 				})
@@ -112,7 +112,7 @@ const UserInformationPage = () => {
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
 					router.push('/')

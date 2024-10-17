@@ -4,15 +4,15 @@ import Modal from 'react-native-modal'
 import CustomButton from '@components/buttons/CustomButton'
 import { useModal } from '@store/modal/useModal'
 
-interface CustomModalProps {
+interface ActionConfirmationModalProps {
 	onSuccessConfirm?: () => void
 	onFailedConfirm?: () => void
 }
 
-const CustomModal = ({
+const ActionConfirmationModal = ({
 	onSuccessConfirm = () => {},
 	onFailedConfirm = () => {},
-}: CustomModalProps) => {
+}: ActionConfirmationModalProps) => {
 	const { isOpen, toogleModalAction, content } = useModal()
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={toogleModalAction} className="bg-transparent">
@@ -39,4 +39,4 @@ const CustomModal = ({
 	)
 }
 
-export default CustomModal
+export default ActionConfirmationModal

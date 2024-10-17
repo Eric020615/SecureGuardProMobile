@@ -1,7 +1,6 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomModal from '@components/modals/CustomModal'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import * as Yup from 'yup'
@@ -9,6 +8,7 @@ import CustomFormField from '@components/form/CustomFormField'
 import { useFormik } from 'formik'
 import { useApplication } from '@store/application/useApplication'
 import { useAuth } from '@store/auth/useAuth'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 interface ForgotPassword {
 	email: string
@@ -33,7 +33,7 @@ const ForgotPasswordPage = () => {
 	})
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
 					router.push('/sign-in')

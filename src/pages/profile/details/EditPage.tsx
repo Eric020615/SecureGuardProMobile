@@ -20,7 +20,7 @@ import { ITimeFormat } from '@config/constant'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '@store/application/useApplication'
 import { useUser } from '@store/user/useUser'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 interface UserProfile {
 	firstName: string
@@ -115,7 +115,7 @@ const ProfileDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<ActionConfirmationModal />
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

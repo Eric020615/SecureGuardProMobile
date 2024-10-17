@@ -14,7 +14,7 @@ import { getLocalDateString, getTodayDate } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
 import { useApplication } from '@store/application/useApplication'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useModal } from '@store/modal/useModal'
 
 interface FacilityBooking {
@@ -28,7 +28,7 @@ const CreateFacilityBookingPage = () => {
 	const [facilityId, setFacilityId] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
-	const { setCustomConfirmModalAction } = useModal()
+	const { setActionConfirmModalAction } = useModal()
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Date is required'),
 		startDate: Yup.date()
@@ -53,7 +53,7 @@ const CreateFacilityBookingPage = () => {
 					)}/${values.duration}/${values.numOfGuest}/check`,
 				)
 			} catch (error) {
-				setCustomConfirmModalAction({
+				setActionConfirmModalAction({
 					title: 'Error',
 					subtitle: 'An error occurred while processing your request',
 					isError: true,
@@ -75,7 +75,7 @@ const CreateFacilityBookingPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<ActionConfirmationModal />
 			<ScrollView className="px-4">
 				{/* Adding horizontal padding */}
 				<View className="w-full min-h-[85vh] my-6">

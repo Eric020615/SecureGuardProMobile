@@ -9,7 +9,7 @@ import CustomFlatList from '@components/list/CustomFlatList'
 import { useNotice } from '@store/notice/useNotice'
 import { useApplication } from '@store/application/useApplication'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 const NoticeListPage = () => {
 	const { notices, totalNotices, getNoticeAction, resetNotice } = useNotice()
@@ -53,7 +53,7 @@ const NoticeListPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal />
+			<ActionConfirmationModal />
 			<View className="flex-1">
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">

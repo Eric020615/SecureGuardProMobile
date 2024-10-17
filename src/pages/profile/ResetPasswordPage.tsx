@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -42,7 +42,7 @@ const ResetPasswordPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
                     router.push('/profile/view') // Navigate back to the profile page

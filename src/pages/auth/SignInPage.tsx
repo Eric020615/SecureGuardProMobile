@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
 import { signInformDataJson } from '@config/constant/auth/index'
-import CustomModal from '@components/modals/CustomModal'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { SignInFormDto } from '@dtos/auth/auth.dto'
 import { useAuth } from '@store/auth/useAuth'
 import { useApplication } from '@store/application/useApplication'
@@ -35,7 +35,7 @@ const SignInPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<CustomModal
+			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					router.replace('/home')
 				}}
