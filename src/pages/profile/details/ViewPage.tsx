@@ -9,6 +9,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { router, usePathname } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
+import Avatar from 'react-native-user-avatar'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -42,7 +43,7 @@ const userProfileViewPage = () => {
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 py-4 my-4 justify-center items-center">
 					<View>
-						<Image source={images.sampleAvatar} className="w-24 h-24" />
+						<Avatar name={userProfile.userName} size={100} round={true} bgColor="#10312b" />
 					</View>
 					{userProfile && (
 						<>

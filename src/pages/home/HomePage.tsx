@@ -1,18 +1,30 @@
 import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
 import { images, icons } from '@assets/index'
+import { useUser } from '@store/user/useUser'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import Avatar from 'react-native-user-avatar'
 
 const HomePage = () => {
+	const { userProfile, getUserProfileByIdAction } = useUser()
+	useEffect(() => {
+		fetchUserProfileByUserId()
+	}, [])
+	const fetchUserProfileByUserId = async () => {
+		await getUserProfileByIdAction()
+	}
 	return (
 		<SafeAreaView className="bg-slate-100 h-full w-full">
+			<ActionConfirmationModal />
 			<ScrollView>
 				<View className="min-w-full">
 					<Image source={images.homeBackground} />
 					<View className="absolute flex flex-row justify-between w-full top-10 px-6">
-						<Text className="text-white font-bold text-2xl">Welcome Eric</Text>
-						<Image source={images.sampleAvatar} />
+						<Text className="text-white font-bold text-2xl">Welcome {userProfile.userName}</Text>
+						<Avatar name={userProfile.userName} size={40} round={true} bgColor="#10312b"/>
+						{/* <Image source={images.sampleAvatar} /> */}
 					</View>
 					<View className="p-8">
 						<Text className="text-black text-lg font-psemibold mb-4">About Your Property</Text>
