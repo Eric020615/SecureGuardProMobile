@@ -37,7 +37,7 @@ const SignInPage = () => {
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {
-					router.replace('/home')
+					router.push('/home')
 				}}
 			/>
 			<ScrollView>

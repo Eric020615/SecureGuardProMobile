@@ -23,10 +23,9 @@ const App = () => {
 					{ text: 'YES', onPress: () => BackHandler.exitApp() },
 				])
 				return true // Prevent the default back action (exiting the app)
-			} else {
-				navigation.goBack() // Default go back behavior for non-tab screens
-				return true
 			}
+			navigation.goBack() // Default go back behavior for non-tab screens
+			return true
 		}
 
 		const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction)

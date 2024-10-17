@@ -42,7 +42,7 @@ const SignUpPage = () => {
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {
-					router.replace('/user-information')
+					router.push('/user-information')
 				}}
 			/>
 			<ScrollView>

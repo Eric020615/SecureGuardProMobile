@@ -75,10 +75,10 @@ const CameraPage = () => {
 		<SafeAreaView className="h-full">
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {
-					router.replace('/profile/view')
+					router.push('/profile/view')
 				}}
 				onFailedConfirm={() => {
-					router.replace('/camera')
+					router.push('/camera')
 				}}
 			/>
 			{!image ? (

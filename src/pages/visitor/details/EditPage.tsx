@@ -111,7 +111,7 @@ const VisitorDetailsEditPage = () => {
 						<CustomButton
 							containerStyles="items-center h-fit"
 							handlePress={() => {
-								router.replace('/visitor')
+								router.push('/visitor')
 							}}
 							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>

@@ -6,7 +6,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 const Home = () => {
 	const router = useRouter();
 	const handlePress = () => {
-		router.replace("/visitor/create")
+		router.push("/visitor/create")
 	}
 
 	return (
