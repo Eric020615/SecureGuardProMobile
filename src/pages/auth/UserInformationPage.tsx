@@ -13,12 +13,12 @@ import * as DocumentPicker from 'react-native-document-picker'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { router } from 'expo-router'
 import { getFile } from '@helpers/file'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@store/application/useApplication'
 import { useModal } from '@store/modal/useModal'
 import { useAuth } from '@store/auth/useAuth'
 import { useUser } from '@store/user/useUser'
+import { convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
 
 interface UserInformationForm {
 	firstName: string
@@ -58,7 +58,7 @@ const UserInformationPage = () => {
 		gender: Yup.string().required('Gender is required'),
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
-		formik.setFieldValue('dateOfBirth', selectedDate)
+		formik.setFieldValue('dateOfBirth', initializeDate(selectedDate))
 		setShowCalendar(false)
 	}
 	const onFileChanged: () => Promise<void> = async () => {
@@ -95,7 +95,7 @@ const UserInformationPage = () => {
 					gender: values.gender,
 					floorNumber: values.floor,
 					unitNumber: values.unitNumber,
-					dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+					dateOfBirth: convertDateToDateString(values.dateOfBirth, ITimeFormat.isoDateTime),
 					supportedFiles:
 						selectedFiles.length > 0
 							? await Promise.all(
@@ -199,10 +199,10 @@ const UserInformationPage = () => {
 								textStyle="text-base"
 								type="DateTime"
 								selectedDate={
-									formik.values.dateOfBirth ? formik.values.dateOfBirth : getTodayDate()
+									formik.values.dateOfBirth ? formik.values.dateOfBirth : getCurrentDate()
 								}
 								onChange={onDatePickerChange}
-								buttonTitle={getLocalDateString(formik.values.dateOfBirth, ITimeFormat.date)}
+								buttonTitle={convertDateToDateString(formik.values.dateOfBirth, ITimeFormat.date)}
 								mode="date"
 								errorMessage={
 									formik.touched.dateOfBirth &&

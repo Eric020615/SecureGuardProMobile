@@ -13,15 +13,10 @@ import { getCountriesByCallingCode, ICountry } from 'react-native-international-
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { ITimeFormat } from '@config/constant'
-import {
-	convertUTCStringToLocalDate,
-	getLocalDateString,
-	getTodayDate,
-	getUTCDateString,
-} from '@helpers/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { useApplication } from '@store/application/useApplication'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { convertDateStringToDate, convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface VisitorDetails {
 	visitDateTime: Date
@@ -44,7 +39,7 @@ const VisitorDetailsEditPage = () => {
 	useEffect(() => {
 		if (visitorDetails) {
 			setFormInitialValue({
-				visitDateTime: convertUTCStringToLocalDate(visitorDetails?.visitDateTime),
+				visitDateTime: convertDateStringToDate(visitorDetails?.visitDateTime),
 				visitorCategory:
 					visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
 				visitorName: visitorDetails?.visitorName ? visitorDetails?.visitorName : '',
@@ -88,7 +83,7 @@ const VisitorDetailsEditPage = () => {
 					visitorName: values.visitorName,
 					visitorCategory: values.visitorCategory,
 					visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-					visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
+					visitDateTime: convertDateToDateString(values.visitDateTime, ITimeFormat.isoDateTime),
 				},
 				id as string,
 			)
@@ -185,14 +180,14 @@ const VisitorDetailsEditPage = () => {
 										textStyle="text-base font-bold"
 										type="DateTime"
 										selectedDate={
-											formik.values.visitDateTime ? formik.values.visitDateTime : getTodayDate()
+											formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()
 										}
 										onChange={onDatePickerChange}
-										buttonTitle={getLocalDateString(
+										buttonTitle={convertDateToDateString(
 											formik.values.visitDateTime,
 											ITimeFormat.dateTime,
 										)}
-										minimumDate={getTodayDate()}
+										minimumDate={getCurrentDate()}
 										mode="datetime"
 										errorMessage={
 											formik.touched.visitDateTime &&

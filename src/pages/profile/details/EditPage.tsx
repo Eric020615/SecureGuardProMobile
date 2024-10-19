@@ -7,12 +7,6 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import { Gender } from '@config/constant/user'
-import {
-	convertUTCStringToLocalDate,
-	getLocalDateString,
-	getTodayDate,
-	getUTCDateString,
-} from '@helpers/time'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { GenderList } from '@config/listOption/user'
@@ -21,6 +15,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '@store/application/useApplication'
 import { useUser } from '@store/user/useUser'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { convertDateStringToDate, convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
 
 interface UserProfile {
 	firstName: string
@@ -68,7 +63,7 @@ const ProfileDetailsEditPage = () => {
 					? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
 					: '',
 				gender: userProfile?.gender ? userProfile.gender : null,
-				dateOfBirth: convertUTCStringToLocalDate(userProfile?.dateOfBirth),
+				dateOfBirth: convertDateStringToDate(userProfile?.dateOfBirth),
 			})
 		}
 	}, [userProfile])
@@ -102,14 +97,14 @@ const ProfileDetailsEditPage = () => {
 				email: values.email,
 				contactNumber: values.userCountryCode.callingCode + values.userPhoneNumber,
 				gender: values.gender,
-				dateOfBirth: getUTCDateString(values.dateOfBirth, ITimeFormat.date),
+				dateOfBirth: convertDateToDateString(values.dateOfBirth , ITimeFormat.isoDateTime),
 			})
 			formik.resetForm()
 			router.push(currentPath.replace('edit', 'view'))
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
-		formik.setFieldValue('dateOfBirth', selectedDate)
+		formik.setFieldValue('dateOfBirth', initializeDate(selectedDate))
 		setShowCalendar(false)
 	}
 
@@ -240,14 +235,14 @@ const ProfileDetailsEditPage = () => {
 										textStyle="text-base font-bold"
 										type="DateTime"
 										selectedDate={
-											formik.values.dateOfBirth ? formik.values.dateOfBirth : getTodayDate()
+											formik.values.dateOfBirth ? formik.values.dateOfBirth : getCurrentDate()
 										}
 										onChange={onDatePickerChange}
-										buttonTitle={getLocalDateString(
+										buttonTitle={convertDateToDateString(
 											formik.values.dateOfBirth,
-											ITimeFormat.dateTime,
+											ITimeFormat.date,
 										)}
-										maximumDate={getTodayDate()}
+										maximumDate={getCurrentDate()}
 										mode="date"
 										errorMessage={
 											formik.touched.dateOfBirth &&

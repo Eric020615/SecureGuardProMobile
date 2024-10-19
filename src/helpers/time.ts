@@ -1,55 +1,46 @@
-import moment from 'moment-timezone'
+import moment from 'moment-timezone';
 
+// Convert a DateTimeOffset string to a Date object
 export const convertDateStringToDate = (dateString: string) => {
-	if (!dateString) return
-	const date = moment(dateString).tz('Asia/Kuala_Lumpur').toDate()
-	return date
-}
+    if (!dateString) return null;
+    return moment(dateString).toDate();
+};
 
+// Convert a Date object to a formatted DateTimeOffset string
+export const convertDateToDateString = (date: Date, dateFormat: string) => {
+    if (!date) return '';
+    return moment(date).format(dateFormat);
+};
 
-export const convertLocalDateStringToUTCString = (dateString: string, dateFormat: string) => {
-	if (!dateString) return
-	const localDateString = moment(dateString).utc().format(dateFormat)
-	return localDateString
-}
+// Convert a DateTimeOffset string to a formatted DateTimeOffset string
+export const convertDateStringToFormattedString = (dateString: string, dateFormat: string) => {
+    if (!dateString) return '';
+    return moment(dateString).format(dateFormat);
+};
 
-export const convertUTCStringToLocalDateString = (UTCString: string, dateFormat: string) => {
-	if (!UTCString) return
-	const localDateString = moment.utc(UTCString).tz('Asia/Kuala_Lumpur').format(dateFormat)
-	return localDateString
-}
+// Get the current date as a Date object
+export const getCurrentDate = () => {
+    return new Date();
+};
 
-export const convertUTCStringToLocalDate = (UTCString: string) => {
-	if (!UTCString) return
-	const localDate = moment.utc(UTCString).tz('Asia/Kuala_Lumpur').toDate()
-	return localDate
-}
+// Get the current date as a formatted DateTimeOffset string
+export const getCurrentDateString = (dateFormat: string) => {
+    return moment().format(dateFormat);
+};
 
-export const getTodayDate = () => {
-	const todayDate = moment().tz('Asia/Kuala_Lumpur').toDate()
-	return todayDate
-}
+// Get a formatted DateTimeOffset string from a Date object
+export const getFormattedDateStringFromDate = (date: Date, dateFormat: string) => {
+    if (!date) return '';
+    return moment(date).format(dateFormat);
+};
 
-export const getLocalDateString = (date: Date, dateFormat: string) => {
-	if (date === null) return ''
-	const dateString = moment(date).tz('Asia/Kuala_Lumpur').format(dateFormat)
-	return dateString
-}
+// Get relative time from now for a given date
+export const getRelativeTimeFromNow = (date: Date) => {
+    if (!date) return '';
+    return moment.tz(date, "Asia/Kuala_Lumpur").fromNow();
+};
 
-export const getUTCDateString = (date: Date, dateFormat: string) => {
-	if (date === null) return ''
-	const dateString = moment(date).utc().format(dateFormat)
-	return dateString
-}
-
-export const getUTCRelativeTimeFromNow = (date: Date) => {
-	if (date === null) return ''
-	const relativeTime = moment.utc(date).tz('Asia/Kuala_Lumpur').fromNow()
-	return relativeTime
-}
-
-export const formatDateString = (dateString: string, dateFormat: string) => {
-	if (dateString === null) return ''
-	const localDateString = moment(dateString).tz('Asia/Kuala_Lumpur').format(dateFormat)
-	return localDateString
+export const initializeDate = (date: Date) => {
+	if(!date) return null
+	return moment(date).startOf("day").toDate()
 }

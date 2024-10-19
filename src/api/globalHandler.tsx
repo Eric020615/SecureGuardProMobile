@@ -169,16 +169,16 @@ const parseParams = (params) => {
 				if (Array.isArray(element)) {
 					// If the element is also an array, iterate over its elements
 					element.forEach((subElement) => {
-						options += `${key}=${subElement}&`
+						options += `${encodeURIComponent(key)}=${encodeURIComponent(subElement)}&`
 					})
 				} else {
 					// If the element is not an array, simply append it with the key
-					options += `${key}=${element}&`
+					options += `${encodeURIComponent(key)}=${encodeURIComponent(element)}&`
 				}
 			})
 		} else {
 			// If the value is not an array, append it with the key
-			options += `${key}=${value}&`
+			options += `${encodeURIComponent(key)}=${encodeURIComponent(value)}&`
 		}
 	})
 	// Remove the trailing '&' and return the result

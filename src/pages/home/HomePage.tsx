@@ -23,7 +23,7 @@ const HomePage = () => {
 					<Image source={images.homeBackground} />
 					<View className="absolute flex flex-row justify-between w-full top-10 px-6">
 						<Text className="text-white font-bold text-2xl">Welcome {userProfile.userName}</Text>
-						<Avatar name={userProfile.userName} size={40} round={true} bgColor="#10312b"/>
+						<Avatar name={userProfile.userName} size={40} round={true} bgColor="#10312b" />
 						{/* <Image source={images.sampleAvatar} /> */}
 					</View>
 					<View className="p-8">

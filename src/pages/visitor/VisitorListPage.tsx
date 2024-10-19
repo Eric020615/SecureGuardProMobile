@@ -6,12 +6,12 @@ import { VisitorEnum } from '@config/constant/visitor'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { ITimeFormat } from '@config/constant'
-import { convertUTCStringToLocalDateString } from '@helpers/time'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useVisitor } from '@store/visitor/useVisitor'
 import { useApplication } from '@store/application/useApplication'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { convertDateStringToFormattedString } from '@helpers/time'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
@@ -60,7 +60,7 @@ const VisitorListPage = () => {
 				<View className="flex flex-row gap-1 items-center">
 					<AntDesign name="clockcircle" color="#10312b" size={16} />
 					<Text className="font-bold">
-						{convertUTCStringToLocalDateString(item.visitDateTime, ITimeFormat.dateTime)}
+						{convertDateStringToFormattedString(item.visitDateTime, ITimeFormat.dateTime)}
 					</Text>
 				</View>
 			</View>

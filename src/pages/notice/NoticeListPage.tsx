@@ -4,12 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { getUTCRelativeTimeFromNow } from '@helpers/time'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useNotice } from '@store/notice/useNotice'
 import { useApplication } from '@store/application/useApplication'
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { getRelativeTimeFromNow } from '@helpers/time'
 
 const NoticeListPage = () => {
 	const { notices, totalNotices, getNoticeAction, resetNotice } = useNotice()
@@ -46,7 +46,7 @@ const NoticeListPage = () => {
 				<Text>{item.description}</Text>
 			</View>
 			<View>
-				<Text className="font-bold">{getUTCRelativeTimeFromNow(new Date(item.startDate))}</Text>
+				<Text className="font-bold">{getRelativeTimeFromNow(new Date(item.startDate))}</Text>
 			</View>
 		</View>
 	)

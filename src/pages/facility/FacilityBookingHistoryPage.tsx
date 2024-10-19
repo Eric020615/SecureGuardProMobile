@@ -5,11 +5,6 @@ import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { FacilityConst } from '@config/constant/facilities'
-import {
-	convertUTCStringToLocalDate,
-	convertUTCStringToLocalDateString,
-	getTodayDate,
-} from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useApplication } from '@store/application/useApplication'
@@ -17,6 +12,11 @@ import { useFacility } from '@store/facility/useFacility'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import CustomConfirmModal from '@components/modals/CustomConfirmationModal'
+import {
+	convertDateStringToDate,
+	convertDateStringToFormattedString,
+	getCurrentDate,
+} from '@helpers/time'
 
 const FacilityBookingHistoryPage = () => {
 	const {
@@ -63,11 +63,11 @@ const FacilityBookingHistoryPage = () => {
 				<Text className="font-bold">{FacilityConst[item.facilityId]}</Text>
 				<View className="flex flex-row gap-1">
 					<Text className="">
-						{convertUTCStringToLocalDateString(item.startDate, ITimeFormat.dateTime)}
+						{convertDateStringToFormattedString(item.startDate, ITimeFormat.dateTime)}
 					</Text>
 					<Text>-</Text>
 					<Text className="">
-						{convertUTCStringToLocalDateString(item.endDate, ITimeFormat.time)}
+						{convertDateStringToFormattedString(item.endDate, ITimeFormat.time)}
 					</Text>
 				</View>
 			</View>
@@ -78,7 +78,7 @@ const FacilityBookingHistoryPage = () => {
 						Cancelled
 					</Text>
 				) : (
-					convertUTCStringToLocalDate(item.startDate) > getTodayDate() && (
+					convertDateStringToDate(item.startDate) > getCurrentDate() && (
 						<CustomButton
 							containerStyles="flex flex-row self-end h-fit mt-1"
 							handlePress={() => {

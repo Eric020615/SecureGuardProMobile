@@ -10,12 +10,12 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { facilityBookingSlotCheckConst } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
-import { getLocalDateString, getTodayDate } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
 import { useApplication } from '@store/application/useApplication'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useModal } from '@store/modal/useModal'
+import { convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface FacilityBooking {
 	facilityId: string
@@ -33,7 +33,7 @@ const CreateFacilityBookingPage = () => {
 		facilityId: Yup.string().required('Date is required'),
 		startDate: Yup.date()
 			.required('Start time is required')
-			.min(getTodayDate(), 'Start date must be after now'),
+			.min(getCurrentDate(), 'Start date must be after now'),
 		duration: Yup.number().required('Booking duration is required'),
 		numOfGuest: Yup.number().required('Number of guest is required'),
 	})
@@ -47,7 +47,7 @@ const CreateFacilityBookingPage = () => {
 			try {
 				setIsLoading(true)
 				router.push(
-					`/facility/${values.facilityId}/${getLocalDateString(
+					`/facility/${values.facilityId}/${convertDateToDateString(
 						values.startDate,
 						ITimeFormat.dateTime,
 					)}/${values.duration}/${values.numOfGuest}/check`,
@@ -117,7 +117,7 @@ const CreateFacilityBookingPage = () => {
 									: moment().add(1, 'minute').toDate()
 							}
 							onChange={onDatePickerChange}
-							buttonTitle={getLocalDateString(formik.values.startDate, ITimeFormat.dateTime)}
+							buttonTitle={convertDateToDateString(formik.values.startDate, ITimeFormat.dateTime)}
 							minimumDate={moment().toDate()}
 							maximumDate={moment().add(2, 'week').toDate()}
 							mode="datetime"

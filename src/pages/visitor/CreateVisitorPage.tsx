@@ -11,12 +11,12 @@ import { VisitorCategoryList } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { getLocalDateString, getTodayDate, getUTCDateString } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import { useApplication } from '@store/application/useApplication'
 import { useVisitor } from '@store/visitor/useVisitor'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useModal } from '@store/modal/useModal'
+import { convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface CreateVisitor {
 	visitDateTime: Date
@@ -62,7 +62,7 @@ const CreateVisitorPage = () => {
 				visitorName: values.visitorName,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
-				visitDateTime: getUTCDateString(values.visitDateTime, ITimeFormat.dateTime),
+				visitDateTime: convertDateToDateString(values.visitDateTime, ITimeFormat.isoDateTime),
 			})
 		},
 	})
@@ -154,14 +154,14 @@ const CreateVisitorPage = () => {
 									textStyle="text-base font-bold"
 									type="DateTime"
 									selectedDate={
-										formik.values.visitDateTime ? formik.values.visitDateTime : getTodayDate()
+										formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()
 									}
 									onChange={onDatePickerChange}
-									buttonTitle={getLocalDateString(
+									buttonTitle={convertDateToDateString(
 										formik.values.visitDateTime,
 										ITimeFormat.dateTime,
 									)}
-									minimumDate={getTodayDate()}
+									minimumDate={getCurrentDate()}
 									mode="datetime"
 									errorMessage={
 										formik.touched.visitDateTime &&

@@ -6,9 +6,9 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
-import { convertUTCStringToLocalDateString } from '@helpers/time'
 import { useVisitor } from '@store/visitor/useVisitor'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { convertDateStringToFormattedString } from '@helpers/time'
 
 const VisitorDetailsViewPage = () => {
 	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
@@ -61,7 +61,7 @@ const VisitorDetailsViewPage = () => {
 								<Text className="text-lg text-black font-bold">Visit Date</Text>
 								<Text className="text-base text-black">
 									{visitorDetails.visitDateTime
-										? convertUTCStringToLocalDateString(
+										? convertDateStringToFormattedString(
 												visitorDetails.visitDateTime,
 												ITimeFormat.dateTime,
 										  )

@@ -11,7 +11,7 @@ import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { convertDateStringToDate, getTodayDate, getUTCDateString } from '@helpers/time'
+import { convertDateStringToDate, convertDateToDateString, getCurrentDate } from '@helpers/time'
 import { SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 import { useFacility } from '@store/facility/useFacility'
 import { useApplication } from '@store/application/useApplication'
@@ -47,8 +47,8 @@ const AvailabilitySlotPage = () => {
 	const fetchAvailabilitySlot = async () => {
 		await checkAvailabilitySlotAction(
 			formik.values.facilityId,
-			getUTCDateString(formik.values.startDate, ITimeFormat.dateTime),
-			getUTCDateString(formik.values.endDate, ITimeFormat.dateTime),
+			convertDateToDateString(formik.values.startDate, ITimeFormat.isoDateTime),
+			convertDateToDateString(formik.values.endDate, ITimeFormat.isoDateTime),
 		)
 	}
 
@@ -66,7 +66,7 @@ const AvailabilitySlotPage = () => {
 		startDate: Yup.date()
 			.required('Please select a start date and time for your booking.')
 			.min(
-				getTodayDate(),
+				getCurrentDate(),
 				'Start time cannot be in the past, please select a valid future date and time',
 			),
 		endDate: Yup.date()
@@ -95,8 +95,8 @@ const AvailabilitySlotPage = () => {
 		onSubmit: async (values) => {
 			await submitBookingAction({
 				facilityId: values.facilityId,
-				startDate: getUTCDateString(values.startDate, ITimeFormat.dateTime),
-				endDate: getUTCDateString(values.endDate, ITimeFormat.dateTime),
+				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),
+				endDate: convertDateToDateString(values.endDate, ITimeFormat.isoDateTime),
 				numOfGuest: values.numOfGuest,
 				spaceId: values.space,
 			})
