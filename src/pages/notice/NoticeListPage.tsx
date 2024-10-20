@@ -17,6 +17,13 @@ const NoticeListPage = () => {
 	const [page, setPage] = useState(0)
 
 	useEffect(() => {
+		if (page == 0) {
+			return
+		}
+		fetchNotice()
+	}, [page])
+
+	useEffect(() => {
 		setPage(0)
 		resetNotice()
 		fetchNotice()
@@ -25,12 +32,10 @@ const NoticeListPage = () => {
 	const fetchNotice = async () => {
 		await getNoticeAction(page, 10)
 	}
+
 	const fetchNextPage = async () => {
 		if (isLoading || notices.length >= totalNotices) return
-		if (notices.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
-		// Logic to fetch the next page
-		fetchNotice() // Fetch the first page again
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
@@ -39,6 +44,7 @@ const NoticeListPage = () => {
 		resetNotice()
 		fetchNotice() // Fetch the first page again
 	}
+	
 	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
 		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
 			<View>

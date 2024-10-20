@@ -25,20 +25,23 @@ const VisitorListPage = () => {
 		fetchVisitor()
 	}, [isPast]) // Dependency on isPast to refetch data
 
+	useEffect(() => {
+		if (page == 0) {
+			return
+		}
+		fetchVisitor()
+	}, [page])
+
 	const fetchVisitor = async () => {
 		await getVisitorsAction(isPast, page, 10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || visitors.length >= totalVisitors) return
-		if (visitors.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
-		// Logic to fetch the next page
-		fetchVisitor() // Fetch the first page again
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		// Logic to refresh data
 		setPage(0)
 		resetVisitorAction()
 		fetchVisitor() // Fetch the first page again

@@ -24,12 +24,6 @@ const SubUserListPage = () => {
 	const [switchStates, setSwitchStates] = useState<{ [key: string]: boolean }>({})
 
 	useEffect(() => {
-		setPage(0)
-		resetSubUserListAction()
-		fetchSubUser()
-	}, [])
-
-	useEffect(() => {
 		const initialStatuses = subUsers.reduce((acc, user) => {
 			acc[user.userGuid] = user.status
 			return acc
@@ -89,13 +83,25 @@ const SubUserListPage = () => {
 		}
 	}
 
+	useEffect(() => {
+		setPage(0)
+		resetSubUserListAction()
+		fetchSubUser()
+	}, [])
+
+	useEffect(() => {
+		if(page == 0) {
+			return
+		}
+		fetchSubUser()
+	}, [page])
+
 	const fetchSubUser = async () => {
 		await getSubUserListAction(page, 10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || subUsers.length >= totalSubUsers) return
-		if (subUsers.length % 10 !== 0) return
 		setPage((prev) => prev + 1)
 		// Logic to fetch the next page
 		fetchSubUser() // Fetch the first page again

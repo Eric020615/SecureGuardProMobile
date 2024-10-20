@@ -56,7 +56,7 @@ const CustomFlatList = <T extends object>({
 				if (fetchNextPage == undefined) return
 				fetchNextPage()
 			}}
-			onEndReachedThreshold={0.5}
+			onEndReachedThreshold={0.1}
 			ListHeaderComponent={() => <></>}
 			ListFooterComponent={() => listFooterComponent}
 			refreshing={isRefreshing}

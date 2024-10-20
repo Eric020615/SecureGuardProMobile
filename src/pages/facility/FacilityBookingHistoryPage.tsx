@@ -22,59 +22,56 @@ const FacilityBookingHistoryPage = () => {
 	const {
 		facilityBookingHistory,
 		totalFacilityBookingHistory,
+		lastId,
 		resetFacilityBookingHistory,
 		getFacilityBookingHistoryAction,
 		cancelBookingAction,
 	} = useFacility()
 	const { isLoading } = useApplication()
 	const [isPast, setIsPast] = useState(true)
-	const [page, setPage] = useState(0)
 	const [open, setOpen] = useState(false)
+
 	const [selectedFacilityBookingId, setSelectedFacilityBookingId] = useState('')
 
 	useEffect(() => {
-		setPage(0)
 		resetFacilityBookingHistory()
 		fetchFacilityBookingHistory()
 	}, [isPast])
 
 	const fetchFacilityBookingHistory = async () => {
-		await getFacilityBookingHistoryAction(isPast, page, 10)
+		await getFacilityBookingHistoryAction(isPast, 10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || facilityBookingHistory.length >= totalFacilityBookingHistory) return
-		if (facilityBookingHistory.length % 10 !== 0) return
-		setPage((prev) => prev + 1)
-		// Logic to fetch the next page
-		fetchFacilityBookingHistory() // Fetch the first page again
+		fetchFacilityBookingHistory()
 	}
+
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		// Logic to refresh data
-		setPage(0)
 		resetFacilityBookingHistory()
 		fetchFacilityBookingHistory() // Fetch the first page again
 	}
 
 	const renderItem: ListRenderItem<GetFacilityBookingHistoryDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
-			<View>
+		<View className="bg-white p-4 rounded-lg">
+			<View className="flex flex-row justify-between" key={index}>
 				<Text className="font-bold">{FacilityConst[item.facilityId]}</Text>
-				<View className="flex flex-row gap-1">
-					<Text className="">
-						{convertDateStringToFormattedString(item.startDate, ITimeFormat.dateTime)}
-					</Text>
-					<Text>-</Text>
-					<Text className="">
-						{convertDateStringToFormattedString(item.endDate, ITimeFormat.time)}
-					</Text>
+				<View>
+					<Text className="font-bold">{item.numOfGuest} Guests(s)</Text>
 				</View>
 			</View>
-			<View>
-				<Text className="font-bold">{item.numOfGuest} Guests(s)</Text>
+			<View className="flex flex-row justify-between mt-1">
+				<Text className="">
+					{convertDateStringToFormattedString(item.startDate, ITimeFormat.dateTime)}
+				</Text>
+				<Text className="">
+					{convertDateStringToFormattedString(item.endDate, ITimeFormat.dateTime)}
+				</Text>
+			</View>
+			<View className='flex items-end'>
 				{item.isCancelled ? (
-					<Text className="bg-red-500 text-xs text-white rounded-lg text-center mt-1">
+					<Text className="bg-red-500 text-xs text-white rounded-lg text-center mt-2 w-fit p-1">
 						Cancelled
 					</Text>
 				) : (
@@ -160,7 +157,7 @@ const FacilityBookingHistoryPage = () => {
 							itemHeight={120} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
-									{isLoading && page > 0 ? (
+									{isLoading && lastId > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
 									) : facilityBookingHistory.length < totalFacilityBookingHistory ? (
