@@ -65,7 +65,7 @@ export const createSubUser = async (
 }
 
 export const getSubUserList = async (
-	page: number,
+	id: number,
 	limit: number,
 ): Promise<IPaginatedResponse<GetSubUserDto>> => {
 	try {
@@ -75,8 +75,8 @@ export const getSubUserList = async (
 			type: listUrl.user.getSubUserList.type,
 			_token: token ? token : '',
 			data: {
-				page: page,
-				limit: limit,
+				id,
+				limit,
 			},
 		})
 		const result: IPaginatedResponse<GetSubUserDto> = {

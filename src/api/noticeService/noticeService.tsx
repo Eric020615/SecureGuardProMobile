@@ -4,7 +4,7 @@ import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export const getNotices = async (
-	page: number,
+	id: number,
 	limit: number,
 ): Promise<IPaginatedResponse<GetNoticeDto>> => {
 	try {
@@ -14,8 +14,8 @@ export const getNotices = async (
 			type: listUrl.notice.getNoticesByResident.type,
 			_token: token ? token : '',
 			data: {
-				page: page,
-				limit: limit,
+				id,
+				limit,
 			},
 		})
 		const result: IPaginatedResponse<GetNoticeDto> = {
@@ -31,7 +31,7 @@ export const getNotices = async (
 		const result: IPaginatedResponse<any> = {
 			success: false,
 			msg: error,
-            data: {
+			data: {
 				list: null,
 				count: 0,
 			},

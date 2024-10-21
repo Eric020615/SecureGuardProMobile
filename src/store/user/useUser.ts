@@ -1,5 +1,13 @@
 import { create } from 'zustand'
-import { createSubUser, createUser, deleteSubUserById, editSubUserStatusById, editUserProfileById, getSubUserList, getUserProfileById } from '@api/userService/userService'
+import {
+	createSubUser,
+	createUser,
+	deleteSubUserById,
+	editSubUserStatusById,
+	editUserProfileById,
+	getSubUserList,
+	getUserProfileById,
+} from '@api/userService/userService'
 import { generalAction } from '@store/application/useApplication'
 import {
 	CreateSubUserDto,
@@ -12,6 +20,7 @@ import {
 interface State {
 	userProfile: GetUserProfileByIdDto
 	subUsers: GetSubUserDto[]
+	id: number
 	totalSubUsers: number
 }
 
@@ -21,7 +30,7 @@ interface Actions {
 		tempToken: string,
 	) => Promise<any>
 	getUserProfileByIdAction: () => Promise<any>
-	getSubUserListAction: (page: number, limit: number) => Promise<any>
+	getSubUserListAction: (limit: number) => Promise<any>
 	resetSubUserListAction: () => void
 	editUserProfileByIdAction: (IEditUserDetailsByIdDto: EditUserDetailsByIdDto) => Promise<any>
 	createSubUserAction: (createSubUserDto: CreateSubUserDto) => Promise<any>
@@ -29,15 +38,16 @@ interface Actions {
 	deleteSubUserByIdAction: (subUserGuid: string) => Promise<any>
 }
 
-export const useUser = create<State & Actions>((set) => ({
+export const useUser = create<State & Actions>((set, get) => ({
 	userProfile: {} as GetUserProfileByIdDto,
 	subUsers: [],
+	id: 0,
 	totalSubUsers: 0,
 	createUserAction: async (IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
 		return generalAction(
 			async () => {
 				const response = await createUser(IUserInformationFormDto, tempToken)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 			},
@@ -50,7 +60,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await getUserProfileById()
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				set({ userProfile: response.data })
@@ -60,17 +70,22 @@ export const useUser = create<State & Actions>((set) => ({
 		)
 	},
 
-	getSubUserListAction: async (page: number, limit: number) => {
+	getSubUserListAction: async (limit: number) => {
 		return generalAction(
 			async () => {
-				const response = await getSubUserList(page, limit)
-				if(!response?.success){
+				const { id } = get()
+				const response = await getSubUserList(id, limit)
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				set((state) => ({
 					subUsers: [...state.subUsers, ...response.data.list],
+					id:
+						response.data.list.length > 0
+							? response.data.list[response.data.list.length - 1]?.userId
+							: 0,
+					totalSubUsers: response.data.count,
 				}))
-				set({ totalSubUsers: response.data.count })
 			},
 			'',
 			'Failed to retrieve sub user list.',
@@ -78,14 +93,14 @@ export const useUser = create<State & Actions>((set) => ({
 	},
 
 	resetSubUserListAction() {
-		set({ subUsers: [], totalSubUsers: 0 })
+		set({ subUsers: [], id: 0, totalSubUsers: 0 })
 	},
 
 	editUserProfileByIdAction: async (IEditUserDetailsByIdDto: EditUserDetailsByIdDto) => {
 		return generalAction(
 			async () => {
 				const response = await editUserProfileById(IEditUserDetailsByIdDto)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 			},
@@ -98,7 +113,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await createSubUser(createSubUserDto)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 			},
@@ -111,7 +126,7 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await editSubUserStatusById(subUserGuid, status)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 			},
@@ -124,12 +139,12 @@ export const useUser = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await deleteSubUserById(subUserGuid)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 			},
 			'Sub user deleted successfully!',
 			'Failed to delete sub user. Please try again.',
 		)
-	}
+	},
 }))

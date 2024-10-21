@@ -14,13 +14,13 @@ const SubUserListPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 	const {
 		subUsers,
+		id,
 		totalSubUsers,
 		getSubUserListAction,
 		resetSubUserListAction,
 		deleteSubUserByIdAction,
 		editSubUserStatusByIdAction,
 	} = useUser()
-	const [page, setPage] = useState(0)
 	const [switchStates, setSwitchStates] = useState<{ [key: string]: boolean }>({})
 
 	useEffect(() => {
@@ -38,7 +38,6 @@ const SubUserListPage = () => {
 		}))
 		const response = await editSubUserStatusByIdAction(userGuid, !switchStates[userGuid])
 		if (response?.success) {
-			setPage(0)
 			resetSubUserListAction()
 			fetchSubUser()
 		}
@@ -77,42 +76,29 @@ const SubUserListPage = () => {
 	const deleteSubUserById = async (subUserGuid: string) => {
 		const response = await deleteSubUserByIdAction(subUserGuid)
 		if (response?.success) {
-			setPage(0)
 			resetSubUserListAction()
 			fetchSubUser()
 		}
 	}
 
 	useEffect(() => {
-		setPage(0)
 		resetSubUserListAction()
 		fetchSubUser()
 	}, [])
 
-	useEffect(() => {
-		if(page == 0) {
-			return
-		}
-		fetchSubUser()
-	}, [page])
-
 	const fetchSubUser = async () => {
-		await getSubUserListAction(page, 10)
+		await getSubUserListAction(10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || subUsers.length >= totalSubUsers) return
-		setPage((prev) => prev + 1)
-		// Logic to fetch the next page
-		fetchSubUser() // Fetch the first page again
+		fetchSubUser()
 	}
 
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		// Logic to refresh data
-		setPage(0)
 		resetSubUserListAction()
-		fetchSubUser() // Fetch the first page again
+		fetchSubUser()
 	}
 
 	return (
@@ -148,7 +134,7 @@ const SubUserListPage = () => {
 							itemHeight={80} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
-									{isLoading && page > 0 ? (
+									{isLoading && id > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
 									) : subUsers.length < totalSubUsers ? (

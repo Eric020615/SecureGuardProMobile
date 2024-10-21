@@ -11,6 +11,7 @@ import { generalAction } from '@store/application/useApplication' // Import gene
 interface State {
 	visitors: GetVisitorDto[]
 	visitorDetails: GetVisitorDto
+	id: number
 	totalVisitors: number
 }
 
@@ -20,14 +21,15 @@ interface Actions {
 		editVisitorByIdDto: EditVisitorByIdDto,
 		visitorGuid: string,
 	) => Promise<any>
-	getVisitorsAction: (isPast: boolean, page: number, limit: number) => Promise<any>
+	getVisitorsAction: (isPast: boolean, limit: number) => Promise<any>
 	resetVisitorAction: () => void
 	getVisitorDetailsByIdAction: (visitorGuid: string) => Promise<any>
 }
 
-export const useVisitor = create<State & Actions>((set) => ({
+export const useVisitor = create<State & Actions>((set, get) => ({
 	visitors: [],
 	visitorDetails: {} as GetVisitorDto,
+	id: 0,
 	totalVisitors: 0,
 	createVisitorAction: async (createVisitorDto: CreateVisitorDto) => {
 		return generalAction(
@@ -56,17 +58,19 @@ export const useVisitor = create<State & Actions>((set) => ({
 		)
 	},
 
-	getVisitorsAction: async (isPast: boolean, page: number, limit: number) => {
+	getVisitorsAction: async (isPast: boolean, limit: number) => {
 		return generalAction(
 			async () => {
-				const response = await getVisitors(isPast, page, limit)
+				const { id } = get()
+				const response = await getVisitors(isPast, id, limit)
 				if(!response?.success){
 					throw new Error(response.msg)
 				}
 				set((state) => ({
 					visitors: [...state.visitors, ...response.data.list],
+					id: response.data.list.length > 0 ? response.data.list[response.data.list.length - 1]?.visitorId : 0,
+					totalVisitors: response.data.count
 				}))
-				set({ totalVisitors: response.data.count })
 				return response
 			},
 			'',
@@ -75,7 +79,7 @@ export const useVisitor = create<State & Actions>((set) => ({
 	},
 
 	resetVisitorAction() {
-		set({ visitors: [], totalVisitors: 0 })
+		set({ visitors: [], id: 0, totalVisitors: 0 })
 	},
 
 	getVisitorDetailsByIdAction: async (visitorGuid: string) => {

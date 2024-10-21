@@ -15,36 +15,27 @@ import { convertDateStringToFormattedString } from '@helpers/time'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
-	const { visitors, totalVisitors, getVisitorsAction, resetVisitorAction } = useVisitor()
+	const { visitors, id, totalVisitors, getVisitorsAction, resetVisitorAction } = useVisitor()
 	const { isLoading } = useApplication()
-	const [page, setPage] = useState(0)
 
 	useEffect(() => {
-		setPage(0)
 		resetVisitorAction()
 		fetchVisitor()
-	}, [isPast]) // Dependency on isPast to refetch data
-
-	useEffect(() => {
-		if (page == 0) {
-			return
-		}
-		fetchVisitor()
-	}, [page])
+	}, [isPast])
 
 	const fetchVisitor = async () => {
-		await getVisitorsAction(isPast, page, 10)
+		await getVisitorsAction(isPast, 10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || visitors.length >= totalVisitors) return
-		setPage((prev) => prev + 1)
+		fetchVisitor()
+
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		setPage(0)
 		resetVisitorAction()
-		fetchVisitor() // Fetch the first page again
+		fetchVisitor()
 	}
 
 	const renderItem: ListRenderItem<GetVisitorDto> = ({ item, index }) => (
@@ -105,7 +96,7 @@ const VisitorListPage = () => {
 							itemHeight={120} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
-									{isLoading && page > 0 ? (
+									{isLoading && id > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
 									) : visitors.length < totalVisitors ? (

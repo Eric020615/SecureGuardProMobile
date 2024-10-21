@@ -34,7 +34,7 @@ export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<I
 
 export const getFacilityBookingHistory = async (
 	isPast: boolean,
-	lastId: number,
+	id: number,
 	limit: number,
 ): Promise<IPaginatedResponse<GetFacilityBookingHistoryDto>> => {
 	try {
@@ -43,9 +43,9 @@ export const getFacilityBookingHistory = async (
 			path: listUrl.facility.getFacilityBookingHistory.path,
 			type: listUrl.facility.getFacilityBookingHistory.type,
 			data: {
-				isPast: isPast,
-				lastId: lastId,
-				limit: limit,
+				isPast,
+				id,
+				limit,
 			},
 			_token: token,
 		})

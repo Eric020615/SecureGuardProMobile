@@ -15,7 +15,7 @@ import {
 interface State {
 	availabilitySlot: SpaceAvailabilityDto[]
 	facilityBookingHistory: GetFacilityBookingHistoryDto[]
-	lastId: number
+	id: number
 	totalFacilityBookingHistory: number
 }
 
@@ -34,7 +34,7 @@ interface Actions {
 export const useFacility = create<State & Actions>((set, get) => ({
 	availabilitySlot: [],
 	facilityBookingHistory: [],
-	lastId: 1,
+	id: 0,
 	totalFacilityBookingHistory: 0,
 	submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
 		return generalAction(
@@ -52,18 +52,16 @@ export const useFacility = create<State & Actions>((set, get) => ({
 	getFacilityBookingHistoryAction: async (isPast: boolean, limit: number) => {
 		return generalAction(
 			async () => {
-				let lastId = get().lastId
-				const response = await getFacilityBookingHistory(isPast, lastId, limit)
+				const { id } = get()
+				const response = await getFacilityBookingHistory(isPast, id, limit)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				set((state) => ({
 					facilityBookingHistory: [...state.facilityBookingHistory, ...response.data.list],
+					id: response.data.list.length > 0 ? response.data.list[response.data.list.length - 1]?.bookingId : 0,
+					totalFacilityBookingHistory: response.data.count,
 				}))
-				set({
-					lastId: response.data.list[response.data.list.length - 1]?.bookingId,
-				})
-				set({ totalFacilityBookingHistory: response.data.count })
 				return response
 			},
 			'',
@@ -71,7 +69,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
 		)
 	},
 	resetFacilityBookingHistory() {
-		set({ facilityBookingHistory: [], totalFacilityBookingHistory: 0, lastId: 1 })
+		set({ facilityBookingHistory: [], totalFacilityBookingHistory: 0, id: 0 })
 	},
 	cancelBookingAction: async (bookingGuid: string) => {
 		return generalAction(

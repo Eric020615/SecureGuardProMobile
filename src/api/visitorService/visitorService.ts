@@ -61,7 +61,7 @@ export const editVisitorById = async (
 
 export const getVisitors = async (
 	isPast: boolean,
-	page: number,
+	id: number,
 	limit: number,
 ): Promise<IPaginatedResponse<GetVisitorDto>> => {
 	try {
@@ -70,9 +70,9 @@ export const getVisitors = async (
 			path: listUrl.visitor.getVisitors.path,
 			type: listUrl.visitor.getVisitors.type,
 			data: {
-				isPast: isPast,
-				page: page,
-				limit: limit,
+				isPast,
+				id,
+				limit
 			},
 			_token: token,
 		})

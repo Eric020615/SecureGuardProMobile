@@ -22,7 +22,7 @@ const FacilityBookingHistoryPage = () => {
 	const {
 		facilityBookingHistory,
 		totalFacilityBookingHistory,
-		lastId,
+		id,
 		resetFacilityBookingHistory,
 		getFacilityBookingHistoryAction,
 		cancelBookingAction,
@@ -157,7 +157,7 @@ const FacilityBookingHistoryPage = () => {
 							itemHeight={120} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
-									{isLoading && lastId > 0 ? (
+									{isLoading && id > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
 									) : facilityBookingHistory.length < totalFacilityBookingHistory ? (

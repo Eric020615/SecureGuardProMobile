@@ -12,39 +12,28 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { getRelativeTimeFromNow } from '@helpers/time'
 
 const NoticeListPage = () => {
-	const { notices, totalNotices, getNoticeAction, resetNotice } = useNotice()
+	const { notices, id, totalNotices, getNoticeAction, resetNotice } = useNotice()
 	const isLoading = useApplication((state) => state.isLoading)
-	const [page, setPage] = useState(0)
 
 	useEffect(() => {
-		if (page == 0) {
-			return
-		}
-		fetchNotice()
-	}, [page])
-
-	useEffect(() => {
-		setPage(0)
 		resetNotice()
 		fetchNotice()
 	}, [])
 
 	const fetchNotice = async () => {
-		await getNoticeAction(page, 10)
+		await getNoticeAction(10)
 	}
 
 	const fetchNextPage = async () => {
 		if (isLoading || notices.length >= totalNotices) return
-		setPage((prev) => prev + 1)
+		fetchNotice()
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		// Logic to refresh data
-		setPage(0)
 		resetNotice()
-		fetchNotice() // Fetch the first page again
+		fetchNotice()
 	}
-	
+
 	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
 		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
 			<View>
@@ -83,7 +72,7 @@ const NoticeListPage = () => {
 							itemHeight={80} // Customize the item height if needed
 							listFooterComponent={
 								<View className="py-4 items-center">
-									{isLoading && page > 0 ? (
+									{isLoading && id > 0 ? (
 										// Show a loading indicator while fetching more data
 										<ActivityIndicator size="large" color="#0000ff" />
 									) : notices.length < totalNotices ? (
