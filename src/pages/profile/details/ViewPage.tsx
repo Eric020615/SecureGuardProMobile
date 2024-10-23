@@ -1,15 +1,14 @@
-import { View, Text, ScrollView, Image } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { RoleConst } from '@config/constant/user'
-import { images } from '@assets/index'
 import CustomButton from '@components/buttons/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { router, usePathname } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
-import Avatar from 'react-native-user-avatar'
+import UserAvatar from '@bhavberi/react-native-user-avatar/src';
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -43,7 +42,7 @@ const userProfileViewPage = () => {
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 py-4 my-4 justify-center items-center">
 					<View>
-						<Avatar name={userProfile.userName} size={100} round={true} bgColor="#10312b" />
+						<UserAvatar name={userProfile.userName || "User"} size={100} round={true} bgColor="#10312b" />
 					</View>
 					{userProfile && (
 						<>

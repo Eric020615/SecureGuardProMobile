@@ -1124,6 +1124,15 @@
     "@babel/helper-validator-identifier" "^7.25.7"
     to-fast-properties "^2.0.0"
 
+"@bhavberi/react-native-user-avatar@^2.0.3":
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/@bhavberi/react-native-user-avatar/-/react-native-user-avatar-2.0.3.tgz#34cc3508bf6bdcda9b904ac246f365bda63c922a"
+  integrity sha512-4LVuxTMied6SsG5+jQkt35oIZmDY/MUMjQGJKv5vPZ3moS5n6LeI2ohw7ttjPomDL3UzxHe9T/1caYxgF0vROg==
+  dependencies:
+    abortcontroller-polyfill "^1.7.5"
+    initials "^3.1.2"
+    prop-types "^15.8.1"
+
 "@egjs/hammerjs@^2.0.17":
   version "2.0.17"
   resolved "https://registry.yarnpkg.com/@egjs/hammerjs/-/hammerjs-2.0.17.tgz#5dc02af75a6a06e4c2db0202cae38c9263895124"
@@ -2960,7 +2969,7 @@ abort-controller@^3.0.0:
   dependencies:
     event-target-shim "^5.0.0"
 
-abortcontroller-polyfill@^1.4.0:
+abortcontroller-polyfill@^1.7.5:
   version "1.7.5"
   resolved "https://registry.yarnpkg.com/abortcontroller-polyfill/-/abortcontroller-polyfill-1.7.5.tgz#6738495f4e901fbb57b6c0611d0c75f76c485bed"
   integrity sha512-JMJ5soJWP18htbbxJjG7bG6yuI6pRhgJ0scHHTfkUjf6wjP912xZWvM+A4sJK3gqd9E8fcPbDnOefbA9Th/FIQ==
@@ -5542,7 +5551,7 @@ ini@~1.3.0:
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.8.tgz#a29da425b48806f34767a4efce397269af28432c"
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
-initials@^3.0.1:
+initials@^3.1.2:
   version "3.1.2"
   resolved "https://registry.yarnpkg.com/initials/-/initials-3.1.2.tgz#30a0f9f149f0654ddf1c6b36b588b525f882a4f8"
   integrity sha512-Sltg35nx8+GX1w4U86rmbxFEmqFiSuMJviS6cB2KChB+jcT2/8Td+nlImXD74HkqpZF5PMv8hN57AyrA/7ltXw==
@@ -7854,15 +7863,6 @@ react-native-screens@3.31.1:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
-
-react-native-user-avatar@^1.0.8:
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/react-native-user-avatar/-/react-native-user-avatar-1.0.8.tgz#d3f5f1d538344a13bfa72026127a1fd6c3bba05e"
-  integrity sha512-OYm7cfEt0IjiL739OGwRZoBCCuAn6CectNcyi1tsa5WtDZjQm7eK0B1mymxZfqELZ847wcDIuevHM9obr4+kxw==
-  dependencies:
-    abortcontroller-polyfill "^1.4.0"
-    initials "^3.0.1"
-    prop-types "^15.7.2"
 
 react-native-vector-icons@^10.1.0:
   version "10.1.0"

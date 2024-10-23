@@ -13,7 +13,7 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 	const checkToken = async (redirectToHome = false) => {
 		try {
-			if (pathname == '/sign-up' || pathname == '/sign-in' || pathname == '/user-information' || pathname == '/reset-password') {
+			if (pathname == '/sign-up' || pathname == '/sign-in' || pathname == '/user-information' || pathname == '/forgot-password') {
 				return
 			}
 			const value = await AsyncStorage.getItem('token')
