@@ -23,7 +23,7 @@
     "App/**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "declarations.d.ts"
+    "declarations.d.ts",
   ],
   "exclude": [
     "node_modules"

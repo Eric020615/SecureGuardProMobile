@@ -100,5 +100,11 @@ export const listUrl = {
             path: "visitor/details",
             type: IType.get
         }
+    },
+    refData: {
+        getPropertyList: {
+            path: "ref-data/property/",
+            type: IType.get
+        }
     }
 }

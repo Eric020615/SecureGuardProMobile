@@ -16,14 +16,14 @@ interface Actions {
 }
 
 export const useFaceAuth = create<State & Actions>((set) => ({
-	image: {} as CameraCapturedPicture,
+	image: null,
 	retakePictureAction: () => {
-		set({ image: {} as CameraCapturedPicture })
+		set({ image: null })
 	},
 	takePictureAction: async (cameraRef: MutableRefObject<CameraView>) => {
 		return generalAction(
 			async () => {
-				if (cameraRef) {
+				if (!cameraRef) {
 					throw new Error('Camera not found. Please try again.')
 				}
 				const data = await cameraRef.current.takePictureAsync()

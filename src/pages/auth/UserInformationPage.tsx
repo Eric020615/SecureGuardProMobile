@@ -1,5 +1,5 @@
 import { View, Text, ScrollView } from 'react-native'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -19,6 +19,9 @@ import { useModal } from '@store/modal/useModal'
 import { useAuth } from '@store/auth/useAuth'
 import { useUser } from '@store/user/useUser'
 import { convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
+import { useRefData } from '@store/refData/useRefData'
+import { Picker } from '@react-native-picker/picker'
+import { listOptions } from '@config/listOption'
 
 interface UserInformationForm {
 	firstName: string
@@ -39,6 +42,11 @@ const UserInformationPage = () => {
 	const createUserAction = useUser((state) => state.createUserAction)
 	const tempToken = useAuth((state) => state.tempToken)
 	const isLoading = useApplication((state) => state.isLoading)
+	const { propertyList, getPropertyListAction } = useRefData()
+
+	useEffect(() => {
+		getPropertyListAction()
+	}, [])
 
 	const validationSchema = Yup.object().shape({
 		firstName: Yup.string().required('First Name is required'),
@@ -110,6 +118,7 @@ const UserInformationPage = () => {
 			)
 		},
 	})
+
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal
@@ -234,11 +243,20 @@ const UserInformationPage = () => {
 						<CustomFormField
 							title="Floor"
 							containerStyle="flex-1 mr-2"
-							type="Text"
-							textValue={formik.values.floor}
-							onChangeText={(e) => {
+							type="Picker"
+							selectedValue={formik.values.floor}
+							onValueChange={(e) => {
 								formik.setFieldValue('floor', e)
 							}}
+							items={
+								propertyList.map((floor, index) => {
+									return {
+										key: index,
+										label: floor.floorId,
+										value: floor.floorId,
+									}
+								}) || []
+							}
 							onBlur={formik.handleBlur('floor')}
 							errorMessage={
 								formik.touched.floor && formik.errors.floor && (formik.errors.floor as string)
@@ -248,16 +266,25 @@ const UserInformationPage = () => {
 						<CustomFormField
 							title="Unit"
 							containerStyle="flex-1"
-							type="Text"
-							textValue={formik.values.unitNumber}
-							onChangeText={(e) => {
+							type="Picker"
+							selectedValue={formik.values.unitNumber}
+							onValueChange={(e) => {
 								formik.setFieldValue('unitNumber', e)
 							}}
+							items={
+								propertyList
+									.find((floor) => floor.floorId === formik.values.floor)
+									?.units.map((unit, index) => {
+										return {
+											key: index,
+											label: unit.unitId,
+											value: unit.unitId,
+										}
+									}) || []
+							}
 							onBlur={formik.handleBlur('unitNumber')}
 							errorMessage={
-								formik.touched.unitNumber &&
-								formik.errors.unitNumber &&
-								(formik.errors.unitNumber as string)
+								formik.touched.unitNumber && formik.errors.unitNumber && (formik.errors.unitNumber as string)
 							}
 							placeholder={'Select unit'}
 						/>
