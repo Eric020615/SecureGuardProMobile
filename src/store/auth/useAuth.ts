@@ -31,7 +31,7 @@ export const useAuth = create<State & Actions>((set) => ({
 				set({ isLogged: true, tempToken: response.data })
 				return response
 			},
-			'', // Custom success message
+			'Account created successfully.', // Custom success message
 			'Account created failed. Please try again.', // Custom error message
 		)
 	},
