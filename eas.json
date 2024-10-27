@@ -5,15 +5,17 @@
   "build": {
     "development": {
       "developmentClient": true,
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "ENV_FILE": ".env.development"
+      }
     },
     "preview": {
       "distribution": "internal"
     },
     "production": {
       "env": {
-        "EXPO_PUBLIC_BACKEND_API": "http://192.168.1.110:3000/",
-        "JWT_SIGNATURE": "SECUREGUARDPRO2024"
+        "ENV_FILE": ".env.production"
       }
     }
   },

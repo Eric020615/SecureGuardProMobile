@@ -1,0 +1,32 @@
+# Node modules and development files
+node_modules/
+*.log
+*.lock
+*.temp
+*.cache
+.vscode/
+.idea/
+.DS_Store
+
+# Expo cache and asset folders
+.expo/
+.expo-shared/
+
+# TypeScript files
+*.tsbuildinfo
+
+# iOS and Android build folders
+ios/build/
+ios/Pods/
+android/build/
+android/app/build/
+android/.gradle/
+
+# Environment and config files
+.env.local
+.env.development
+.env.test
+.env.*
+.env
+
+service-account-file.json
