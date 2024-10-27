@@ -7,7 +7,6 @@ import { router, useNavigation } from 'expo-router'
 
 const App = () => {
 	const navigation = useNavigation()
-
 	useEffect(() => {
 		const backAction = () => {
 			// Check if the user is on any screen inside the "Tabs" navigator

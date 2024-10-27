@@ -5,11 +5,21 @@ import { useEffect } from 'react'
 import GlobalProvider from '../context/GlobalProvider'
 import CustomLoader from '@components/loader/CustomLoader'
 import { useApplication } from '@store/application/useApplication'
+import { NotificationProvider } from '../context/NotificationContext'
+import * as Notifications from "expo-notifications";
+
+Notifications.setNotificationHandler({
+	handleNotification: async () => ({
+		shouldShowAlert: true,
+		shouldPlaySound: false,
+		shouldSetBadge: false,
+	}),
+})
 
 SplashScreen.preventAutoHideAsync()
 
 const RootLayout = () => {
-	const { isLoading } = useApplication();
+	const { isLoading } = useApplication()
 	NativeWindStyleSheet.setOutput({
 		default: 'native',
 	})
@@ -30,17 +40,19 @@ const RootLayout = () => {
 	}, [fontsLoaded, error])
 
 	if (!fontsLoaded && !error) return null
-  
+
 	return (
-		<GlobalProvider>
-			<Stack>
-				<Stack.Screen name="index" options={{ headerShown: false }} />
-				<Stack.Screen name="(auth)" options={{ headerShown: false }} />
-				<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-				<Stack.Screen name="(screen)" options={{ headerShown: false }} />
-			</Stack>
-			{isLoading && (<CustomLoader/>)}
-		</GlobalProvider>
+		<NotificationProvider>
+			<GlobalProvider>
+				<Stack>
+					<Stack.Screen name="index" options={{ headerShown: false }} />
+					<Stack.Screen name="(auth)" options={{ headerShown: false }} />
+					<Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+					<Stack.Screen name="(screen)" options={{ headerShown: false }} />
+				</Stack>
+				{isLoading && <CustomLoader />}
+			</GlobalProvider>
+		</NotificationProvider>
 	)
 }
 

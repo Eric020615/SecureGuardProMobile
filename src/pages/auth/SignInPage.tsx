@@ -11,19 +11,24 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { SignInFormDto } from '@dtos/auth/auth.dto'
 import { useAuth } from '@store/auth/useAuth'
 import { useApplication } from '@store/application/useApplication'
+import { useNotification } from '../../context/NotificationContext'
 
 const SignInPage = () => {
 	const validationSchema = Yup.object().shape({
 		email: Yup.string().email('Invalid Email').required('Email is required'),
 		password: Yup.string().required('Password is required'),
 	})
+	const notificationToken = useNotification()
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: signInformDataJson,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			signInWithPassword(values)
+			signInWithPassword({
+				notificationToken: notificationToken.expoPushToken,
+				...values
+			} as SignInFormDto)
 		},
 	})
 	const signInAction = useAuth((state) => state.signInAction)

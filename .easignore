@@ -29,4 +29,4 @@ android/.gradle/
 .env.*
 .env
 
-service-account-file.json
+google-services
