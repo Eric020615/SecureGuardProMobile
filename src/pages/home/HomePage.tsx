@@ -30,7 +30,7 @@ const HomePage = () => {
 						<View className="flex flex-row gap-5">
 							<TouchableOpacity
 								className="py-4 w-fit flex justify-center items-center bg-white rounded-md flex-1"
-								onPress={() => router.push('/package')}
+								onPress={() => router.push('/parcel')}
 							>
 								<Image source={icons.packages} className="mb-2" />
 								<Text className="text-sm font-semibold">Package</Text>

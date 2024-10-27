@@ -1,14 +1,15 @@
 import GlobalHandler, { IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 import { GetPropertyDto } from '@dtos/refData/refData.dto'
 
-export const getPropertyList = async (
-): Promise<IResponse<GetPropertyDto[]>> => {
+export const getPropertyList = async (): Promise<IResponse<GetPropertyDto[]>> => {
 	try {
 		const [success, response] = await GlobalHandler({
 			path: listUrl.refData.getPropertyList.path,
 			type: listUrl.refData.getPropertyList.type,
+			data: {
+				checkOccupied: true,
+			}, 
 		})
 		const result: IResponse<GetPropertyDto[]> = {
 			success,

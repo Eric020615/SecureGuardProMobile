@@ -13,7 +13,7 @@ const ScreenLayout = () => {
 					}}
 				/>
 				<Stack.Screen
-					name="package"
+					name="parcel"
 					options={{
 						headerShown: false,
 					}}

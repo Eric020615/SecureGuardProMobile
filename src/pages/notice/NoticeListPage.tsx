@@ -1,5 +1,5 @@
 import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
@@ -35,22 +35,32 @@ const NoticeListPage = () => {
 	}
 
 	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg flex flex-row justify-between" key={index}>
-			<View>
-				<Text className="font-bold">{item.title}</Text>
-				<Text>{item.description}</Text>
+		<View
+			className="bg-white p-4 rounded-lg flex flex-row justify-between items-start"
+			key={index}
+		>
+			{/* Left section with title and description */}
+			<View className="flex-1 pr-4">
+				<Text className="font-bold text-lg text-black">{item.title}</Text>
+				<Text className="text-gray-600 mt-1" numberOfLines={2} ellipsizeMode="tail">
+					{item.description}
+				</Text>
 			</View>
-			<View>
-				<Text className="font-bold">{getRelativeTimeFromNow(new Date(item.startDate))}</Text>
+
+			{/* Right section with relative time */}
+			<View className="items-end">
+				<Text className="text-gray-500 text-sm font-semibold">
+					{getRelativeTimeFromNow(new Date(item.startDate))}
+				</Text>
 			</View>
 		</View>
 	)
 
 	return (
-		<SafeAreaView className="bg-slate-100 h-full">
+		<SafeAreaView className="bg-slate-100 min-h-screen">
 			<ActionConfirmationModal />
 			<View className="flex-1">
-				<View className="w-full min-h-[85vh] px-4 my-6">
+				<View className="w-full min-h-full px-4 my-6">
 					<View className="flex flex-row items-center">
 						<CustomButton
 							containerStyles="items-center h-fit"

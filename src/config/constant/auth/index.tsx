@@ -14,7 +14,7 @@ export const userInforformDataJson = {
     phoneNumber: '',
     gender: '',
     floor: '',
-    unitNumber: '',
+    unit: '',
     dateOfBirth: null
 }
 

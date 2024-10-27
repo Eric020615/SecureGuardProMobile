@@ -20,8 +20,6 @@ import { useAuth } from '@store/auth/useAuth'
 import { useUser } from '@store/user/useUser'
 import { convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
 import { useRefData } from '@store/refData/useRefData'
-import { Picker } from '@react-native-picker/picker'
-import { listOptions } from '@config/listOption'
 
 interface UserInformationForm {
 	firstName: string
@@ -31,7 +29,7 @@ interface UserInformationForm {
 	phoneNumber: string
 	gender: string
 	floor: string
-	unitNumber: string
+	unit: string
 	dateOfBirth: Date
 }
 
@@ -61,7 +59,7 @@ const UserInformationPage = () => {
 				)
 				return phone ? phone.isValid() : false
 			}),
-		unitNumber: Yup.string().required('Unit Number is required'),
+		unit: Yup.string().required('Unit Number is required'),
 		dateOfBirth: Yup.date().required('Date of Birth is required'),
 		gender: Yup.string().required('Gender is required'),
 	})
@@ -101,8 +99,8 @@ const UserInformationPage = () => {
 					userName: values.userName,
 					contactNumber: values.countryCode.callingCode + values.phoneNumber,
 					gender: values.gender,
-					floorNumber: values.floor,
-					unitNumber: values.unitNumber,
+					floor: values.floor,
+					unit: values.unit,
 					dateOfBirth: convertDateToDateString(values.dateOfBirth, ITimeFormat.isoDateTime),
 					supportedFiles:
 						selectedFiles.length > 0
@@ -267,9 +265,9 @@ const UserInformationPage = () => {
 							title="Unit"
 							containerStyle="flex-1"
 							type="Picker"
-							selectedValue={formik.values.unitNumber}
+							selectedValue={formik.values.unit}
 							onValueChange={(e) => {
-								formik.setFieldValue('unitNumber', e)
+								formik.setFieldValue('unit', e)
 							}}
 							items={
 								propertyList
@@ -282,9 +280,9 @@ const UserInformationPage = () => {
 										}
 									}) || []
 							}
-							onBlur={formik.handleBlur('unitNumber')}
+							onBlur={formik.handleBlur('unit')}
 							errorMessage={
-								formik.touched.unitNumber && formik.errors.unitNumber && (formik.errors.unitNumber as string)
+								formik.touched.unit && formik.errors.unit && (formik.errors.unit as string)
 							}
 							placeholder={'Select unit'}
 						/>

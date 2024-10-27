@@ -7,8 +7,8 @@ export interface UserInformationFormDto {
 	userName: string
 	contactNumber: string
 	gender: string
-	floorNumber: string
-	unitNumber: string
+	floor: string
+	unit: string
 	dateOfBirth: string
 	supportedFiles: GeneralFile[]
 }
@@ -42,8 +42,8 @@ export interface EditUserDetailsByIdDto {
 }
 
 export interface ResidentInformationDto {
-	floorNumber: string
-	unitNumber: string
+	floor: string
+	unit: string
 	supportedFiles: string[]
 }
 

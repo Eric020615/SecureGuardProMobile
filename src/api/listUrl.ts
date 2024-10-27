@@ -106,5 +106,11 @@ export const listUrl = {
             path: "ref-data/property/",
             type: IType.get
         }
+    },
+    parcel: {
+        getParcels: {
+            path: "parcel/",
+            type: IType.get
+        }
     }
 }
