@@ -30,8 +30,8 @@ const VisitorListPage = () => {
 	const fetchNextPage = async () => {
 		if (isLoading || visitors.length >= totalVisitors) return
 		fetchVisitor()
-
 	}
+	
 	const onRefresh = async () => {
 		if (isLoading == true) return
 		resetVisitorAction()

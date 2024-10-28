@@ -112,5 +112,11 @@ export const listUrl = {
             path: "parcel/",
             type: IType.get
         }
-    }
+    },
+    notification: {
+        getNotification: {
+            path: "notification/",
+            type: IType.get
+        }
+    },
 }

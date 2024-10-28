@@ -1,12 +1,8 @@
-import { View, Text } from 'react-native'
 import React from 'react'
+import NotificationListPage from '@pages/notification/NotificationListPage'
 
 const Notification = () => {
-  return (
-    <View>
-      <Text>Notification</Text>
-    </View>
-  )
+	return <NotificationListPage />
 }
 
 export default Notification
