@@ -11,7 +11,7 @@ interface State {
 
 interface Actions {
 	getNoticeAction: (limit: number) => Promise<any>
-	resetNotice: () => void
+	resetNoticeAction: () => void
 }
 
 export const useNotice = create<State & Actions>((set, get) => ({
@@ -37,7 +37,7 @@ export const useNotice = create<State & Actions>((set, get) => ({
 			'Failed to retrieve notices. Please try again.',
 		)
 	},
-	resetNotice() {
+	resetNoticeAction () {
 		set({ notices: [], id: 0, totalNotices: 0 })
 	},
 }))

@@ -12,11 +12,11 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { getRelativeTimeFromNow } from '@helpers/time'
 
 const NoticeListPage = () => {
-	const { notices, id, totalNotices, getNoticeAction, resetNotice } = useNotice()
+	const { notices, id, totalNotices, getNoticeAction, resetNoticeAction } = useNotice()
 	const isLoading = useApplication((state) => state.isLoading)
 
 	useEffect(() => {
-		resetNotice()
+		resetNoticeAction()
 		fetchNotice()
 	}, [])
 
@@ -30,26 +30,23 @@ const NoticeListPage = () => {
 	}
 	const onRefresh = async () => {
 		if (isLoading == true) return
-		resetNotice()
+		resetNoticeAction()
 		fetchNotice()
 	}
 
 	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
-		<View
-			className="bg-white p-4 rounded-lg flex flex-row justify-between items-start"
-			key={index}
-		>
+		<View className="bg-white p-4 rounded-lg flex flex-row justify-between shadow-sm" key={index}>
 			{/* Left section with title and description */}
-			<View className="flex-1 pr-4">
-				<Text className="font-bold text-lg text-black">{item.title}</Text>
+			<View className="flex-1">
+				<Text className="font-semibold text-lg text-black">{item.title}</Text>
 				<Text className="text-gray-600 mt-1" numberOfLines={2} ellipsizeMode="tail">
 					{item.description}
 				</Text>
 			</View>
 
-			{/* Right section with relative time */}
+			{/* Right section with relative time and delete button */}
 			<View className="items-end">
-				<Text className="text-gray-500 text-sm font-semibold">
+				<Text className="text-gray-500 text-sm font-semibold mb-2">
 					{getRelativeTimeFromNow(new Date(item.startDate))}
 				</Text>
 			</View>

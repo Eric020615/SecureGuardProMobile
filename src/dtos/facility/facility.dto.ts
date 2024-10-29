@@ -16,17 +16,13 @@ export interface SpaceAvailabilityDto {
 export interface GetFacilityBookingHistoryDto {
 	bookingId: number
 	bookingGuid: string
-	startDate: string
-	facilityId: string
 	facilityName: string
+	startDate: string
 	endDate: string
 	bookedBy: string
-	numOfGuest: number
 	isCancelled: boolean
-	cancelRemark: string
-	createdBy: string
+	status: string
 	createdDateTime: string
-	updatedBy: string
 	updatedDateTime: string
 }
 

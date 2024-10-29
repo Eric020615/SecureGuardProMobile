@@ -56,10 +56,7 @@ const FacilityBookingHistoryPage = () => {
 	const renderItem: ListRenderItem<GetFacilityBookingHistoryDto> = ({ item, index }) => (
 		<View className="bg-white p-4 rounded-lg">
 			<View className="flex flex-row justify-between" key={index}>
-				<Text className="font-bold">{FacilityConst[item.facilityId]}</Text>
-				<View>
-					<Text className="font-bold">{item.numOfGuest} Guests(s)</Text>
-				</View>
+				<Text className="font-bold">{item.facilityName}</Text>
 			</View>
 			<View className="flex flex-row justify-between mt-1">
 				<Text className="">

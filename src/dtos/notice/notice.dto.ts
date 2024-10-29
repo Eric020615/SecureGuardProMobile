@@ -10,3 +10,7 @@ export interface GetNoticeDto {
 	updatedBy: string
 	updatedDateTime: string
 }
+
+export interface DeleteNoticeDto {
+	noticeGuid: string
+}

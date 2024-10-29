@@ -1,12 +1,9 @@
-import { GetNoticeDto } from '@dtos/notice/notice.dto'
-import GlobalHandler, { IPaginatedResponse } from '@api/globalHandler'
+import { DeleteNoticeDto, GetNoticeDto } from '@dtos/notice/notice.dto'
+import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const getNotices = async (
-	id: number,
-	limit: number,
-): Promise<IPaginatedResponse<GetNoticeDto>> => {
+export const getNotices = async (id: number, limit: number): Promise<IPaginatedResponse<GetNoticeDto>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({

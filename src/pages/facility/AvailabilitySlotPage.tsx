@@ -40,7 +40,7 @@ const AvailabilitySlotPage = () => {
 				.add(duration as string, 'hours')
 				.format(ITimeFormat.dateTime),
 		),
-			formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
+		formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
 	}, [facilityId, startDate, duration, numOfGuest])
 
@@ -65,16 +65,10 @@ const AvailabilitySlotPage = () => {
 		facilityId: Yup.string().required('Please select a facility to proceed.'),
 		startDate: Yup.date()
 			.required('Please select a start date and time for your booking.')
-			.min(
-				getCurrentDate(),
-				'Start time cannot be in the past, please select a valid future date and time',
-			),
+			.min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),
 		endDate: Yup.date()
 			.required('Please select a start date and time for your booking.')
-			.min(
-				Yup.ref('startDate'),
-				'End time cannot be before the start time, please select a valid end time.',
-			),
+			.min(Yup.ref('startDate'), 'End time cannot be before the start time, please select a valid end time.'),
 		numOfGuest: Yup.number().required('Please select the number of guests for your booking.'),
 		space: Yup.string().required('Please select a slot to proceed.'),
 	})
@@ -130,9 +124,7 @@ const AvailabilitySlotPage = () => {
 				</View>
 				<View className="items-end">
 					<Text className="text-sm text-white">Capacity: {item.capacity}</Text>
-					<Text className="mt-2 font-semibold text-white">
-						{item.isBooked ? 'Booked' : 'Available'}
-					</Text>
+					<Text className="mt-2 font-semibold text-white">{item.isBooked ? 'Booked' : 'Available'}</Text>
 				</View>
 			</View>
 		</TouchableOpacity>
