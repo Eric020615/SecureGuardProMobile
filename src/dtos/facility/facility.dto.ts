@@ -22,8 +22,6 @@ export interface GetFacilityBookingHistoryDto {
 	bookedBy: string
 	isCancelled: boolean
 	status: string
-	createdDateTime: string
-	updatedDateTime: string
 }
 
 export interface CancelFacilityBookingDto {

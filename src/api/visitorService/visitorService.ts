@@ -1,4 +1,4 @@
-import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDetailsDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -100,7 +100,7 @@ export const getVisitors = async (
 
 export const getVisitorDetailsById = async (
 	visitorGuid: string,
-): Promise<IResponse<GetVisitorDto>> => {
+): Promise<IResponse<GetVisitorDetailsDto>> => {
 	try {
 		const token = await AsyncStorage.getItem('token')
 		const [success, response] = await GlobalHandler({
@@ -111,7 +111,7 @@ export const getVisitorDetailsById = async (
 			},
 			_token: token,
 		})
-		const result: IResponse<GetVisitorDto> = {
+		const result: IResponse<GetVisitorDetailsDto> = {
 			success,
 			msg: success ? 'success' : response?.message,
 			data: success ? response?.data : undefined,

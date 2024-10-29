@@ -12,11 +12,7 @@ import { useFacility } from '@store/facility/useFacility'
 import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import CustomConfirmModal from '@components/modals/CustomConfirmationModal'
-import {
-	convertDateStringToDate,
-	convertDateStringToFormattedString,
-	getCurrentDate,
-} from '@helpers/time'
+import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@helpers/time'
 
 const FacilityBookingHistoryPage = () => {
 	const {
@@ -54,36 +50,47 @@ const FacilityBookingHistoryPage = () => {
 	}
 
 	const renderItem: ListRenderItem<GetFacilityBookingHistoryDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg">
-			<View className="flex flex-row justify-between" key={index}>
-				<Text className="font-bold">{item.facilityName}</Text>
+		<View className="bg-white p-4 rounded-lg shadow-sm">
+			{/* Facility Name and Status */}
+			<View className="flex flex-row justify-between items-center mb-2" key={index}>
+				<Text className="font-bold text-lg">{item.facilityName}</Text>
+				{item.isCancelled ? (
+					<Text className="bg-red-500 text-xs text-white rounded-lg px-2 py-1">Cancelled</Text>
+				) : (
+					<Text
+						className={`bg-${
+							item.status === 'confirmed' ? 'green' : 'yellow'
+						}-500 text-xs text-white rounded-lg px-2 py-1`}
+					>
+						{item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+					</Text>
+				)}
 			</View>
-			<View className="flex flex-row justify-between mt-1">
-				<Text className="">
+
+			{/* Booking Dates */}
+			<View className="flex flex-row justify-between">
+				<Text className="text-sm text-gray-500">
 					{convertDateStringToFormattedString(item.startDate, ITimeFormat.dateTime)}
 				</Text>
-				<Text className="">
+				<Text className="text-sm text-gray-500">
 					{convertDateStringToFormattedString(item.endDate, ITimeFormat.dateTime)}
 				</Text>
 			</View>
-			<View className='flex items-end'>
-				{item.isCancelled ? (
-					<Text className="bg-red-500 text-xs text-white rounded-lg text-center mt-2 w-fit p-1">
-						Cancelled
-					</Text>
-				) : (
-					convertDateStringToDate(item.startDate) > getCurrentDate() && (
-						<CustomButton
-							containerStyles="flex flex-row self-end h-fit mt-1"
-							handlePress={() => {
-								setOpen(!open)
-								setSelectedFacilityBookingId(item.bookingGuid)
-							}}
-							rightReactNativeIcons={<Ionicons name="close-circle" color={'#ff0000'} size={16} />}
-						/>
-					)
-				)}
-			</View>
+			{/* Action Button */}
+			{!item.isCancelled && convertDateStringToDate(item.startDate) > getCurrentDate() && (
+				<View className="flex items-end mt-2">
+					<CustomButton
+						title="Cancel Booking"
+						containerStyles="flex flex-row items-center bg-red-500 py-1 px-2"
+						textStyles="text-white text-sm"
+						handlePress={() => {
+							setOpen(!open)
+							setSelectedFacilityBookingId(item.bookingGuid)
+						}}
+						leftReactNativeIcons={<Ionicons name="close-circle" color={'#ffffff'} size={16} />}
+					/>
+				</View>
+			)}
 		</View>
 	)
 

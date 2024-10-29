@@ -4,9 +4,14 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Images from '@assets/images'
 import CustomButton from '@components/buttons/CustomButton'
 import { router, useNavigation } from 'expo-router'
+import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 
 const App = () => {
 	const navigation = useNavigation()
+	configureReanimatedLogger({
+		level: ReanimatedLogLevel.warn,
+		strict: false, // Disable strict mode
+	})
 	useEffect(() => {
 		const backAction = () => {
 			// Check if the user is on any screen inside the "Tabs" navigator

@@ -5,12 +5,12 @@ import {
 	getVisitorDetailsById,
 	getVisitors,
 } from '@api/visitorService/visitorService'
-import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
+import { CreateVisitorDto, EditVisitorByIdDto, GetVisitorDetailsDto, GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import { generalAction } from '@store/application/useApplication' // Import generalAction
 
 interface State {
 	visitors: GetVisitorDto[]
-	visitorDetails: GetVisitorDto
+	visitorDetails: GetVisitorDetailsDto
 	id: number
 	totalVisitors: number
 }
@@ -28,7 +28,7 @@ interface Actions {
 
 export const useVisitor = create<State & Actions>((set, get) => ({
 	visitors: [],
-	visitorDetails: {} as GetVisitorDto,
+	visitorDetails: {} as GetVisitorDetailsDto,
 	id: 0,
 	totalVisitors: 0,
 	createVisitorAction: async (createVisitorDto: CreateVisitorDto) => {

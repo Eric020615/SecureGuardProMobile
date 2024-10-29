@@ -15,14 +15,25 @@ export interface EditVisitorByIdDto {
 }
 
 export interface GetVisitorDto {
-	visitorId: number
-	visitorGuid: string;
-	visitorName: string
-	visitorCategory: VisitorEnum | null
-	visitorContactNumber: string
-	visitDateTime: string
-	createdBy: string
-	updatedBy: string
-	createdDateTime: string
-	updatedDateTime: string
+    visitorId: number;
+    visitorGuid: string;
+    visitorName: string;
+    visitorCategory: string;
+    visitorContactNumber: string;
+    visitDateTime: string;
+    status: string,
+}
+
+export interface GetVisitorDetailsDto {
+    visitorId: number;
+    visitorGuid: string;
+    visitorName: string;
+    visitorCategory: string;
+    visitorContactNumber: string;
+    visitDateTime: string;
+    status: string,
+    createdBy: string;
+    updatedBy: string;
+    createdDateTime: string;
+    updatedDateTime: string;
 }
