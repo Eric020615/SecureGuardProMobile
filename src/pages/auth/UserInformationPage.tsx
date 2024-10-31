@@ -102,7 +102,7 @@ const UserInformationPage = () => {
 					floor: values.floor,
 					unit: values.unit,
 					dateOfBirth: convertDateToDateString(values.dateOfBirth, ITimeFormat.isoDateTime),
-					supportedFiles:
+					supportedDocuments:
 						selectedFiles.length > 0
 							? await Promise.all(
 									selectedFiles.map(async (selectedFile) => {

@@ -1,6 +1,8 @@
-export type GeneralFile = {
+export type GeneralFileDto = {
 	fileName: string
-	data: string
+	fileData: string
+	contentType: string
+	size?: number
 }
 
 export interface Page<T> {

@@ -2,17 +2,19 @@ import { CameraCapturedPicture } from 'expo-camera'
 import { readAsStringAsync, cacheDirectory, copyAsync } from 'expo-file-system'
 import { DocumentPickerResponse } from 'react-native-document-picker'
 import { manipulateAsync } from 'expo-image-manipulator'
-import { GeneralFile } from '@dtos/application/application.dto'
+import { GeneralFileDto } from '@dtos/application/application.dto'
 
-export const getFile = async (document: DocumentPickerResponse): Promise<GeneralFile> => {
+export const getFile = async (document: DocumentPickerResponse): Promise<GeneralFileDto> => {
 	try {
 		const tempUri = cacheDirectory + document.name
 		await copyAsync({ from: document.uri, to: tempUri })
 		const base64 = await readAsStringAsync(tempUri, { encoding: 'base64' })
 		const file = {
 			fileName: document.name,
-			data: base64,
-		} as GeneralFile
+			fileData: base64,
+			contentType: document.type,
+			size: document.size,
+		} as GeneralFileDto
 		return file
 	} catch (error) {
 		console.log(error)
