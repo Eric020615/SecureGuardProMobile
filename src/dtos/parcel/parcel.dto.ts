@@ -1,7 +1,9 @@
+import { GeneralFileResponseDto } from "@dtos/application/application.dto"
+
 export interface GetParcelDto {
 	parcelId: number
 	parcelGuid: string
-	parcelImage: string
+	parcelImage: GeneralFileResponseDto
 	floor: string
 	unit: string
 	createdBy: string

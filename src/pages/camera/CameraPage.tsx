@@ -5,10 +5,10 @@ import { CameraView, CameraType, useCameraPermissions } from 'expo-camera'
 import * as MediaLibrary from 'expo-media-library'
 import CustomButton from '@components/buttons/CustomButton'
 import Entypo from 'react-native-vector-icons/Entypo'
-import { convertImageToBase64 } from '@helpers/file'
 import { router } from 'expo-router'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
+import { convertImageToGeneralFile } from '@helpers/file'
 
 const CameraPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
@@ -64,9 +64,9 @@ const CameraPage = () => {
 
 	const saveImage = async () => {
 		if (image) {
-			const base64 = await convertImageToBase64(image)
+			const file = await convertImageToGeneralFile(image)
 			await uploadUserFaceAuthAction({
-				faceData: base64,
+				faceData: file,
 			})
 		}
 	}

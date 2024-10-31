@@ -13,7 +13,7 @@ export const getFile = async (document: DocumentPickerResponse): Promise<General
 			fileName: document.name,
 			fileData: base64,
 			contentType: document.type,
-			size: document.size,
+			size: document.size
 		} as GeneralFileDto
 		return file
 	} catch (error) {
@@ -22,13 +22,20 @@ export const getFile = async (document: DocumentPickerResponse): Promise<General
 	}
 }
 
-export const convertImageToBase64 = async (image: CameraCapturedPicture): Promise<string> => {
-	try {
-		const manipulateResult = await manipulateAsync(image.uri, [], { compress: 0.2 })
-		const base64 = await readAsStringAsync(manipulateResult.uri, { encoding: 'base64' })
-		return base64
-	} catch (error) {
-		console.log(error)
-		throw new Error(error)
-	}
-}
+export const convertImageToGeneralFile = async (image: CameraCapturedPicture): Promise<GeneralFileDto> => {
+    try {
+        const manipulateResult = await manipulateAsync(image.uri, [], { compress: 0.2 });
+        const base64 = await readAsStringAsync(manipulateResult.uri, { encoding: 'base64' });
+
+        const file: GeneralFileDto = {
+            fileName: 'captured-image.jpg',
+            fileData: base64,
+            contentType: 'image/jpeg', // Assuming JPEG for captured images
+            size: base64.length * (3 / 4), // Approximation: base64 size (in bytes)
+        };
+        return file;
+    } catch (error) {
+        console.log(error);
+        throw new Error(error);
+    }
+};

@@ -1,11 +1,4 @@
-import {
-	View,
-	Text,
-	TouchableOpacity,
-	ListRenderItem,
-	ActivityIndicator,
-	Image,
-} from 'react-native'
+import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator, Image } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { router } from 'expo-router'
@@ -54,7 +47,7 @@ const ParcelListPage = () => {
 			{/* Display Parcel Image */}
 			<View className="w-16 h-16 rounded-lg overflow-hidden">
 				{item.parcelImage ? (
-					<Image source={{ uri: item.parcelImage }} className="w-full h-full" resizeMode="cover" />
+					<Image source={{ uri: item.parcelImage.fileUrl }} className="w-full h-full" resizeMode="cover" />
 				) : (
 					<View className="w-full h-full bg-gray-200 flex items-center justify-center">
 						<AntDesign name="picture" size={24} color="#ccc" />
