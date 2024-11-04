@@ -38,7 +38,9 @@ const NoticeListPage = () => {
 		<View className="bg-white p-4 rounded-lg flex flex-row justify-between shadow-sm" key={index}>
 			{/* Left section with title and description */}
 			<View className="flex-1">
-				<Text className="font-semibold text-lg text-black">{item.title}</Text>
+				<Text className="font-semibold text-lg text-black" numberOfLines={1} ellipsizeMode="tail">
+					{item.title}
+				</Text>
 				<Text className="text-gray-600 mt-1" numberOfLines={2} ellipsizeMode="tail">
 					{item.description}
 				</Text>
@@ -46,7 +48,7 @@ const NoticeListPage = () => {
 
 			{/* Right section with relative time and delete button */}
 			<View className="items-end">
-				<Text className="text-gray-500 text-sm font-semibold mb-2">
+				<Text className="text-gray-500 text-sm font-semibold ml-2 mt-1">
 					{getRelativeTimeFromNow(new Date(item.startDate))}
 				</Text>
 			</View>

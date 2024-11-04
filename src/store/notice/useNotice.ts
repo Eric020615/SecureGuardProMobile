@@ -1,7 +1,7 @@
 import { create } from 'zustand'
-import { getNotices } from '@api/noticeService/noticeService'
 import { generalAction } from '@store/application/useApplication' // Import generalAction
 import { GetNoticeDto } from '@dtos/notice/notice.dto'
+import { getNoticeList } from '@api/noticeService/noticeService'
 
 interface State {
 	notices: GetNoticeDto[]
@@ -22,7 +22,7 @@ export const useNotice = create<State & Actions>((set, get) => ({
 		return generalAction(
 			async () => {
 				const { id } = get()
-				const response = await getNotices(id, limit)
+				const response = await getNoticeList(id, limit)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

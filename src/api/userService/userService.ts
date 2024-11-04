@@ -1,209 +1,103 @@
-import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import {
 	CreateSubUserDto,
-	DeleteSubUserByIdDto,
 	EditUserDetailsByIdDto,
 	GetSubUserDto,
 	GetUserProfileByIdDto,
 	UserInformationFormDto,
 } from '@dtos/user/user.dto'
 
+// Function to create a new user
 export const createUser = async (
 	IUserInformationDto: UserInformationFormDto,
 	tempToken: string,
 ): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.createUser.path,
-			type: listUrl.user.createUser.type,
-			data: IUserInformationDto,
-			_token: tempToken,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
-}
-
-export const createSubUser = async (
-	createSubUserDto: CreateSubUserDto,
-): Promise<IResponse<any>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.createSubUser.path,
-			type: listUrl.user.createSubUser.type,
-			data: createSubUserDto,
-			_token: token,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
-}
-
-export const getSubUserList = async (
-	id: number,
-	limit: number,
-): Promise<IPaginatedResponse<GetSubUserDto>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.getSubUserList.path,
-			type: listUrl.user.getSubUserList.type,
-			_token: token ? token : '',
-			data: {
-				id,
-				limit,
-			},
-		})
-		const result: IPaginatedResponse<GetSubUserDto> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: {
-				list: success ? response?.data.list : undefined,
-				count: success ? response?.data.count : 0,
-			},
-		}
-		return result
-	} catch (error) {
-		const result: IPaginatedResponse<any> = {
-			success: false,
-			msg: error,
-			data: {
-				list: null,
-				count: 0,
-			},
-		}
-		return result
-	}
+	const response = await handleApiRequest<any>(
+		listUrl.users.create.path,
+		listUrl.users.create.type,
+		IUserInformationDto,
+		tempToken,
+	)
+	return response
 }
 
 export const getUserProfileById = async (): Promise<IResponse<GetUserProfileByIdDto>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.getUserProfileById.path,
-			type: listUrl.user.getUserProfileById.type,
-			_token: token,
-		})
-		const result: IResponse<GetUserProfileByIdDto> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		console.log('error', error)
-		const result: IResponse<GetUserProfileByIdDto> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<GetUserProfileByIdDto>(
+		listUrl.users.getById.path,
+		listUrl.users.getById.type,
+		{},
+		token,
+	)
+	return response
 }
 
-export const editUserProfileById = async (
-	IEditUserDetailsByIdDto: EditUserDetailsByIdDto,
-): Promise<any> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.editUserProfileById.path,
-			type: listUrl.user.editUserProfileById.type,
-			_token: token,
-			data: IEditUserDetailsByIdDto,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+// Function to edit user profile by id
+export const editUserProfileById = async (IEditUserDetailsByIdDto: EditUserDetailsByIdDto): Promise<any> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<GetUserProfileByIdDto>(
+		listUrl.users.update.path,
+		listUrl.users.update.type,
+		IEditUserDetailsByIdDto,
+		token,
+	)
+	return response
+}
+
+// Function to create a new user
+export const createSubUser = async (createSubUserDto: CreateSubUserDto): Promise<IResponse<any>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.users.createSubUser.path,
+		listUrl.users.createSubUser.type,
+		createSubUserDto,
+		token,
+	)
+	return response
+}
+
+export const getSubUserList = async (id: number, limit: number): Promise<IPaginatedResponse<GetSubUserDto>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiPaginationRequest<GetSubUserDto>(
+		listUrl.users.getSubUsers.path,
+		listUrl.users.getSubUsers.type,
+		{},
+		token,
+		{ id, limit },
+	)
+	return response
 }
 
 export const editSubUserStatusById = async (subUserGuid: string, status: boolean): Promise<any> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.editSubUserStatusById.path,
-			type: listUrl.user.editSubUserStatusById.type,
-			_token: token,
-			params: {
-				subUserGuid,
-				status,
-			},
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.users.updateSubUserStatus.path,
+		listUrl.users.updateSubUserStatus.type,
+		{},
+		token,
+		{ status },
+		{
+			placeholder: ':id',
+			value: subUserGuid,
+		},
+	)
+	return response
 }
 
 export const deleteSubUserById = async (subUserGuid: string): Promise<any> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.user.deleteSubUserById.path,
-			type: listUrl.user.deleteSubUserById.type,
-			_token: token,
-			data: {
-				subUserGuid,
-			} as DeleteSubUserByIdDto,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.users.deleteSubUser.path,
+		listUrl.users.deleteSubUser.type,
+		{},
+		token,
+		{},
+		{
+			placeholder: ':id',
+			value: subUserGuid,
+		},
+	)
+	return response
 }

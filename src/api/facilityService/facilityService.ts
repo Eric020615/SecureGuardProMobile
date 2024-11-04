@@ -1,96 +1,53 @@
-import {
-	FacilityBookingFormDto,
-	GetFacilityBookingHistoryDto,
-	SpaceAvailabilityDto,
-} from '@dtos/facility/facility.dto'
-import GlobalHandler, { IPaginatedResponse, IResponse } from '@api/globalHandler'
+import { FacilityBookingFormDto, GetFacilityBookingHistoryDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export const submitBooking = async (IBooking: FacilityBookingFormDto): Promise<IResponse<any>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.facility.facilityBooking.path,
-			type: listUrl.facility.facilityBooking.type,
-			data: IBooking,
-			_token: token,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+export const createBooking = async (bookingForm: FacilityBookingFormDto): Promise<any> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.facilities.book.path,
+		listUrl.facilities.book.type,
+		bookingForm,
+		token,
+	)
+	return response
 }
 
-export const getFacilityBookingHistory = async (
+export const getBookingHistory = async (
 	isPast: boolean,
 	id: number,
 	limit: number,
 ): Promise<IPaginatedResponse<GetFacilityBookingHistoryDto>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.facility.getFacilityBookingHistory.path,
-			type: listUrl.facility.getFacilityBookingHistory.type,
-			data: {
-				isPast,
-				id,
-				limit,
-			},
-			_token: token,
-		})
-		const result: IPaginatedResponse<GetFacilityBookingHistoryDto> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: {
-				list: success ? response?.data.list : undefined,
-				count: success ? response?.data.count : 0,
-			},
-		}
-		return result
-	} catch (error) {
-		const result: IPaginatedResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiPaginationRequest<GetFacilityBookingHistoryDto>(
+		listUrl.facilities.getBookingHistory.path,
+		listUrl.facilities.getBookingHistory.type,
+		{},
+		token,
+		{
+			isPast,
+			id,
+			limit,
+		},
+	)
+	return response
 }
 
-export const cancelBooking = async (bookingGuid: string): Promise<IResponse<any>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.facility.cancelFacilityBooking.path,
-			type: listUrl.facility.cancelFacilityBooking.type,
-			data: { bookingGuid },
-			_token: token,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+export const cancelBooking = async (facilityBookingGuid: string): Promise<IResponse<any>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.facilities.cancelBooking.path,
+		listUrl.facilities.cancelBooking.type,
+		{},
+		token,
+		{},
+		{
+			placeholder: ':id',
+			value: facilityBookingGuid,
+		},
+	)
+	return response
 }
 
 export const checkAvailabilitySlot = async (
@@ -98,30 +55,17 @@ export const checkAvailabilitySlot = async (
 	startDate: string,
 	endDate: string,
 ): Promise<IResponse<SpaceAvailabilityDto[]>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.facility.checkAvailabilitySlot.path,
-			type: listUrl.facility.checkAvailabilitySlot.type,
-			data: {
-				facilityId: facilityId,
-				startDate: startDate,
-				endDate: endDate,
-			},
-			_token: token,
-		})
-		const result: IResponse<SpaceAvailabilityDto[]> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.facilities.checkAvailability.path,
+		listUrl.facilities.checkAvailability.type,
+		{},
+		token,
+		{
+			facilityId,
+			startDate,
+			endDate,
+		},
+	)
+	return response
 }

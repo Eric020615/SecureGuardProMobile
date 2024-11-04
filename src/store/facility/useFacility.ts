@@ -2,8 +2,8 @@ import { create } from 'zustand'
 import {
 	cancelBooking,
 	checkAvailabilitySlot,
-	getFacilityBookingHistory,
-	submitBooking,
+	createBooking,
+	getBookingHistory,
 } from '@api/facilityService/facilityService'
 import { generalAction } from '@store/application/useApplication' // Import generalAction
 import {
@@ -39,7 +39,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
 	submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
 		return generalAction(
 			async () => {
-				const response = await submitBooking(facilityBookingForm)
+				const response = await createBooking(facilityBookingForm)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}
@@ -53,7 +53,7 @@ export const useFacility = create<State & Actions>((set, get) => ({
 		return generalAction(
 			async () => {
 				const { id } = get()
-				const response = await getFacilityBookingHistory(isPast, id, limit)
+				const response = await getBookingHistory(isPast, id, limit)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

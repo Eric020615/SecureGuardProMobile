@@ -1,123 +1,43 @@
-import GlobalHandler, { IResponse } from '@api/globalHandler'
+import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { RoleEnum } from '@config/constant/user'
 import { ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
+// Sign up for user
 export const signUp = async (ISignUp: UserSignUpFormDto): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.signUp.path,
-			type: listUrl.auth.signUp.type,
-			data: ISignUp,
-			params: { role: RoleEnum.RESIDENT },
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response.message,
-			data: success ? response.data : null,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	return handleApiRequest<any>(listUrl.auth.signUp.path, listUrl.auth.signUp.type, ISignUp, undefined, {
+		role: RoleEnum.RESIDENT,
+	})
 }
 
+// Sign in an existing user
 export const signIn = async (ISignIn: SignInFormDto): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.logIn.path,
-			type: listUrl.auth.logIn.type,
-			data: ISignIn,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const response = await handleApiRequest<any>(listUrl.auth.logIn.path, listUrl.auth.logIn.type, ISignIn)
+	return response
 }
 
+// forgot password
 export const forgotPassword = async (forgotPasswordDto: ForgotPasswordDto): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.forgotPassword.path,
-			type: listUrl.auth.forgotPassword.type,
-			data: forgotPasswordDto,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	return handleApiRequest<any>(
+		listUrl.auth.requestPasswordReset.path,
+		listUrl.auth.requestPasswordReset.type,
+		forgotPasswordDto,
+	)
 }
 
+// Check authentication
 export const checkAuth = async (token: string): Promise<IResponse<any>> => {
-	try {
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.checkJwtAuth.path,
-			type: listUrl.auth.checkJwtAuth.type,
-			_token: token,
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	return handleApiRequest<any>(listUrl.auth.checkAuth.path, listUrl.auth.checkAuth.type, {}, token)
 }
 
+// Reset password
 export const resetPassword = async (resetPasswordDto: ResetPasswordDto): Promise<IResponse<any>> => {
-	try {
-		const token = await AsyncStorage.getItem('token')
-		const [success, response] = await GlobalHandler({
-			path: listUrl.auth.resetPassword.path,
-			type: listUrl.auth.resetPassword.type,
-			data: resetPasswordDto,
-			_token: token ? token : '',
-		})
-		const result: IResponse<any> = {
-			success,
-			msg: success ? 'success' : response?.message,
-			data: success ? response?.data : undefined,
-		}
-		return result
-	} catch (error) {
-		const result: IResponse<any> = {
-			success: false,
-			msg: error,
-			data: null,
-		}
-		return result
-	}
+	const token = await AsyncStorage.getItem('token')
+	return handleApiRequest<any>(
+		listUrl.auth.resetPassword.path,
+		listUrl.auth.resetPassword.type,
+		resetPasswordDto,
+		token,
+	)
 }

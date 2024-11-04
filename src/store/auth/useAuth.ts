@@ -25,7 +25,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await signUp(userSignUpForm)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				set({ isLogged: true, tempToken: response.data })
@@ -57,7 +57,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await forgotPassword(ForgotPasswordDto)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				return response
@@ -71,7 +71,7 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await resetPassword(resetPasswordDto)
-				if(!response?.success){
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				return response
@@ -85,7 +85,8 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAuth(token)
-				if(!response?.success){
+				console.log(response)
+				if (!response?.success) {
 					throw new Error(response.msg)
 				}
 				return response
