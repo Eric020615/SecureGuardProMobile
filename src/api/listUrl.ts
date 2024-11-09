@@ -25,7 +25,7 @@ export const listUrl = {
 	},
 	faceAuth: {
 		upload: {
-			path: 'face-auth/user/upload',
+			path: 'face-auth',
 			type: IType.post,
 		},
 	},
@@ -97,7 +97,7 @@ export const listUrl = {
 			type: IType.get,
 		},
 		getById: {
-			path: 'visitors/:id',
+			path: 'visitors/:id/details',
 			type: IType.get,
 		},
 	},
