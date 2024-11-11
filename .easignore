@@ -28,4 +28,3 @@ android/.gradle/
 .env.test
 .env.*
 .env
-google-services.json

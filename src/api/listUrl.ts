@@ -88,13 +88,13 @@ export const listUrl = {
 			path: 'visitors',
 			type: IType.post,
 		},
-		update: {
-			path: 'visitors/:id',
-			type: IType.put,
-		},
 		getAll: {
 			path: 'visitors',
 			type: IType.get,
+		},
+		update: {
+			path: 'visitors/:id',
+			type: IType.put,
 		},
 		getById: {
 			path: 'visitors/:id/details',
@@ -119,4 +119,10 @@ export const listUrl = {
 			type: IType.get,
 		},
 	},
+	cards: {
+		getQrCode: {
+			path: 'cards/qr-code',
+			type: IType.get,
+		}
+	}
 }

@@ -72,9 +72,9 @@ const TabsLayout = () => {
           }}
         />
         <Tabs.Screen
-          name="scan"
+          name="qrCode"
           options={{
-            title: "Scan",
+            title: "Qr Code",
             headerShown: false,
             tabBarLabel: "",
             tabBarIcon: () => (

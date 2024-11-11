@@ -46,6 +46,12 @@ const VisitorDetailsViewPage = () => {
 								</Text>
 							</View>
 							<View className="mt-3">
+								<Text className="text-lg text-black font-bold">Email</Text>
+								<Text className="text-base text-black">
+									{visitorDetails.visitorEmail ? visitorDetails.visitorEmail : ''}
+								</Text>
+							</View>
+							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Contact Number</Text>
 								<Text className="text-base text-black">
 									{visitorDetails.visitorContactNumber ? visitorDetails.visitorContactNumber : ''}

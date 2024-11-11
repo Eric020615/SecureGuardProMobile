@@ -22,6 +22,7 @@ interface CreateVisitor {
 	visitDateTime: Date
 	visitorCategory: VisitorEnum
 	visitorName: string
+	visitorEmail: string
 	visitorCountryCode: ICountry
 	visitorPhoneNumber: string
 }
@@ -40,14 +41,12 @@ const CreateVisitorPage = () => {
 		visitDateTime: Yup.date().required('Visit date is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
+		visitorEmail: Yup.string().email('Invalid email address'),
 		visitorPhoneNumber: Yup.string()
 			.required('Visitor phone number is required')
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
 				if (!value) return false
-				const phone = parsePhoneNumberFromString(
-					value,
-					formik.values.visitorCountryCode.cca2 as CountryCode,
-				)
+				const phone = parsePhoneNumberFromString(value, formik.values.visitorCountryCode.cca2 as CountryCode)
 				return phone ? phone.isValid() : false
 			}),
 	})
@@ -60,6 +59,7 @@ const CreateVisitorPage = () => {
 		onSubmit: async (values) => {
 			await createVisitorAction({
 				visitorName: values.visitorName,
+				visitorEmail: values.visitorEmail,
 				visitorCategory: values.visitorCategory,
 				visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 				visitDateTime: convertDateToDateString(values.visitDateTime, ITimeFormat.isoDateTime),
@@ -105,9 +105,21 @@ const CreateVisitorPage = () => {
 							}}
 							placeholder={'Enter full name'}
 							errorMessage={
-								formik.touched.visitorName &&
-								formik.errors.visitorName &&
-								(formik.errors.visitorName as string)
+								formik.touched.visitorName && formik.errors.visitorName && (formik.errors.visitorName as string)
+							}
+						/>
+						<CustomFormField
+							containerStyle="mt-4"
+							title="Visitor Email"
+							textStyle="text-base font-bold"
+							type="Text"
+							textValue={formik.values.visitorEmail}
+							onChangeText={(e) => {
+								formik.setFieldValue('visitorEmail', e)
+							}}
+							placeholder={'Enter email'}
+							errorMessage={
+								formik.touched.visitorEmail && formik.errors.visitorEmail && (formik.errors.visitorEmail as string)
 							}
 						/>
 						<CustomFormField
@@ -153,14 +165,9 @@ const CreateVisitorPage = () => {
 									title="Visit Date"
 									textStyle="text-base font-bold"
 									type="DateTime"
-									selectedDate={
-										formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()
-									}
+									selectedDate={formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()}
 									onChange={onDatePickerChange}
-									buttonTitle={convertDateToDateString(
-										formik.values.visitDateTime,
-										ITimeFormat.dateTime,
-									)}
+									buttonTitle={convertDateToDateString(formik.values.visitDateTime, ITimeFormat.dateTime)}
 									minimumDate={getCurrentDate()}
 									mode="datetime"
 									errorMessage={

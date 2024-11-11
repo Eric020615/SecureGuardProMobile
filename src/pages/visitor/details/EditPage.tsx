@@ -20,8 +20,9 @@ import { convertDateStringToDate, convertDateToDateString, getCurrentDate } from
 
 interface VisitorDetails {
 	visitDateTime: Date
-	visitorCategory: VisitorEnum
+	visitorCategory: string
 	visitorName: string
+	visitorEmail: string
 	visitorCountryCode: ICountry
 	visitorPhoneNumber: string
 }
@@ -40,8 +41,8 @@ const VisitorDetailsEditPage = () => {
 		if (visitorDetails) {
 			setFormInitialValue({
 				visitDateTime: convertDateStringToDate(visitorDetails?.visitDateTime),
-				visitorCategory:
-					visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
+				visitorEmail: visitorDetails?.visitorEmail ? visitorDetails?.visitorEmail : '',
+				visitorCategory: visitorDetails?.visitorCategory in VisitorEnum ? visitorDetails.visitorCategory : null,
 				visitorName: visitorDetails?.visitorName ? visitorDetails?.visitorName : '',
 				visitorCountryCode: visitorDetails?.visitorContactNumber
 					? getCountriesByCallingCode(
@@ -65,10 +66,7 @@ const VisitorDetailsEditPage = () => {
 			.required('Visitor phone number is required')
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
 				if (!value) return false
-				const phone = parsePhoneNumberFromString(
-					value,
-					formik.values.visitorCountryCode.cca2 as CountryCode,
-				)
+				const phone = parsePhoneNumberFromString(value, formik.values.visitorCountryCode.cca2 as CountryCode)
 				return phone ? phone.isValid() : false
 			}),
 	})
@@ -81,6 +79,7 @@ const VisitorDetailsEditPage = () => {
 			await editVisitorByIdAction(
 				{
 					visitorName: values.visitorName,
+					visitorEmail: values.visitorEmail,
 					visitorCategory: values.visitorCategory,
 					visitorContactNumber: values.visitorCountryCode.callingCode + values.visitorPhoneNumber,
 					visitDateTime: convertDateToDateString(values.visitDateTime, ITimeFormat.isoDateTime),
@@ -114,24 +113,34 @@ const VisitorDetailsEditPage = () => {
 					<Text className="text-4xl text-black font-bold mt-6">Visitor Details</Text>
 					{visitorDetails && (
 						<>
-							<View>
-								<CustomFormField
-									containerStyle="mt-4"
-									title="Visitor Name"
-									textStyle="text-base font-bold"
-									type="Text"
-									textValue={formik.values.visitorName}
-									onChangeText={(e) => {
-										formik.setFieldValue('visitorName', e)
-									}}
-									placeholder={'Enter full name'}
-									errorMessage={
-										formik.touched.visitorName &&
-										formik.errors.visitorName &&
-										(formik.errors.visitorName as string)
-									}
-								/>
-							</View>
+							<CustomFormField
+								containerStyle="mt-4"
+								title="Visitor Name"
+								textStyle="text-base font-bold"
+								type="Text"
+								textValue={formik.values.visitorName}
+								onChangeText={(e) => {
+									formik.setFieldValue('visitorName', e)
+								}}
+								placeholder={'Enter full name'}
+								errorMessage={
+									formik.touched.visitorName && formik.errors.visitorName && (formik.errors.visitorName as string)
+								}
+							/>
+							<CustomFormField
+								containerStyle="mt-4"
+								title="Visitor email"
+								textStyle="text-base font-bold"
+								type="Text"
+								textValue={formik.values.visitorEmail}
+								onChangeText={(e) => {
+									formik.setFieldValue('visitorEmail', e)
+								}}
+								placeholder={'Enter email address'}
+								errorMessage={
+									formik.touched.visitorEmail && formik.errors.visitorEmail && (formik.errors.visitorEmail as string)
+								}
+							/>
 							<CustomFormField
 								containerStyle="mt-4"
 								title="Visitor Category"
@@ -179,14 +188,9 @@ const VisitorDetailsEditPage = () => {
 										title="Visit Date"
 										textStyle="text-base font-bold"
 										type="DateTime"
-										selectedDate={
-											formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()
-										}
+										selectedDate={formik.values.visitDateTime ? formik.values.visitDateTime : getCurrentDate()}
 										onChange={onDatePickerChange}
-										buttonTitle={convertDateToDateString(
-											formik.values.visitDateTime,
-											ITimeFormat.dateTime,
-										)}
+										buttonTitle={convertDateToDateString(formik.values.visitDateTime, ITimeFormat.dateTime)}
 										minimumDate={getCurrentDate()}
 										mode="datetime"
 										errorMessage={
