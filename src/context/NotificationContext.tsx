@@ -2,7 +2,6 @@ import React, { createContext, useContext, useState, useEffect, useRef, ReactNod
 import * as Notifications from 'expo-notifications'
 import { Subscription } from 'expo-modules-core'
 import { registerForPushNotificationsAsync } from '@helpers/notification'
-import { useApplication } from '@store/application/useApplication'
 
 interface NotificationContextType {
 	expoPushToken: string | null

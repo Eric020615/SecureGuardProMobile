@@ -85,7 +85,6 @@ export const useAuth = create<State & Actions>((set) => ({
 		return generalAction(
 			async () => {
 				const response = await checkAuth(token)
-				console.log(response)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

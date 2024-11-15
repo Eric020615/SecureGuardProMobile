@@ -43,7 +43,7 @@ const VisitorListPage = () => {
 			className="bg-white p-4 rounded-lg flex flex-row justify-between"
 			key={index}
 			onPress={() => {
-				router.push(`/visitor/visitorDetails/${item.visitorGuid}/view`)
+				router.push(`/visitor/${item.visitorGuid}`)
 			}}
 		>
 			<View className="grid gap-1">

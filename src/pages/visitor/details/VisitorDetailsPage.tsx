@@ -10,7 +10,7 @@ import { useVisitor } from '@store/visitor/useVisitor'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { convertDateStringToFormattedString } from '@helpers/time'
 
-const VisitorDetailsViewPage = () => {
+const VisitorDetailsPage = () => {
 	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
 	const { id } = useLocalSearchParams()
 
@@ -59,18 +59,13 @@ const VisitorDetailsViewPage = () => {
 							</View>
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Category</Text>
-								<Text className="text-base text-black">
-									{VisitorEnum[visitorDetails.visitorCategory]}
-								</Text>
+								<Text className="text-base text-black">{VisitorEnum[visitorDetails.visitorCategory]}</Text>
 							</View>
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Visit Date</Text>
 								<Text className="text-base text-black">
 									{visitorDetails.visitDateTime
-										? convertDateStringToFormattedString(
-												visitorDetails.visitDateTime,
-												ITimeFormat.dateTime,
-										  )
+										? convertDateStringToFormattedString(visitorDetails.visitDateTime, ITimeFormat.dateTime)
 										: ''}
 								</Text>
 							</View>
@@ -82,4 +77,4 @@ const VisitorDetailsViewPage = () => {
 	)
 }
 
-export default VisitorDetailsViewPage
+export default VisitorDetailsPage

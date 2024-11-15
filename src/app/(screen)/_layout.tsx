@@ -6,18 +6,27 @@ const ScreenLayout = () => {
 	return (
 		<>
 			<Stack>
+				{/* notice */}
 				<Stack.Screen
-					name="notices"
+					name="notice/index"
 					options={{
 						headerShown: false,
 					}}
 				/>
+				<Stack.Screen
+					name="notice/[id]/index"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				{/* parcel */}
 				<Stack.Screen
 					name="parcel"
 					options={{
 						headerShown: false,
 					}}
 				/>
+				{/* visitor */}
 				<Stack.Screen
 					name="visitor/create"
 					options={{
@@ -25,17 +34,19 @@ const ScreenLayout = () => {
 					}}
 				/>
 				<Stack.Screen
-					name="visitor/visitorDetails/[id]/[pageMode]"
+					name="visitor/[id]/index"
 					options={{
 						headerShown: false,
 					}}
 				/>
+				{/* camera */}
 				<Stack.Screen
 					name="camera"
 					options={{
 						headerShown: false,
 					}}
 				/>
+				{/* facility */}
 				<Stack.Screen
 					name="facility/create"
 					options={{
@@ -54,6 +65,7 @@ const ScreenLayout = () => {
 						headerShown: false,
 					}}
 				/>
+				{/* sub user */}
 				<Stack.Screen
 					name="sub-user/index"
 					options={{
@@ -66,6 +78,7 @@ const ScreenLayout = () => {
 						headerShown: false,
 					}}
 				/>
+				{/* reset password */}
 				<Stack.Screen
 					name="reset-password"
 					options={{

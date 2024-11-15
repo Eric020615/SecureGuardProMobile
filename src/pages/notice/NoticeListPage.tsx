@@ -1,4 +1,4 @@
-import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
@@ -12,7 +12,7 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { getRelativeTimeFromNow } from '@helpers/time'
 
 const NoticeListPage = () => {
-	const { notices, id, totalNotices, getNoticeAction, resetNoticeAction } = useNotice()
+	const { notices, id, totalNotices, getNoticesAction, resetNoticeAction } = useNotice()
 	const isLoading = useApplication((state) => state.isLoading)
 
 	useEffect(() => {
@@ -21,7 +21,7 @@ const NoticeListPage = () => {
 	}, [])
 
 	const fetchNotice = async () => {
-		await getNoticeAction(10)
+		await getNoticesAction(10)
 	}
 
 	const fetchNextPage = async () => {
@@ -35,7 +35,13 @@ const NoticeListPage = () => {
 	}
 
 	const renderItem: ListRenderItem<GetNoticeDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg flex flex-row justify-between shadow-sm" key={index}>
+		<TouchableOpacity
+			className="bg-white p-4 rounded-lg flex flex-row justify-between shadow-sm"
+			key={index}
+			onPress={() => {
+				router.push(`/notice/${item.noticeGuid}`)
+			}}
+		>
 			{/* Left section with title and description */}
 			<View className="flex-1">
 				<Text className="font-semibold text-lg text-black" numberOfLines={1} ellipsizeMode="tail">
@@ -52,7 +58,7 @@ const NoticeListPage = () => {
 					{getRelativeTimeFromNow(new Date(item.startDate))}
 				</Text>
 			</View>
-		</View>
+		</TouchableOpacity>
 	)
 
 	return (

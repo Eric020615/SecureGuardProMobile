@@ -56,6 +56,17 @@ const FacilityBookingHistoryPage = () => {
 				<Text className="font-bold text-lg">{item.facilityName}</Text>
 				{item.isCancelled ? (
 					<Text className="bg-red-500 text-xs text-white rounded-lg px-2 py-1">Cancelled</Text>
+				) : convertDateStringToDate(item.startDate) > getCurrentDate() ? (
+					<CustomButton
+						title="Cancel Booking"
+						containerStyles="flex flex-row items-center bg-red-500 p-1 rounded-md"
+						textStyles="text-white text-xs"
+						handlePress={() => {
+							setOpen(!open)
+							setSelectedFacilityBookingId(item.bookingGuid)
+						}}
+						leftReactNativeIcons={<Ionicons name="close-circle" color={'#ffffff'} size={16} />}
+					/>
 				) : (
 					<Text
 						className={`bg-${
@@ -76,21 +87,6 @@ const FacilityBookingHistoryPage = () => {
 					{convertDateStringToFormattedString(item.endDate, ITimeFormat.dateTime)}
 				</Text>
 			</View>
-			{/* Action Button */}
-			{!item.isCancelled && convertDateStringToDate(item.startDate) > getCurrentDate() && (
-				<View className="flex items-end mt-2">
-					<CustomButton
-						title="Cancel Booking"
-						containerStyles="flex flex-row items-center bg-red-500 py-1 px-2"
-						textStyles="text-white text-sm"
-						handlePress={() => {
-							setOpen(!open)
-							setSelectedFacilityBookingId(item.bookingGuid)
-						}}
-						leftReactNativeIcons={<Ionicons name="close-circle" color={'#ffffff'} size={16} />}
-					/>
-				</View>
-			)}
 		</View>
 	)
 

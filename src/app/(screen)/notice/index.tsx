@@ -1,3 +1,4 @@
+import React from 'react'
 import NoticeListPage from "@pages/notice/NoticeListPage";
 
 const Notices = () => {

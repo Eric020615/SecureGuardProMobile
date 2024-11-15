@@ -1,3 +1,5 @@
+import { GeneralFileResponseDto } from "@dtos/application/application.dto"
+
 export interface GetNoticeDto {
     noticeId: number
     noticeGuid: string
@@ -15,6 +17,7 @@ export interface GetNoticeDetailsDto {
 	description: string
 	startDate: string
 	endDate: string
+	attachments: GeneralFileResponseDto[]
 	status: string
 	createdBy: string
 	createdDateTime: string

@@ -78,10 +78,14 @@ export const listUrl = {
 		},
 	},
 	notices: {
-		getByResident: {
+		getAll: {
 			path: 'notices',
 			type: IType.get,
 		},
+		getById: {
+			path: 'notices/:id/details',
+			type: IType.get,
+		}
 	},
 	visitors: {
 		create: {
