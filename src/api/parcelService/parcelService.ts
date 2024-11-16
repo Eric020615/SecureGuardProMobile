@@ -32,3 +32,20 @@ export const getParcelDetailsById = async (id: string): Promise<IResponse<GetPar
 	)
 	return response
 }
+
+// Function to delete parcel
+export const deleteParcelById = async (id: string): Promise<IResponse<null>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<null>(
+		listUrl.parcels.deleteById.path,
+		listUrl.parcels.deleteById.type,
+		{},
+		token,
+		{},
+		{
+			placeholder: ':id',
+			value: id,
+		},
+	)
+	return response
+}

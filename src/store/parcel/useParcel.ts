@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { getParcelDetailsById, getParcels } from '@api/parcelService/parcelService'
+import { deleteParcelById, getParcelDetailsById, getParcels } from '@api/parcelService/parcelService'
 import { generalAction } from '@store/application/useApplication'
 import { GetParcelDetailsDto, GetParcelDto } from '@dtos/parcel/parcel.dto'
 
@@ -14,6 +14,7 @@ interface Actions {
 	getParcelsAction: (limit: number) => Promise<any>
 	resetParcelAction: () => void
 	getParcelDetailsByIdAction: (id: string) => Promise<any>
+	deleteParcelByIdAction: (id: string) => Promise<any>
 }
 
 export const useParcel = create<State & Actions>((set, get) => ({
@@ -55,6 +56,19 @@ export const useParcel = create<State & Actions>((set, get) => ({
 			},
 			'',
 			'Failed to retrieve Parcel details. Please try again.',
+		)
+	},
+	deleteParcelByIdAction: async (id: string) => {
+		return generalAction(
+			async () => {
+				const response = await deleteParcelById(id)
+				if (!response) {
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Parcel deleted successfully.',
+			'Failed to delete Parcel. Please try again.',
 		)
 	},
 }))

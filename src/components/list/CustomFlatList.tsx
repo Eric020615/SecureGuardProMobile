@@ -1,6 +1,8 @@
-import { FlatList, ListRenderItem, Text, View, ViewStyle } from 'react-native'
-import { ReactElement, useMemo } from 'react'
+import { FlatList, ListRenderItem, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { ReactElement, useEffect, useMemo, useState } from 'react'
 import CustomDataNotFound from '@components/dataNotFound/CustomDataNotFound'
+import { Menu, MenuItem } from 'react-native-material-menu' // Example of a dropdown library
+import Ionicons from 'react-native-vector-icons/Ionicons' // Import the icon set you want to use
 
 interface CustomFlatListProps<T> {
 	data: T[]
@@ -46,32 +48,34 @@ const CustomFlatList = <T extends object>({
 	}
 	const flatListContentStyle = useMemo(() => ({ gap }), [gap])
 	return (
-		<FlatList
-			data={data}
-			renderItem={renderItem}
-			contentContainerStyle={flatListContentStyle}
-			columnWrapperStyle={columnWrapperStyle}
-			onEndReached={() => {
-				if (loading) return
-				if (fetchNextPage == undefined) return
-				fetchNextPage()
-			}}
-			onEndReachedThreshold={0.1}
-			ListHeaderComponent={() => <></>}
-			ListFooterComponent={() => listFooterComponent}
-			refreshing={isRefreshing}
-			onRefresh={() => {
-				if (loading) return
-				onRefresh()
-			}}
-			numColumns={numColumns}
-			initialNumToRender={10}
-			getItemLayout={(_data, index) => ({
-				length: itemHeight,
-				offset: (itemHeight + gap) * index,
-				index,
-			})}
-		/>
+		<View className="flex-1">
+			<FlatList
+				data={data}
+				renderItem={renderItem}
+				contentContainerStyle={flatListContentStyle}
+				columnWrapperStyle={columnWrapperStyle}
+				onEndReached={() => {
+					if (loading) return
+					if (fetchNextPage == undefined) return
+					fetchNextPage()
+				}}
+				onEndReachedThreshold={0.1}
+				ListHeaderComponent={() => <></>}
+				ListFooterComponent={() => listFooterComponent}
+				refreshing={isRefreshing}
+				onRefresh={() => {
+					if (loading) return
+					onRefresh()
+				}}
+				numColumns={numColumns}
+				initialNumToRender={10}
+				getItemLayout={(_data, index) => ({
+					length: itemHeight,
+					offset: (itemHeight + gap) * index,
+					index,
+				})}
+			/>
+		</View>
 	)
 }
 

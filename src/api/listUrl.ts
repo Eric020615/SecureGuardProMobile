@@ -123,6 +123,10 @@ export const listUrl = {
 		getById: {
 			path: 'parcels/:id/details',
 			type: IType.get,
+		},
+		deleteById: {
+			path: 'parcels/:id',
+			type: IType.delete,
 		}
 	},
 	notifications: {
