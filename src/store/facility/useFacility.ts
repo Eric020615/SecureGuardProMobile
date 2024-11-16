@@ -4,10 +4,12 @@ import {
 	checkAvailabilitySlot,
 	createBooking,
 	getBookingHistory,
+	getBookingHistoryById,
 } from '@api/facilityService/facilityService'
 import { generalAction } from '@store/application/useApplication' // Import generalAction
 import {
 	FacilityBookingFormDto,
+	GetFacilityBookingDetailsDto,
 	GetFacilityBookingHistoryDto,
 	SpaceAvailabilityDto,
 } from '@dtos/facility/facility.dto'
@@ -15,6 +17,7 @@ import {
 interface State {
 	availabilitySlot: SpaceAvailabilityDto[]
 	facilityBookingHistory: GetFacilityBookingHistoryDto[]
+	facilityBookingDetails: GetFacilityBookingDetailsDto
 	id: number
 	totalFacilityBookingHistory: number
 }
@@ -22,18 +25,16 @@ interface State {
 interface Actions {
 	submitBookingAction: (facilityBookingForm: FacilityBookingFormDto) => Promise<any>
 	getFacilityBookingHistoryAction: (isPast: boolean, limit: number) => Promise<any>
+	getFacilityBookingDetailsByIdAction: (id: string) => Promise<any>
 	resetFacilityBookingHistory: () => void
 	cancelBookingAction: (bookingGuid: string) => Promise<any>
-	checkAvailabilitySlotAction: (
-		facilityId: string,
-		startDate: string,
-		endDate: string,
-	) => Promise<any>
+	checkAvailabilitySlotAction: (facilityId: string, startDate: string, endDate: string) => Promise<any>
 }
 
 export const useFacility = create<State & Actions>((set, get) => ({
 	availabilitySlot: [],
 	facilityBookingHistory: [],
+	facilityBookingDetails: {} as GetFacilityBookingDetailsDto,
 	id: 0,
 	totalFacilityBookingHistory: 0,
 	submitBookingAction: async (facilityBookingForm: FacilityBookingFormDto) => {
@@ -66,6 +67,20 @@ export const useFacility = create<State & Actions>((set, get) => ({
 			},
 			'',
 			'Failed to retrieve booking history. Please try again.',
+		)
+	},
+	getFacilityBookingDetailsByIdAction: async (id: string) => {
+		return generalAction(
+			async () => {
+				const response = await getBookingHistoryById(id)
+				if (!response?.success) {
+					throw new Error(response.msg)
+				}
+				set({ facilityBookingDetails: response.data })
+				return response
+			},
+			'',
+			'Failed to retrieve booking details. Please try again.',
 		)
 	},
 	resetFacilityBookingHistory() {

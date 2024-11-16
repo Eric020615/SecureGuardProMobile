@@ -24,6 +24,23 @@ export interface GetFacilityBookingHistoryDto {
 	status: string
 }
 
+export interface GetFacilityBookingDetailsDto {
+	bookingId: number
+	bookingGuid: string
+	facilityName: string
+	startDate: string
+	endDate: string
+	bookedBy: string
+	numOfGuest: number
+	isCancelled: boolean
+	cancelRemark: string
+	status: string
+	createdBy: string
+	createdDateTime: string
+	updatedBy: string
+	updatedDateTime: string
+}
+
 export interface CancelFacilityBookingDto {
 	cancelRemark: string
 }

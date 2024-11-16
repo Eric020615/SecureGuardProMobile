@@ -54,13 +54,19 @@ const ScreenLayout = () => {
 					}}
 				/>
 				<Stack.Screen
+					name="facility/[id]/[startDate]/[duration]/[numOfGuest]/check"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
 					name="facility/history"
 					options={{
 						headerShown: false,
 					}}
 				/>
 				<Stack.Screen
-					name="facility/[facilityId]/[startDate]/[duration]/[numOfGuest]/check"
+					name="facility/[id]/index"
 					options={{
 						headerShown: false,
 					}}

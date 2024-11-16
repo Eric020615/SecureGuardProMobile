@@ -26,13 +26,13 @@ interface FacilityBooking {
 }
 
 const AvailabilitySlotPage = () => {
-	const { facilityId, startDate, duration, numOfGuest } = useLocalSearchParams()
+	const { id, startDate, duration, numOfGuest } = useLocalSearchParams()
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null) // State to track selected slot
 	const { availabilitySlot, checkAvailabilitySlotAction, submitBookingAction } = useFacility()
 	const { isLoading } = useApplication()
 
 	useEffect(() => {
-		formik.setFieldValue('facilityId', facilityId)
+		formik.setFieldValue('facilityId', id)
 		formik.setFieldValue('startDate', convertDateStringToDate(startDate as string))
 		formik.setFieldValue(
 			'endDate',
@@ -42,7 +42,7 @@ const AvailabilitySlotPage = () => {
 		),
 		formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
-	}, [facilityId, startDate, duration, numOfGuest])
+	}, [id, startDate, duration, numOfGuest])
 
 	const fetchAvailabilitySlot = async () => {
 		await checkAvailabilitySlotAction(
@@ -77,7 +77,7 @@ const AvailabilitySlotPage = () => {
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			facilityId: facilityId as string,
+			facilityId: id as string,
 			startDate: convertDateStringToDate(startDate as string),
 			endDate: moment(startDate as string)
 				.add(duration as string, 'hours')
@@ -159,7 +159,7 @@ const AvailabilitySlotPage = () => {
 					<View style={{ marginTop: 10 }}>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="location-sharp" color={'#2A5D4F'} size={24} />
-							<Text className="text-lg text-black">{FacilityConst[facilityId as string]}</Text>
+							<Text className="text-lg text-black">{FacilityConst[id as string]}</Text>
 						</View>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="calendar-outline" color={'#10312B'} size={24} />

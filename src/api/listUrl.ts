@@ -68,6 +68,10 @@ export const listUrl = {
 			path: 'facilities/',
 			type: IType.get,
 		},
+		getById: {
+			path: 'facilities/:id/details',
+			type: IType.get,
+		},
 		cancelBooking: {
 			path: 'facilities/:id/cancel',
 			type: IType.put,

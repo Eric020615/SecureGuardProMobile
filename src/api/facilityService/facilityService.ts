@@ -1,4 +1,9 @@
-import { FacilityBookingFormDto, GetFacilityBookingHistoryDto, SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
+import {
+	FacilityBookingFormDto,
+	GetFacilityBookingDetailsDto,
+	GetFacilityBookingHistoryDto,
+	SpaceAvailabilityDto,
+} from '@dtos/facility/facility.dto'
 import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -29,6 +34,22 @@ export const getBookingHistory = async (
 			isPast,
 			id,
 			limit,
+		},
+	)
+	return response
+}
+
+export const getBookingHistoryById = async (id: string): Promise<IResponse<GetFacilityBookingDetailsDto>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<any>(
+		listUrl.facilities.getById.path,
+		listUrl.facilities.getById.type,
+		{},
+		token,
+		{},
+		{
+			placeholder: ':id',
+			value: id,
 		},
 	)
 	return response

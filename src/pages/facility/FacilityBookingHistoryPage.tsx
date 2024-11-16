@@ -1,10 +1,9 @@
-import { View, Text, ListRenderItem, ActivityIndicator } from 'react-native'
+import { View, Text, ListRenderItem, ActivityIndicator, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { FacilityConst } from '@config/constant/facilities'
 import { ITimeFormat } from '@config/constant'
 import CustomFlatList from '@components/list/CustomFlatList'
 import { useApplication } from '@store/application/useApplication'
@@ -50,7 +49,13 @@ const FacilityBookingHistoryPage = () => {
 	}
 
 	const renderItem: ListRenderItem<GetFacilityBookingHistoryDto> = ({ item, index }) => (
-		<View className="bg-white p-4 rounded-lg shadow-sm">
+		<TouchableOpacity
+			className="bg-white p-4 rounded-lg shadow-sm"
+			key={index}
+			onPress={() => {
+				router.push(`/facility/${item.bookingGuid}`)
+			}}
+		>
 			{/* Facility Name and Status */}
 			<View className="flex flex-row justify-between items-center mb-2" key={index}>
 				<Text className="font-bold text-lg">{item.facilityName}</Text>
@@ -87,7 +92,7 @@ const FacilityBookingHistoryPage = () => {
 					{convertDateStringToFormattedString(item.endDate, ITimeFormat.dateTime)}
 				</Text>
 			</View>
-		</View>
+		</TouchableOpacity>
 	)
 
 	const onConfirm = () => {

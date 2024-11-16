@@ -21,10 +21,6 @@ const NoticeDetailsPage = () => {
 		await getNoticeDetailsByIdAction(id)
 	}
 
-	useEffect(() => {
-		console.log(noticeDetails)
-	}, [noticeDetails])
-
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal />
