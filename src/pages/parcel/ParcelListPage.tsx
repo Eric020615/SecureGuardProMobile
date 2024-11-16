@@ -41,7 +41,7 @@ const ParcelListPage = () => {
 			className="bg-white p-4 rounded-lg flex flex-row items-center space-x-4"
 			key={index}
 			onPress={() => {
-				router.push(`/Parcel/ParcelDetails/${item.parcelGuid}/view`)
+				router.push(`/parcel/${item.parcelGuid}`)
 			}}
 		>
 			{/* Display Parcel Image */}
@@ -57,7 +57,6 @@ const ParcelListPage = () => {
 
 			{/* Display Parcel Information */}
 			<View className="flex-1">
-				<Text className="font-bold text-lg">{`Parcel ID: ${item.parcelId}`}</Text>
 				<Text className="text-gray-500">{`Floor: ${item.floor}, Unit: ${item.unit}`}</Text>
 				<View className="flex flex-row items-center space-x-1 mt-2">
 					<AntDesign name="clockcircle" color="#10312b" size={16} />

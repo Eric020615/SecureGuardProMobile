@@ -21,7 +21,13 @@ const ScreenLayout = () => {
 				/>
 				{/* parcel */}
 				<Stack.Screen
-					name="parcel"
+					name="parcel/index"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				<Stack.Screen
+					name="parcel/[id]/index"
 					options={{
 						headerShown: false,
 					}}

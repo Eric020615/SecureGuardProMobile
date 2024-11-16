@@ -1,6 +1,6 @@
-import { handleApiPaginationRequest, IPaginatedResponse } from '@api/globalHandler'
+import { handleApiPaginationRequest, handleApiRequest, IPaginatedResponse, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
-import { GetParcelDto } from '@dtos/parcel/parcel.dto'
+import { GetParcelDetailsDto, GetParcelDto } from '@dtos/parcel/parcel.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Function to get a list of app notifications
@@ -12,6 +12,23 @@ export const getParcels = async (id: number, limit: number): Promise<IPaginatedR
 		{},
 		token,
 		{ id, limit },
+	)
+	return response
+}
+
+// Function to get a single parcel by id
+export const getParcelDetailsById = async (id: string): Promise<IResponse<GetParcelDetailsDto>> => {
+	const token = await AsyncStorage.getItem('token')
+	const response = await handleApiRequest<GetParcelDetailsDto>(
+		listUrl.parcels.getById.path,
+		listUrl.parcels.getById.type,
+		{},
+		token,
+		{},
+		{
+			placeholder: ':id',
+			value: id,
+		},
 	)
 	return response
 }

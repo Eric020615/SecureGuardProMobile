@@ -120,6 +120,10 @@ export const listUrl = {
 			path: 'parcels',
 			type: IType.get,
 		},
+		getById: {
+			path: 'parcels/:id/details',
+			type: IType.get,
+		}
 	},
 	notifications: {
 		getAll: {

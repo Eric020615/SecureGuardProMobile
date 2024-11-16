@@ -1,9 +1,10 @@
 import { create } from 'zustand'
-import { getParcels } from '@api/parcelService/parcelService'
-import { generalAction } from '@store/application/useApplication' // Import generalAction
-import { GetParcelDto } from '@dtos/parcel/parcel.dto'
+import { getParcelDetailsById, getParcels } from '@api/parcelService/parcelService'
+import { generalAction } from '@store/application/useApplication'
+import { GetParcelDetailsDto, GetParcelDto } from '@dtos/parcel/parcel.dto'
 
 interface State {
+	parcelDetails: GetParcelDetailsDto
 	parcels: GetParcelDto[]
 	id: number
 	totalParcels: number
@@ -12,9 +13,11 @@ interface State {
 interface Actions {
 	getParcelsAction: (limit: number) => Promise<any>
 	resetParcelAction: () => void
+	getParcelDetailsByIdAction: (id: string) => Promise<any>
 }
 
 export const useParcel = create<State & Actions>((set, get) => ({
+	parcelDetails: {} as GetParcelDetailsDto,
 	parcels: [],
 	id: 0,
 	totalParcels: 0,
@@ -39,5 +42,19 @@ export const useParcel = create<State & Actions>((set, get) => ({
 	},
 	resetParcelAction() {
 		set({ parcels: [], id: 0, totalParcels: 0 })
+	},
+	getParcelDetailsByIdAction: async (id: string) => {
+		return generalAction(
+			async () => {
+				const response = await getParcelDetailsById(id)
+				if (!response) {
+					throw new Error(response.msg)
+				}
+				set({ parcelDetails: response.data })
+				return response
+			},
+			'',
+			'Failed to retrieve Parcel details. Please try again.',
+		)
 	},
 }))
