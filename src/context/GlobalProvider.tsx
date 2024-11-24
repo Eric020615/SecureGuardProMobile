@@ -3,6 +3,18 @@ import { router, useGlobalSearchParams, usePathname } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useAuth } from '@store/auth/useAuth'
 
+export const roles = {
+	RES: 'RES', // Resident
+	SUB: 'SUB', // Sub User
+} as const // Makes roles a readonly type with literal values
+
+type Role = keyof typeof roles // 'SA' | 'STF' | 'RES' | 'SUB'
+
+export const rolePermissions: Record<Role, string[]> = {
+	RES: [],
+	SUB: [],
+}
+
 export const GlobalContext = React.createContext<any>(null)
 export const useGlobalContext = () => useContext(GlobalContext)
 
@@ -13,20 +25,30 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 
 	const checkToken = async (redirectToHome = false) => {
 		try {
-			if (pathname == '/sign-up' || pathname == '/sign-in' || pathname == '/user-information' || pathname == '/forgot-password') {
+			if (
+				pathname == '/sign-up' ||
+				pathname == '/sign-in' ||
+				pathname == '/user-information' ||
+				pathname == '/forgot-password'
+			) {
 				return
 			}
 			const value = await AsyncStorage.getItem('token')
 			if (!value) {
-				router.push('/sign-in')
+				throw new Error('Unauthorized')
 			}
 			const response = await checkJwtAuthAction(value)
-			if (response.success && redirectToHome) {
+			if (!response.success) {
+				throw new Error('Unauthorized')
+			}
+			const allowedRoutes = rolePermissions[response.data.role] || []
+			// Check if the requested path is in the allowed routes
+			if (!allowedRoutes.includes(pathname)) {
+				throw new Error('Unauthorized')
+			}
+			if (redirectToHome) {
 				router.push('/home')
 				return
-			}
-			if (!response.success) {
-				router.push('/sign-in')
 			}
 		} catch (error) {
 			router.push('/sign-in')

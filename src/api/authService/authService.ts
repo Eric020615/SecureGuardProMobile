@@ -1,7 +1,13 @@
 import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
 import { RoleEnum } from '@config/constant/user'
-import { ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import {
+	AuthTokenPayloadDto,
+	ForgotPasswordDto,
+	ResetPasswordDto,
+	SignInFormDto,
+	UserSignUpFormDto,
+} from '@dtos/auth/auth.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Sign up for user
@@ -27,8 +33,8 @@ export const forgotPassword = async (forgotPasswordDto: ForgotPasswordDto): Prom
 }
 
 // Check authentication
-export const checkAuth = async (token: string): Promise<IResponse<any>> => {
-	return handleApiRequest<any>(listUrl.auth.checkAuth.path, listUrl.auth.checkAuth.type, {}, token)
+export const checkAuth = async (token: string): Promise<IResponse<AuthTokenPayloadDto>> => {
+	return handleApiRequest<AuthTokenPayloadDto>(listUrl.auth.checkAuth.path, listUrl.auth.checkAuth.type, {}, token)
 }
 
 // Reset password

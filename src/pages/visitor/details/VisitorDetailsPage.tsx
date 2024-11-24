@@ -47,7 +47,7 @@ const VisitorDetailsPage = () => {
 				visitorDetails.visitDateTime
 					? convertDateStringToFormattedString(visitorDetails.visitDateTime, ITimeFormat.dateTime)
 					: 'N/A'
-			}\n\n🔗 View Details: ${process.env.EXPO_PUBLIC_WEB_URL}/resident/visitor/?token=${visitorDetails.token}`,
+			}\n\n🔗 View Details: ${process.env.EXPO_PUBLIC_WEB_URL}/visitor/access-pass/?token=${visitorDetails.token}`,
 		}
 		try {
 			await Share.open({

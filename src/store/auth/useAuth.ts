@@ -1,8 +1,9 @@
 import { create } from 'zustand'
 import { checkAuth, forgotPassword, resetPassword, signIn, signUp } from '@api/authService/authService'
 import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
-import { ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
+import { AuthTokenPayloadDto, ForgotPasswordDto, ResetPasswordDto, SignInFormDto, UserSignUpFormDto } from '@dtos/auth/auth.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { IResponse } from '@api/globalHandler'
 
 interface State {
 	isLogged: boolean
@@ -14,7 +15,7 @@ interface Actions {
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
 	resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
 	forgotPasswordAction: (ForgotPasswordDto: ForgotPasswordDto) => Promise<any>
-	checkJwtAuthAction: (token: string) => Promise<any>
+	checkJwtAuthAction: (token: string) => Promise<IResponse<AuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
 }
 
