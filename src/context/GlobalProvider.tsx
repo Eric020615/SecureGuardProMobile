@@ -2,18 +2,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { router, useGlobalSearchParams, usePathname } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useAuth } from '@store/auth/useAuth'
-
-export const roles = {
-	RES: 'RES', // Resident
-	SUB: 'SUB', // Sub User
-} as const // Makes roles a readonly type with literal values
-
-type Role = keyof typeof roles // 'SA' | 'STF' | 'RES' | 'SUB'
-
-export const rolePermissions: Record<Role, string[]> = {
-	RES: [],
-	SUB: [],
-}
+import { RoleEnum } from '@config/constant/user'
 
 export const GlobalContext = React.createContext<any>(null)
 export const useGlobalContext = () => useContext(GlobalContext)
@@ -41,14 +30,11 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 			if (!response.success) {
 				throw new Error('Unauthorized')
 			}
-			const allowedRoutes = rolePermissions[response.data.role] || []
-			// Check if the requested path is in the allowed routes
-			if (!allowedRoutes.includes(pathname)) {
-				throw new Error('Unauthorized')
+			if (response.data.role !== RoleEnum.RESIDENT && response.data.role !== RoleEnum.RESIDENT_SUBUSER) {
+				throw new Error('Invalid Role')
 			}
 			if (redirectToHome) {
 				router.push('/home')
-				return
 			}
 		} catch (error) {
 			router.push('/sign-in')
