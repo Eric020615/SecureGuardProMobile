@@ -1,12 +1,25 @@
 import { View, Text, Image } from 'react-native'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { useQrCode } from '@store/card/useCard'
+import { useCard } from '@store/card/useCard'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 const QrCodePage = () => {
-	const { qrCode, getQrCodeAction } = useQrCode()
+	const { qrCode, getQrCodeAction } = useCard()
+	const [hasBadge, setHasBadge] = useState(false)
 
 	useEffect(() => {
+		const checkBadge = async () => {
+			const badge = await AsyncStorage.getItem('card')
+			if (badge) setHasBadge(true)
+		}
+		checkBadge()
+	}, [])
+
+	useEffect(() => {
+		if (!hasBadge) {
+			return
+		}
 		if (!qrCode) {
 			getQrCodeAction() // Fetch the Base64 QR code data if not available
 		}

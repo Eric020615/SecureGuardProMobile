@@ -6,7 +6,7 @@ import GlobalProvider from '../context/GlobalProvider'
 import CustomLoader from '@components/loader/CustomLoader'
 import { useApplication } from '@store/application/useApplication'
 import { NotificationProvider } from '../context/NotificationContext'
-import * as Notifications from "expo-notifications";
+import * as Notifications from 'expo-notifications'
 
 Notifications.setNotificationHandler({
 	handleNotification: async () => ({

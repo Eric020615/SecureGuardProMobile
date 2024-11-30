@@ -23,12 +23,6 @@ export const listUrl = {
 			type: IType.get,
 		},
 	},
-	faceAuth: {
-		upload: {
-			path: 'face-auth',
-			type: IType.post,
-		},
-	},
 	users: {
 		create: {
 			path: 'users',
@@ -89,7 +83,7 @@ export const listUrl = {
 		getById: {
 			path: 'notices/:id/details',
 			type: IType.get,
-		}
+		},
 	},
 	visitors: {
 		create: {
@@ -127,7 +121,7 @@ export const listUrl = {
 		deleteById: {
 			path: 'parcels/:id',
 			type: IType.delete,
-		}
+		},
 	},
 	notifications: {
 		getAll: {
@@ -136,9 +130,21 @@ export const listUrl = {
 		},
 	},
 	cards: {
+		createCards: {
+			path: 'cards',
+			type: IType.post,
+		},
+		getCards: {
+			path: 'cards',
+			type: IType.get,
+		},
 		getQrCode: {
 			path: 'cards/qr-code',
 			type: IType.get,
-		}
-	}
+		},
+		upload: {
+			path: 'cards/face-auth',
+			type: IType.post,
+		},
+	},
 }

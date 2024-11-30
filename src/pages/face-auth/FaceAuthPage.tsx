@@ -10,7 +10,7 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 import { convertImageToGeneralFile } from '@helpers/file'
 
-const CameraPage = () => {
+const FaceAuthPage = () => {
 	const [cameraPermission, requestCameraPermission] = useCameraPermissions()
 	const [facing, setFacing] = useState<CameraType>('back')
 	const [flash, setFlash] = useState(false)
@@ -148,4 +148,4 @@ const CameraPage = () => {
 	)
 }
 
-export default CameraPage
+export default FaceAuthPage

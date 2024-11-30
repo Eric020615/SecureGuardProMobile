@@ -5,6 +5,7 @@ import sampleAvatar from '../assets/images/sampleAvatar.png'
 import badmintonCourt from '../assets/images/badmintonCourt.jpeg'
 import basketballCourt from '../assets/images/basketballCourt.jpg'
 import gymRoom from '../assets/images/gymRoom.jpg'
+import logo from '../assets/images/icon.png'
 
 export default {
 	apartmentBuilding,
@@ -14,4 +15,5 @@ export default {
 	gymRoom,
     homeBackground,
 	sampleAvatar,
+	logo
 }

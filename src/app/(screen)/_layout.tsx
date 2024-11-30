@@ -45,9 +45,9 @@ const ScreenLayout = () => {
 						headerShown: false,
 					}}
 				/>
-				{/* camera */}
+				{/* face-auth */}
 				<Stack.Screen
-					name="camera"
+					name="face-auth/index"
 					options={{
 						headerShown: false,
 					}}
@@ -93,6 +93,13 @@ const ScreenLayout = () => {
 				{/* reset password */}
 				<Stack.Screen
 					name="reset-password"
+					options={{
+						headerShown: false,
+					}}
+				/>
+				{/* card */}
+				<Stack.Screen
+					name="card/index"
 					options={{
 						headerShown: false,
 					}}

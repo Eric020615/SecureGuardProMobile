@@ -3,6 +3,7 @@ import { router, useGlobalSearchParams, usePathname } from 'expo-router'
 import React, { useContext, useEffect } from 'react'
 import { useAuth } from '@store/auth/useAuth'
 import { RoleEnum } from '@config/constant/user'
+import { ToastAndroid } from 'react-native'
 
 export const GlobalContext = React.createContext<any>(null)
 export const useGlobalContext = () => useContext(GlobalContext)
@@ -41,6 +42,24 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 		}
 	}
 
+	const checkCardRegistration = async () => {
+		try {
+			// Define routes that require card registration
+			const protectedRoutes = ['/face-auth', '/qrCode'] // Add your protected paths here
+
+			if (protectedRoutes.includes(pathname)) {
+				const cardInfo = await AsyncStorage.getItem('card')
+				if (!cardInfo) {
+					// Redirect to card registration page if no card is registered
+					router.push('/card')
+					throw new Error('Please register your card to access this feature.')
+				}
+			}
+		} catch (error) {
+			ToastAndroid.show(error.message, ToastAndroid.CENTER)
+		}
+	}
+
 	// Track the location in your analytics provider here.
 	useEffect(() => {
 		checkToken(true)
@@ -49,6 +68,7 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 	// Track the location in your analytics provider here.
 	useEffect(() => {
 		checkToken()
+		checkCardRegistration()
 	}, [pathname, params])
 
 	return <GlobalContext.Provider value={null}>{children}</GlobalContext.Provider>

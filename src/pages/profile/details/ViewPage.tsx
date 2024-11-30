@@ -8,7 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import { router, usePathname } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
-import UserAvatar from '@bhavberi/react-native-user-avatar/src';
+import UserAvatar from '@bhavberi/react-native-user-avatar/src'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -42,7 +42,7 @@ const userProfileViewPage = () => {
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 py-4 my-4 justify-center items-center">
 					<View>
-						<UserAvatar name={userProfile.userName || "User"} size={100} round={true} bgColor="#10312b" />
+						<UserAvatar name={userProfile.userName || 'User'} size={100} round={true} bgColor="#10312b" />
 					</View>
 					{userProfile && (
 						<>
@@ -57,9 +57,7 @@ const userProfileViewPage = () => {
 								</Text>
 							</View>
 							<View>
-								<Text className="text-base text-gray-500 font-semibold">
-									{RoleConst[userProfile.role]}
-								</Text>
+								<Text className="text-base text-gray-500 font-semibold">{RoleConst[userProfile.role]}</Text>
 							</View>
 						</>
 					)}
@@ -85,14 +83,12 @@ const userProfileViewPage = () => {
 									<Ionicons name="settings" color={'#000000'} size={24} />
 								</View>
 							}
-							rightReactNativeIcons={
-								<Ionicons name="chevron-forward" color={'#000000'} size={24} />
-							}
+							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							title="Face ID"
 							handlePress={() => {
-								router.push('/camera')
+								router.push('/face-auth')
 							}}
 							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
 							textStyles="text-base text-black flex-1"
@@ -101,9 +97,7 @@ const userProfileViewPage = () => {
 									<MaterialCommunityIcons name="face-recognition" color={'#000000'} size={24} />
 								</View>
 							}
-							rightReactNativeIcons={
-								<Ionicons name="chevron-forward" color={'#000000'} size={24} />
-							}
+							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							title="Password"
@@ -114,16 +108,28 @@ const userProfileViewPage = () => {
 							textStyles="text-base text-black flex-1"
 							leftReactNativeIcons={
 								<View className="mr-4 bg-white p-1 rounded-xl">
+									<MaterialCommunityIcons name="form-textbox-password" color={'#000000'} size={24} />
+								</View>
+							}
+							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
+						/>
+						<CustomButton
+							title="Card"
+							handlePress={() => {
+								router.push('/card')
+							}}
+							containerStyles="bg-gray-200 p-3 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							textStyles="text-base text-black flex-1"
+							leftReactNativeIcons={
+								<View className="mr-4 bg-white p-1 rounded-xl">
 									<MaterialCommunityIcons
-										name="form-textbox-password"
+										name="card-account-details-outline"
 										color={'#000000'}
 										size={24}
 									/>
 								</View>
 							}
-							rightReactNativeIcons={
-								<Ionicons name="chevron-forward" color={'#000000'} size={24} />
-							}
+							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
 							title="Logout"
