@@ -218,7 +218,7 @@ const UserInformationPage = () => {
 								}
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
-								placeholder={'Select date of birth'}
+								placeholder={'DOB'}
 							/>
 						</View>
 						<CustomFormField
@@ -234,7 +234,7 @@ const UserInformationPage = () => {
 							errorMessage={
 								formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
 							}
-							placeholder={'Select gender'}
+							placeholder={'Gender'}
 						/>
 					</View>
 					<View className="flex flex-row mb-3">

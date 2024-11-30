@@ -11,19 +11,17 @@ const QrCodePage = () => {
 	useEffect(() => {
 		const checkBadge = async () => {
 			const badge = await AsyncStorage.getItem('card')
-			if (badge) setHasBadge(true)
+			setHasBadge(!!badge) // Update state based on whether the badge exists
 		}
 		checkBadge()
 	}, [])
 
 	useEffect(() => {
-		if (!hasBadge) {
-			return
-		}
+		if (!hasBadge) return // Do nothing if no badge
 		if (!qrCode) {
-			getQrCodeAction() // Fetch the Base64 QR code data if not available
+			getQrCodeAction() // Trigger fetching of QR code
 		}
-	}, [qrCode, getQrCodeAction])
+	}, [hasBadge]) // Add hasBadge as a dependency
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">

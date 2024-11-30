@@ -67,13 +67,13 @@ const CardPage = () => {
 				) : (
 					// Prompt to activate if no badge is found
 					<View className="flex-1 justify-center items-center">
-						<Text className="text-lg font-semibold text-black text-center mb-4">No badge found for your card.</Text>
+						<Text className="text-lg font-semibold text-black text-center mb-4">No badge found for your account.</Text>
 						<Text className="text-sm text-gray-500 text-center mb-6">
 							Please activate your badge to access your card details.
 						</Text>
 						<CustomButton
 							title="Activate Badge"
-							containerStyles="bg-primary py-3 px-6 rounded-lg"
+							containerStyles="bg-primary p-3 rounded-lg"
 							handlePress={() => {
 								createCardAction() // Create a new card
 							}}

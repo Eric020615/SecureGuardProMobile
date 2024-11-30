@@ -37,6 +37,7 @@ export const useCard = create<State & Actions>((set) => ({
 			async () => {
 				const response = await getQrCode()
 				if (!response?.success) {
+					set({ qrCode: '' })
 					throw new Error(response.msg)
 				}
 				set({ qrCode: response.data.data })
@@ -51,6 +52,8 @@ export const useCard = create<State & Actions>((set) => ({
 			async () => {
 				const response = await getUserCard()
 				if (!response?.success) {
+					set({ card: {} as GetCardByUserDto })
+					await AsyncStorage.removeItem('card')
 					throw new Error(response.msg)
 				}
 				await AsyncStorage.setItem('card', response.data.badgeNumber)
