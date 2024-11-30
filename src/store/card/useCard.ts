@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { generalAction } from '@store/application/useApplication' // Import the generalAction utility
-import { createUserCard, getQrCode, getUserCard } from '@api/cardService/cardService'
+import { createQrCode, createUserCard, getQrCode, getUserCard } from '@api/cardService/cardService'
 import { IResponse } from '@api/globalHandler'
 import { GetCardByUserDto } from '@dtos/card/card.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
@@ -13,6 +13,7 @@ interface State {
 interface Actions {
 	createCardAction: () => Promise<IResponse<any>>
 	getCardAction: () => Promise<IResponse<GetCardByUserDto>>
+	createQrCodeAction: () => Promise<IResponse<any>>
 	getQrCodeAction: () => Promise<any>
 }
 
@@ -30,6 +31,19 @@ export const useCard = create<State & Actions>((set) => ({
 			},
 			'Card created successfully.', // Custom success message
 			'Card creation failed. Please try again.', // Custom error message
+		)
+	},
+	createQrCodeAction: async () => {
+		return generalAction(
+			async () => {
+				const response = await createQrCode()
+				if (!response?.success) {
+					throw new Error(response.msg)
+				}
+				return response
+			},
+			'Qr code created successfully.', // Custom success message
+			'Qr code generated failed. Please try again.', // Custom error message
 		)
 	},
 	getQrCodeAction: async () => {

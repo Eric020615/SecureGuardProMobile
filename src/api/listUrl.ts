@@ -1,4 +1,5 @@
 import { IType } from '@config/constant'
+import { createQrCode } from './cardService/cardService'
 
 export const listUrl = {
 	auth: {
@@ -137,6 +138,10 @@ export const listUrl = {
 		getCards: {
 			path: 'cards',
 			type: IType.get,
+		},
+		createQrCode: {
+			path: 'cards/qr-code',
+			type: IType.post,
 		},
 		getQrCode: {
 			path: 'cards/qr-code',

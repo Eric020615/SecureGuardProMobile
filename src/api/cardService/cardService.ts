@@ -15,6 +15,12 @@ export const getUserCard = async (): Promise<IResponse<GetCardByUserDto>> => {
 	return handleApiRequest<GetCardByUserDto>(listUrl.cards.getCards.path, listUrl.cards.getCards.type, undefined, token)
 }
 
+// Create Qr Code
+export const createQrCode = async (): Promise<IResponse<any>> => {
+	const token = await AsyncStorage.getItem('token')
+	return handleApiRequest<any>(listUrl.cards.createQrCode.path, listUrl.cards.createQrCode.type, undefined, token)
+}
+
 // Get Qr Code
 export const getQrCode = async (): Promise<IResponse<GetQrCodeByUserDto>> => {
 	const token = await AsyncStorage.getItem('token')

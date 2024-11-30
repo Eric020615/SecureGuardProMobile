@@ -22,6 +22,11 @@ const CardPage = () => {
 		}
 	}, [card])
 
+	const createCard = async () => {
+		await createCardAction()
+		await getCardAction() // Re-fetch the card after creation
+	}
+
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal />
@@ -75,7 +80,7 @@ const CardPage = () => {
 							title="Activate Badge"
 							containerStyles="bg-primary p-3 rounded-lg"
 							handlePress={() => {
-								createCardAction() // Create a new card
+								createCard()
 							}}
 						/>
 					</View>

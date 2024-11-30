@@ -78,7 +78,7 @@ const FaceAuthPage = () => {
 					router.push('/profile/view')
 				}}
 				onFailedConfirm={() => {
-					router.push('/camera')
+					router.push('/face-auth')
 				}}
 			/>
 			{!image ? (
