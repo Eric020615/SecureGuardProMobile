@@ -1,9 +1,9 @@
 import { create } from 'zustand'
-import { uploadUserFaceAuth } from '@api/faceAuthService/faceAuthService'
 import { generalAction } from '@store/application/useApplication'
-import { CreateUserFaceAuthDto } from '@dtos/faceAuth/faceAuth.dto'
 import { CameraCapturedPicture, CameraView } from 'expo-camera'
 import { MutableRefObject } from 'react'
+import { CreateUserFaceAuthDto } from '@dtos/card/card.dto'
+import { uploadUserFaceAuth } from '@api/cardService/cardService'
 
 interface State {
 	image: CameraCapturedPicture

@@ -1,6 +1,6 @@
 import { handleApiRequest, IResponse } from '@api/globalHandler'
 import { listUrl } from '@api/listUrl'
-import { GetCardByUserDto, GetQrCodeByUserDto } from '@dtos/card/card.dto'
+import { CreateUserFaceAuthDto, GetCardByUserDto, GetQrCodeByUserDto } from '@dtos/card/card.dto'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // Create User Card
@@ -30,4 +30,9 @@ export const getQrCode = async (): Promise<IResponse<GetQrCodeByUserDto>> => {
 		undefined,
 		token,
 	)
+}
+
+export const uploadUserFaceAuth = async (createUserFaceAuthDto: CreateUserFaceAuthDto): Promise<IResponse<any>> => {
+	const token = await AsyncStorage.getItem('token')
+	return handleApiRequest<any>(listUrl.cards.upload.path, listUrl.cards.upload.type, createUserFaceAuthDto, token)
 }
