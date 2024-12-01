@@ -18,13 +18,17 @@ interface ResetPassword {
 
 const ResetPasswordPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
-    const resetPasswordAction = useAuth((state) => state.resetPasswordAction)
+	const resetPasswordAction = useAuth((state) => state.resetPasswordAction)
 
 	const validationSchema = Yup.object().shape({
 		currentPassword: Yup.string().required('Current Password is required'),
 		newPassword: Yup.string()
-			.required('New Password is required')
-			.min(6, 'New Password must be at least 6 characters long'),
+			.min(8, 'New password must be at least 8 characters long')
+			.matches(/[A-Z]/, 'New password must contain at least one uppercase letter')
+			.matches(/[a-z]/, 'New password must contain at least one lowercase letter')
+			.matches(/\d/, 'New password must contain at least one number')
+			.matches(/[@$!%*?&]/, 'New password must contain at least one special character')
+			.required('New password is required'),
 	})
 
 	const formik = useFormik<ResetPassword>({
@@ -36,7 +40,7 @@ const ResetPasswordPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-            await resetPasswordAction(values)
+			await resetPasswordAction(values)
 		},
 	})
 
@@ -45,7 +49,7 @@ const ResetPasswordPage = () => {
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {
 					formik.resetForm()
-                    router.push('/profile/view') // Navigate back to the profile page
+					router.push('/profile/view') // Navigate back to the profile page
 				}}
 			/>
 			<View className="flex-1">
@@ -87,7 +91,7 @@ const ResetPasswordPage = () => {
 							errorMessage={formik.errors.newPassword}
 							placeholder={'Enter your new password'}
 							isSecureTextEntry={true}
-                            containerStyle='mt-3'
+							containerStyle="mt-3"
 						/>
 						<CustomButton
 							title="Submit"
