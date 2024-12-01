@@ -5,7 +5,6 @@ import CustomButton from '@components/buttons/CustomButton'
 import { router, useLocalSearchParams } from 'expo-router'
 import CustomFlatList from '@components/list/CustomFlatList'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { FacilityConst } from '@config/constant/facilities'
 import moment from 'moment'
 import { ITimeFormat } from '@config/constant'
 import CheckBox from '@react-native-community/checkbox'
@@ -16,9 +15,10 @@ import { SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 import { useFacility } from '@store/facility/useFacility'
 import { useApplication } from '@store/application/useApplication'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { FacilityEnum } from '@config/constant/facilities'
 
 interface FacilityBooking {
-	facilityId: string
+	facilityId: FacilityEnum
 	startDate: Date
 	endDate: Date
 	numOfGuest: number
@@ -40,7 +40,7 @@ const AvailabilitySlotPage = () => {
 				.add(duration as string, 'hours')
 				.format(ITimeFormat.dateTime),
 		),
-		formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
+			formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
 	}, [id, startDate, duration, numOfGuest])
 
@@ -77,7 +77,7 @@ const AvailabilitySlotPage = () => {
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			facilityId: id as string,
+			facilityId: Object.values(FacilityEnum).includes(id as FacilityEnum) ? (id as FacilityEnum) : FacilityEnum.BC,
 			startDate: convertDateStringToDate(startDate as string),
 			endDate: moment(startDate as string)
 				.add(duration as string, 'hours')
@@ -159,7 +159,7 @@ const AvailabilitySlotPage = () => {
 					<View style={{ marginTop: 10 }}>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="location-sharp" color={'#2A5D4F'} size={24} />
-							<Text className="text-lg text-black">{FacilityConst[id as string]}</Text>
+							<Text className="text-lg text-black">{FacilityEnum[id as string]}</Text>
 						</View>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="calendar-outline" color={'#10312B'} size={24} />

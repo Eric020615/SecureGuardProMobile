@@ -1,5 +1,7 @@
+import { FacilityEnum } from "@config/constant/facilities"
+
 export interface FacilityBookingFormDto {
-	facilityId: string
+	facilityId: FacilityEnum
 	startDate: string
 	endDate: string
 	numOfGuest: number

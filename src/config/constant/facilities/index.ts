@@ -1,7 +1,7 @@
-export const FacilityConst = {
-	BC: 'Badminton Court',
-	BBC: 'Basketball Court',
-	GR: 'Gym Room',
+export enum FacilityEnum {
+	BC = 'Badminton Court',
+	BBC = 'Basketball Court',
+	GR = 'Gym Room',
 }
 
 export const facilityBookingSlotCheckConst = {
