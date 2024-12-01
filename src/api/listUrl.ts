@@ -1,5 +1,4 @@
 import { IType } from '@config/constant'
-import { createQrCode } from './cardService/cardService'
 
 export const listUrl = {
 	auth: {
@@ -147,7 +146,7 @@ export const listUrl = {
 			path: 'cards/qr-code',
 			type: IType.get,
 		},
-		upload: {
+		createFaceAuth: {
 			path: 'cards/face-auth',
 			type: IType.post,
 		},

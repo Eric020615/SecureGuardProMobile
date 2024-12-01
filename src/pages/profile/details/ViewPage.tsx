@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { RoleConst } from '@config/constant/user'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
-import { router, usePathname } from 'expo-router'
+import { router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
 import UserAvatar from '@bhavberi/react-native-user-avatar/src'
@@ -12,14 +12,12 @@ import CustomButton from '@components/buttons/CustomButton'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
-	const currentPath = usePathname()
 
 	const handleEditProfile = () => {
-		if (currentPath.includes('view')) {
-			router.push(currentPath.replace('view', 'edit'))
-			return
-		}
-		router.push(currentPath.concat('/edit'))
+		router.push({
+			pathname: '/(tabs)/profile/[pageMode]',
+			params: { pageMode: 'edit' },
+		})
 	}
 
 	const logOut = async () => {

@@ -2,7 +2,7 @@ import { ScrollView, Text, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
-import { router, usePathname } from 'expo-router'
+import { router } from 'expo-router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
@@ -33,13 +33,11 @@ const ProfileDetailsEditPage = () => {
 	const { isLoading } = useApplication()
 	const { userProfile, getUserProfileByIdAction, editUserProfileByIdAction } = useUser()
 	const [formInitialValue, setFormInitialValue] = useState<UserProfile>({} as UserProfile)
-	const currentPath = usePathname()
 	const handlePress = () => {
-		if (currentPath.includes('edit')) {
-			router.push(currentPath.replace('edit', 'view'))
-			return
-		}
-		router.push(currentPath.concat('/view'))
+		router.push({
+			pathname: '/(tabs)/profile/[pageMode]',
+			params: { pageMode: 'view' },
+		})
 	}
 	useEffect(() => {
 		fetchUserProfileByUserId()
@@ -55,9 +53,7 @@ const ProfileDetailsEditPage = () => {
 				userName: userProfile?.userName ? userProfile.userName : '',
 				email: userProfile?.email ? userProfile.email : '',
 				userCountryCode: userProfile?.contactNumber
-					? getCountriesByCallingCode(
-							parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode,
-					  )[0]
+					? getCountriesByCallingCode(parsePhoneNumberFromString(userProfile.contactNumber).countryCallingCode)[0]
 					: null,
 				userPhoneNumber: userProfile?.contactNumber
 					? parsePhoneNumberFromString(userProfile?.contactNumber).nationalNumber
@@ -77,10 +73,7 @@ const ProfileDetailsEditPage = () => {
 			.required('Phone number is required')
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
 				if (!value) return false
-				const phone = parsePhoneNumberFromString(
-					value,
-					formik.values.userCountryCode.cca2 as CountryCode,
-				)
+				const phone = parsePhoneNumberFromString(value, formik.values.userCountryCode.cca2 as CountryCode)
 				return phone ? phone.isValid() : false
 			}),
 	})
@@ -97,10 +90,8 @@ const ProfileDetailsEditPage = () => {
 				email: values.email,
 				contactNumber: values.userCountryCode.callingCode + values.userPhoneNumber,
 				gender: values.gender,
-				dateOfBirth: convertDateToDateString(values.dateOfBirth , ITimeFormat.isoDateTime),
+				dateOfBirth: convertDateToDateString(values.dateOfBirth, ITimeFormat.isoDateTime),
 			})
-			formik.resetForm()
-			router.push(currentPath.replace('edit', 'view'))
 		},
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
@@ -110,7 +101,15 @@ const ProfileDetailsEditPage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
-			<ActionConfirmationModal />
+			<ActionConfirmationModal
+				onSuccessConfirm={() => {
+					formik.resetForm()
+					router.push({
+						pathname: '/(tabs)/profile/[pageMode]',
+						params: { pageMode: 'view' },
+					})
+				}}
+			/>
 			<ScrollView>
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="flex flex-row items-center">
@@ -137,9 +136,7 @@ const ProfileDetailsEditPage = () => {
 									}}
 									placeholder="Enter your first name"
 									errorMessage={
-										formik.touched.firstName &&
-										formik.errors.firstName &&
-										(formik.errors.firstName as string)
+										formik.touched.firstName && formik.errors.firstName && (formik.errors.firstName as string)
 									}
 								/>
 							</View>
@@ -154,11 +151,7 @@ const ProfileDetailsEditPage = () => {
 										formik.setFieldValue('lastName', e)
 									}}
 									placeholder="Enter your last name"
-									errorMessage={
-										formik.touched.lastName &&
-										formik.errors.lastName &&
-										(formik.errors.lastName as string)
-									}
+									errorMessage={formik.touched.lastName && formik.errors.lastName && (formik.errors.lastName as string)}
 								/>
 							</View>
 							<View>
@@ -172,11 +165,7 @@ const ProfileDetailsEditPage = () => {
 										formik.setFieldValue('userName', e)
 									}}
 									placeholder="Enter your username"
-									errorMessage={
-										formik.touched.userName &&
-										formik.errors.userName &&
-										(formik.errors.userName as string)
-									}
+									errorMessage={formik.touched.userName && formik.errors.userName && (formik.errors.userName as string)}
 								/>
 							</View>
 							<CustomFormField
@@ -189,9 +178,7 @@ const ProfileDetailsEditPage = () => {
 									formik.setFieldValue('email', e)
 								}}
 								placeholder="Enter your email"
-								errorMessage={
-									formik.touched.email && formik.errors.email && (formik.errors.email as string)
-								}
+								errorMessage={formik.touched.email && formik.errors.email && (formik.errors.email as string)}
 							/>
 							<CustomFormField
 								containerStyle="mt-4"
@@ -223,9 +210,7 @@ const ProfileDetailsEditPage = () => {
 									formik.setFieldValue('gender', e)
 								}}
 								items={GenderList}
-								errorMessage={
-									formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
-								}
+								errorMessage={formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)}
 								placeholder="Select gender"
 							/>
 							<View className="flex flex-row gap-4 mt-1">
@@ -234,20 +219,13 @@ const ProfileDetailsEditPage = () => {
 										title="DOB"
 										textStyle="text-base font-bold"
 										type="DateTime"
-										selectedDate={
-											formik.values.dateOfBirth ? formik.values.dateOfBirth : getCurrentDate()
-										}
+										selectedDate={formik.values.dateOfBirth ? formik.values.dateOfBirth : getCurrentDate()}
 										onChange={onDatePickerChange}
-										buttonTitle={convertDateToDateString(
-											formik.values.dateOfBirth,
-											ITimeFormat.date,
-										)}
+										buttonTitle={convertDateToDateString(formik.values.dateOfBirth, ITimeFormat.date)}
 										maximumDate={getCurrentDate()}
 										mode="date"
 										errorMessage={
-											formik.touched.dateOfBirth &&
-											formik.errors.dateOfBirth &&
-											(formik.errors.dateOfBirth as string)
+											formik.touched.dateOfBirth && formik.errors.dateOfBirth && (formik.errors.dateOfBirth as string)
 										}
 										setShowDateTime={setShowCalendar}
 										showDateTime={showCalendar}

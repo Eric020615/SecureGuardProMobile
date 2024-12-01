@@ -92,7 +92,7 @@ const ScreenLayout = () => {
 				/>
 				{/* reset password */}
 				<Stack.Screen
-					name="reset-password"
+					name="reset-password/index"
 					options={{
 						headerShown: false,
 					}}

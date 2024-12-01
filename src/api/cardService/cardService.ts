@@ -34,5 +34,10 @@ export const getQrCode = async (): Promise<IResponse<GetQrCodeByUserDto>> => {
 
 export const uploadUserFaceAuth = async (createUserFaceAuthDto: CreateUserFaceAuthDto): Promise<IResponse<any>> => {
 	const token = await AsyncStorage.getItem('token')
-	return handleApiRequest<any>(listUrl.cards.upload.path, listUrl.cards.upload.type, createUserFaceAuthDto, token)
+	return handleApiRequest<any>(
+		listUrl.cards.createFaceAuth.path,
+		listUrl.cards.createFaceAuth.type,
+		createUserFaceAuthDto,
+		token,
+	)
 }
