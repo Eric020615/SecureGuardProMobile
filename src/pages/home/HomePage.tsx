@@ -50,15 +50,6 @@ const HomePage = () => {
 								<Text className="text-sm font-semibold">Notices</Text>
 							</TouchableOpacity>
 						</View>
-						<View className="mt-6">
-							<Text className="text-black text-lg font-psemibold mb-4">Notices</Text>
-							<View className="flex flex-row gap-5">
-								<TouchableOpacity className="p-6 w-fit flex justify-center items-center bg-white rounded-md flex-1">
-									<Image source={icons.packages} className="mb-2" />
-									<Text className="text-sm">Package</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
 					</View>
 				</View>
 			</ScrollView>
