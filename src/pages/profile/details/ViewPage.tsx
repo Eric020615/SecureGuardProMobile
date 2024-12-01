@@ -99,20 +99,6 @@ const userProfileViewPage = () => {
 							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
 						/>
 						<CustomButton
-							title="Password"
-							handlePress={() => {
-								router.push('/reset-password')
-							}}
-							containerStyles="bg-gray-200 p-2 mt-2 w-full rounded-3xl flex flex-row justify-start"
-							textStyles="text-base text-black flex-1"
-							leftReactNativeIcons={
-								<View className="mr-4 bg-white p-1 rounded-xl">
-									<MaterialCommunityIcons name="form-textbox-password" color={'#000000'} size={24} />
-								</View>
-							}
-							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
-						/>
-						<CustomButton
 							title="Card"
 							handlePress={() => {
 								router.push('/card')
@@ -122,6 +108,20 @@ const userProfileViewPage = () => {
 							leftReactNativeIcons={
 								<View className="mr-4 bg-white p-1 rounded-xl">
 									<MaterialCommunityIcons name="card-account-details-outline" color={'#000000'} size={24} />
+								</View>
+							}
+							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
+						/>
+						<CustomButton
+							title="Password"
+							handlePress={() => {
+								router.push('/reset-password')
+							}}
+							containerStyles="bg-gray-200 p-2 mt-2 w-full rounded-3xl flex flex-row justify-start"
+							textStyles="text-base text-black flex-1"
+							leftReactNativeIcons={
+								<View className="mr-4 bg-white p-1 rounded-xl">
+									<MaterialCommunityIcons name="form-textbox-password" color={'#000000'} size={24} />
 								</View>
 							}
 							rightReactNativeIcons={<Ionicons name="chevron-forward" color={'#000000'} size={24} />}
