@@ -10,11 +10,6 @@ export enum RoleDescriptionEnum {
 	SUB = 'Sub-user',
 }
 
-export enum GenderEnum {
-	MALE = 'M',
-	FEMALE = 'F',
-}
-
 export enum GenderDescriptionEnum {
 	M = 'Male',
 	F = 'Female',
