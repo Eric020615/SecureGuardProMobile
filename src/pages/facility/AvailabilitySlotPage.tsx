@@ -40,7 +40,7 @@ const AvailabilitySlotPage = () => {
 				.add(duration as string, 'hours')
 				.format(ITimeFormat.dateTime),
 		),
-			formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
+		formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
 	}, [id, startDate, duration, numOfGuest])
 
@@ -77,7 +77,7 @@ const AvailabilitySlotPage = () => {
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			facilityId: Object.values(FacilityEnum).includes(id as FacilityEnum) ? (id as FacilityEnum) : FacilityEnum.BC,
+			facilityId: id as FacilityEnum,
 			startDate: convertDateStringToDate(startDate as string),
 			endDate: moment(startDate as string)
 				.add(duration as string, 'hours')

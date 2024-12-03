@@ -5,7 +5,7 @@ export enum FacilityEnum {
 }
 
 export const facilityBookingSlotCheckConst = {
-	facilityId: '',
+	facilityId: 'BC' as keyof typeof FacilityEnum,
 	startDate: null,
 	duration: null,
 	numOfGuest: null,

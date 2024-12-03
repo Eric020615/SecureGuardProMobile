@@ -8,7 +8,7 @@ import { BookingDurationList, FacilityList, GuestList } from '@config/listOption
 import moment from 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { facilityBookingSlotCheckConst } from '@config/constant/facilities'
+import { facilityBookingSlotCheckConst, FacilityEnum } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
@@ -18,7 +18,7 @@ import { useModal } from '@store/modal/useModal'
 import { convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface FacilityBooking {
-	facilityId: string
+	facilityId: keyof typeof FacilityEnum
 	startDate: Date
 	duration: number
 	numOfGuest: number
