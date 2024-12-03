@@ -2,7 +2,6 @@ import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator } from 
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
-import { VisitorEnum } from '@config/constant/visitor'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { ITimeFormat } from '@config/constant'
@@ -12,6 +11,7 @@ import { useApplication } from '@store/application/useApplication'
 import { GetVisitorDto } from '@dtos/visitor/visitor.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { convertDateStringToFormattedString } from '@helpers/time'
+import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 
 const VisitorListPage = () => {
 	const [isPast, setIsPast] = useState(true)
@@ -49,7 +49,7 @@ const VisitorListPage = () => {
 			<View className="grid gap-1">
 				<Text className="font-bold text-lg">{item.visitorName}</Text>
 				<Text className="text-gray-500 font-semibold">
-					{VisitorEnum[item.visitorCategory] ? VisitorEnum[item.visitorCategory] : 'others'}
+					{VisitorCategoryDescriptionEnum[item.visitorCategory]}
 				</Text>
 				<View className="flex flex-row gap-1 items-center">
 					<AntDesign name="clockcircle" color="#10312b" size={16} />

@@ -1,21 +1,21 @@
 export enum RoleEnum {
-    'SYSTEM_ADMIN' = 'SA',
-    'RESIDENT' = 'RES',
-    'RESIDENT_SUBUSER' = 'SUB'
+	SYSTEM_ADMIN = 'SA',
+	RESIDENT = 'RES',
+	RESIDENT_SUBUSER = 'SUB',
 }
 
-export enum RoleConst {
-    'RES' = 'Resident',
-    "SA" = "System Admin",
-    'SUB' = 'Sub-user'
+export enum RoleDescriptionEnum {
+	RES = 'Resident',
+	SA = 'System Admin',
+	SUB = 'Sub-user',
 }
 
-export enum Gender {
-    'MALE' = 'M',
-    'FEMALE' = 'F'
+export enum GenderEnum {
+	MALE = 'M',
+	FEMALE = 'F',
 }
 
-export const GenderConst = {
-    "M": "Male",
-    "F": "Female"
+export enum GenderDescriptionEnum {
+	M = 'Male',
+	F = 'Female',
 }

@@ -1,22 +1,24 @@
-export const signUpformDataJson = {
+import { GenderDescriptionEnum } from "../user"
+
+export const signUpConst = {
     email: "",
     password: "",
     confirmPassword: ""
 }
 
-export const userInforformDataJson = {
+export const userInforConst = {
     firstName: '',
     lastName: '',
     userName: '',
     countryCode: null,
     phoneNumber: '',
-    gender: '',
+    gender: 'M' as keyof typeof GenderDescriptionEnum,
     floor: '',
     unit: '',
     dateOfBirth: null
 }
 
-export const signInformDataJson = {
+export const signInConst = {
     email: "",
     password: "",
 }

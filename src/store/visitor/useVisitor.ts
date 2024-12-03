@@ -34,6 +34,7 @@ export const useVisitor = create<State & Actions>((set, get) => ({
 	createVisitorAction: async (createVisitorDto: CreateVisitorDto) => {
 		return generalAction(
 			async () => {
+				console.log(createVisitorDto)
 				const response = await createVisitor(createVisitorDto)
 				if(!response?.success){
 					throw new Error(response.msg)

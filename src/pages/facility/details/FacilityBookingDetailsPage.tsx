@@ -8,6 +8,7 @@ import CustomButton from '@components/buttons/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
+import { FacilityDescriptionEnum } from '@config/constant/facilities'
 
 const FacilityBookingDetails = () => {
 	const { facilityBookingDetails, getFacilityBookingDetailsByIdAction } = useFacility()
@@ -51,7 +52,7 @@ const FacilityBookingDetails = () => {
 							{/* Facility Name */}
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Facility Name</Text>
-								<Text className="text-base text-black">{facilityBookingDetails.facilityName || 'N/A'}</Text>
+								<Text className="text-base text-black">{FacilityDescriptionEnum[facilityBookingDetails.facilityId] || 'N/A'}</Text>
 							</View>
 
 							{/* Booked By */}

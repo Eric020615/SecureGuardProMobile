@@ -12,6 +12,7 @@ import { GetFacilityBookingHistoryDto } from '@dtos/facility/facility.dto'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import CustomConfirmModal from '@components/modals/CustomConfirmationModal'
 import { convertDateStringToDate, convertDateStringToFormattedString, getCurrentDate } from '@helpers/time'
+import { FacilityDescriptionEnum } from '@config/constant/facilities'
 
 const FacilityBookingHistoryPage = () => {
 	const {
@@ -58,7 +59,7 @@ const FacilityBookingHistoryPage = () => {
 		>
 			{/* Facility Name and Status */}
 			<View className="flex flex-row justify-between items-center mb-2" key={index}>
-				<Text className="font-bold text-lg">{item.facilityName}</Text>
+				<Text className="font-bold text-lg">{FacilityDescriptionEnum[item.facilityId]}</Text>
 				{item.isCancelled ? (
 					<Text className="bg-red-500 text-xs text-white rounded-lg px-2 py-1">Cancelled</Text>
 				) : convertDateStringToDate(item.startDate) > getCurrentDate() ? (
@@ -73,13 +74,14 @@ const FacilityBookingHistoryPage = () => {
 						leftReactNativeIcons={<Ionicons name="close-circle" color={'#ffffff'} size={16} />}
 					/>
 				) : (
-					<Text
-						className={`bg-${
-							item.status === 'confirmed' ? 'green' : 'yellow'
-						}-500 text-xs text-white rounded-lg px-2 py-1`}
-					>
-						{item.status.charAt(0).toUpperCase() + item.status.slice(1)}
-					</Text>
+					<></>
+					// <Text
+					// 	className={`bg-${
+					// 		item.status === 'confirmed' ? 'green' : 'yellow'
+					// 	}-500 text-xs text-white rounded-lg px-2 py-1`}
+					// >
+					// 	{item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+					// </Text>
 				)}
 			</View>
 

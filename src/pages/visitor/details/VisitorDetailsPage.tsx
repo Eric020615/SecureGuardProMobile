@@ -4,12 +4,12 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomButton from '@components/buttons/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
-import { VisitorEnum } from '@config/constant/visitor'
 import { ITimeFormat } from '@config/constant'
 import { useVisitor } from '@store/visitor/useVisitor'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { convertDateStringToFormattedString } from '@helpers/time'
 import Share from 'react-native-share'
+import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 
 const VisitorDetailsPage = () => {
 	const { visitorDetails, getVisitorDetailsByIdAction } = useVisitor()
@@ -67,7 +67,7 @@ const VisitorDetailsPage = () => {
 				<DetailRow label="Name" value={visitorDetails.visitorName} />
 				<DetailRow label="Email" value={visitorDetails.visitorEmail} />
 				<DetailRow label="Contact Number" value={visitorDetails.visitorContactNumber} />
-				<DetailRow label="Category" value={VisitorEnum[visitorDetails.visitorCategory]} />
+				<DetailRow label="Category" value={VisitorCategoryDescriptionEnum[visitorDetails.visitorCategory]} />
 				<DetailRow
 					label="Visit Date"
 					value={

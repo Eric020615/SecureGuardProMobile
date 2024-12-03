@@ -1,7 +1,6 @@
 import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
 import React, { useEffect } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import { RoleConst } from '@config/constant/user'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import { router } from 'expo-router'
@@ -9,6 +8,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
 import UserAvatar from '@bhavberi/react-native-user-avatar/src'
 import CustomButton from '@components/buttons/CustomButton'
+import { RoleDescriptionEnum } from '@config/constant/user'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -62,7 +62,7 @@ const userProfileViewPage = () => {
 								<Text className="text-base text-gray-500 font-semibold">{userProfile.email || ''}</Text>
 							</View>
 							<View>
-								<Text className="text-base text-gray-500 font-semibold">{RoleConst[userProfile.role]}</Text>
+								<Text className="text-base text-gray-500 font-semibold">{RoleDescriptionEnum[userProfile.role]}</Text>
 							</View>
 						</>
 					)}

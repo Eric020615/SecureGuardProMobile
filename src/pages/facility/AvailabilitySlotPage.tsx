@@ -15,14 +15,14 @@ import { SpaceAvailabilityDto } from '@dtos/facility/facility.dto'
 import { useFacility } from '@store/facility/useFacility'
 import { useApplication } from '@store/application/useApplication'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
-import { FacilityEnum } from '@config/constant/facilities'
+import { FacilityDescriptionEnum } from '@config/constant/facilities'
 
 interface FacilityBooking {
-	facilityId: FacilityEnum
+	facilityId: keyof typeof FacilityDescriptionEnum
+	spaceId: string
 	startDate: Date
 	endDate: Date
 	numOfGuest: number
-	space: string
 }
 
 const AvailabilitySlotPage = () => {
@@ -32,7 +32,7 @@ const AvailabilitySlotPage = () => {
 	const { isLoading } = useApplication()
 
 	useEffect(() => {
-		formik.setFieldValue('facilityId', id)
+		formik.setFieldValue('facility', id)
 		formik.setFieldValue('startDate', convertDateStringToDate(startDate as string))
 		formik.setFieldValue(
 			'endDate',
@@ -52,17 +52,17 @@ const AvailabilitySlotPage = () => {
 		)
 	}
 
-	const handleSlotSelection = (index: number, spaceId: string) => {
+	const handleSlotSelection = (index: number, space: string) => {
 		if (selectedSlot === index) {
 			setSelectedSlot(null)
 		} else {
 			setSelectedSlot(index)
-			formik.setFieldValue('space', spaceId)
+			formik.setFieldValue('space', space)
 		}
 	}
 
 	const validationSchema = Yup.object().shape({
-		facilityId: Yup.string().required('Please select a facility to proceed.'),
+		facility: Yup.string().required('Please select a facility to proceed.'),
 		startDate: Yup.date()
 			.required('Please select a start date and time for your booking.')
 			.min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),
@@ -77,13 +77,13 @@ const AvailabilitySlotPage = () => {
 		enableReinitialize: true,
 		validateOnBlur: false,
 		initialValues: {
-			facilityId: id as FacilityEnum,
+			facilityId: id as keyof typeof FacilityDescriptionEnum,
 			startDate: convertDateStringToDate(startDate as string),
 			endDate: moment(startDate as string)
 				.add(duration as string, 'hours')
 				.toDate(),
 			numOfGuest: parseInt(numOfGuest as string),
-			space: '',
+			spaceId: '',
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
@@ -92,7 +92,7 @@ const AvailabilitySlotPage = () => {
 				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),
 				endDate: convertDateToDateString(values.endDate, ITimeFormat.isoDateTime),
 				numOfGuest: values.numOfGuest,
-				spaceId: values.space,
+				spaceId: values.spaceId,
 			})
 		},
 	})
@@ -159,7 +159,7 @@ const AvailabilitySlotPage = () => {
 					<View style={{ marginTop: 10 }}>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="location-sharp" color={'#2A5D4F'} size={24} />
-							<Text className="text-lg text-black">{FacilityEnum[id as string]}</Text>
+							<Text className="text-lg text-black">{FacilityDescriptionEnum[id as string]}</Text>
 						</View>
 						<View className="flex flex-row items-center gap-1">
 							<Ionicons name="calendar-outline" color={'#10312B'} size={24} />

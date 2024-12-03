@@ -4,11 +4,11 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomButton from '@components/buttons/CustomButton'
 import { router } from 'expo-router'
-import { BookingDurationList, FacilityList, GuestList } from '@config/listOption/facility'
+import { BookingDurationList, FacilityOptions, GuestList } from '@config/listOption/facility'
 import moment from 'moment-timezone'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { facilityBookingSlotCheckConst, FacilityEnum } from '@config/constant/facilities'
+import { facilityBookingSlotCheckConst, FacilityDescriptionEnum } from '@config/constant/facilities'
 import CustomFormField from '@components/form/CustomFormField'
 import { ITimeFormat } from '@config/constant'
 import CustomImageSlider from '@components/slider/CustomImageSlider'
@@ -18,19 +18,19 @@ import { useModal } from '@store/modal/useModal'
 import { convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface FacilityBooking {
-	facilityId: keyof typeof FacilityEnum
+	facility: keyof typeof FacilityDescriptionEnum
 	startDate: Date
 	duration: number
 	numOfGuest: number
 }
 
 const CreateFacilityBookingPage = () => {
-	const [facilityId, setFacilityId] = useState('BC')
+	const [facility, setfacility] = useState('BC')
 	const [showCalendar, setShowCalendar] = useState(false)
 	const { isLoading, setIsLoading } = useApplication()
 	const { setActionConfirmModalAction } = useModal()
 	const validationSchema = Yup.object().shape({
-		facilityId: Yup.string().required('Date is required'),
+		facility: Yup.string().required('Date is required'),
 		startDate: Yup.date()
 			.required('Start time is required')
 			.min(getCurrentDate(), 'Start date must be after now'),
@@ -47,7 +47,7 @@ const CreateFacilityBookingPage = () => {
 			try {
 				setIsLoading(true)
 				router.push(
-					`/facility/${values.facilityId}/${convertDateToDateString(
+					`/facility/${values.facility}/${convertDateToDateString(
 						values.startDate,
 						ITimeFormat.dateTime,
 					)}/${values.duration}/${values.numOfGuest}/check`,
@@ -65,8 +65,8 @@ const CreateFacilityBookingPage = () => {
 	})
 
 	useEffect(() => {
-		formik.setFieldValue('facilityId', facilityId)
-	}, [facilityId])
+		formik.setFieldValue('facility', facility)
+	}, [facility])
 
 	const onDatePickerChange = (selectedDate: Date) => {
 		formik.handleBlur('selectedDate')
@@ -100,8 +100,8 @@ const CreateFacilityBookingPage = () => {
 					<View className="items-center my-4">
 						{/* Centering image slider */}
 						<CustomImageSlider
-							item={FacilityList}
-							onChangeIndex={setFacilityId}
+							item={FacilityOptions}
+							onChangeIndex={setfacility}
 							containerStyle="w-full" // Ensure slider takes full width
 						/>
 					</View>

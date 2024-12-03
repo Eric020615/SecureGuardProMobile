@@ -6,8 +6,8 @@ import CustomButton from '@components/buttons/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
-import { createVisitorConst, VisitorEnum } from '@config/constant/visitor'
-import { VisitorCategoryList } from '@config/listOption/visitor'
+import { createVisitorConst, VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
+import { VisitorCategoryOptions } from '@config/listOption/visitor'
 import { ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
@@ -20,7 +20,7 @@ import { convertDateToDateString, getCurrentDate } from '@helpers/time'
 
 interface CreateVisitor {
 	visitDateTime: Date
-	visitorCategory: VisitorEnum
+	visitorCategory: keyof typeof VisitorCategoryDescriptionEnum
 	visitorName: string
 	visitorEmail: string
 	visitorCountryCode: ICountry
@@ -131,7 +131,7 @@ const CreateVisitorPage = () => {
 							onValueChange={(e) => {
 								formik.setFieldValue('visitorCategory', e)
 							}}
-							items={VisitorCategoryList}
+							items={VisitorCategoryOptions}
 							placeholder={'Select visitor category'}
 							errorMessage={
 								formik.touched.visitorCategory &&

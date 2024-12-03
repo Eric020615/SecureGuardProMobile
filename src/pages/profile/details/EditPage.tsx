@@ -6,16 +6,16 @@ import { router } from 'expo-router'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
-import { Gender } from '@config/constant/user'
 import { getCountriesByCallingCode, ICountry } from 'react-native-international-phone-number'
 import CustomFormField from '@components/form/CustomFormField'
-import { GenderList } from '@config/listOption/user'
+import { GenderOptions } from '@config/listOption/user'
 import { ITimeFormat } from '@config/constant'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { useApplication } from '@store/application/useApplication'
 import { useUser } from '@store/user/useUser'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { convertDateStringToDate, convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
+import { GenderDescriptionEnum } from '@config/constant/user'
 
 interface UserProfile {
 	firstName: string
@@ -24,7 +24,7 @@ interface UserProfile {
 	email: string
 	userCountryCode: ICountry
 	userPhoneNumber: string
-	gender: Gender
+	gender: keyof typeof GenderDescriptionEnum
 	dateOfBirth: Date
 }
 
@@ -209,7 +209,7 @@ const ProfileDetailsEditPage = () => {
 								onValueChange={(e) => {
 									formik.setFieldValue('gender', e)
 								}}
-								items={GenderList}
+								items={GenderOptions}
 								errorMessage={formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)}
 								placeholder="Select gender"
 							/>

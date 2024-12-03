@@ -28,7 +28,7 @@ interface Actions {
 	getFacilityBookingDetailsByIdAction: (id: string) => Promise<any>
 	resetFacilityBookingHistory: () => void
 	cancelBookingAction: (bookingGuid: string) => Promise<any>
-	checkAvailabilitySlotAction: (facilityId: string, startDate: string, endDate: string) => Promise<any>
+	checkAvailabilitySlotAction: (facility: string, startDate: string, endDate: string) => Promise<any>
 }
 
 export const useFacility = create<State & Actions>((set, get) => ({
@@ -100,10 +100,10 @@ export const useFacility = create<State & Actions>((set, get) => ({
 		)
 	},
 
-	checkAvailabilitySlotAction: async (facilityId: string, startDate: string, endDate: string) => {
+	checkAvailabilitySlotAction: async (facility: string, startDate: string, endDate: string) => {
 		return generalAction(
 			async () => {
-				const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
+				const response = await checkAvailabilitySlot(facility, startDate, endDate)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

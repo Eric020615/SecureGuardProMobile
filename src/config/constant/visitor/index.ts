@@ -1,14 +1,14 @@
-export const createVisitorConst = {
-    visitDateTime: null,
-    visitorCategory: null,
-    visitorName: "",
-    visitorEmail: "",
-    visitorCountryCode: null,
-    visitorPhoneNumber: "",
+export enum VisitorCategoryDescriptionEnum {
+	FM = 'Family Member',
+	F = 'Friend',
+	R = 'Relative',
 }
 
-export enum VisitorEnum {
-    FR = "Friend",
-    FM = "Family Member",
-    RL = "Relative"
+export const createVisitorConst = {
+	visitDateTime: null,
+	visitorCategory: null,
+	visitorName: '',
+	visitorEmail: '',
+	visitorCountryCode: null,
+	visitorPhoneNumber: '',
 }

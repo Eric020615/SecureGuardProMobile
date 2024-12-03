@@ -6,7 +6,7 @@ import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import CustomButton from '@components/buttons/CustomButton'
 import { Link, router } from 'expo-router'
-import { signInformDataJson } from '@config/constant/auth/index'
+import { signInConst } from '@config/constant/auth/index'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { SignInFormDto } from '@dtos/auth/auth.dto'
 import { useAuth } from '@store/auth/useAuth'
@@ -22,7 +22,7 @@ const SignInPage = () => {
 	const formik = useFormik<SignInFormDto>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: signInformDataJson,
+		initialValues: signInConst,
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
 			signInWithPassword({

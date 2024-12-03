@@ -1,12 +1,12 @@
 import { images } from '@assets/index'
 import { listOptions } from '..'
-import { FacilityEnum } from '@config/constant/facilities'
+import { FacilityDescriptionEnum } from '@config/constant/facilities'
 
-export const FacilityList: {
+export const FacilityOptions: {
 	key: number
-	name: keyof typeof FacilityEnum
+	name: keyof typeof FacilityDescriptionEnum
 	image: any
-}[] = [
+} [] = [
 	{
 		key: 0,
 		name: 'BC',

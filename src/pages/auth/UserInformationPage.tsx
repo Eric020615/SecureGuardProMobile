@@ -4,10 +4,10 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomFormField from '@components/form/CustomFormField'
-import { userInforformDataJson } from '@config/constant/auth'
+import { userInforConst } from '@config/constant/auth'
 import CustomButton from '@components/buttons/CustomButton'
 import { ICountry } from 'react-native-international-phone-number'
-import { GenderList } from '@config/listOption/user'
+import { GenderOptions } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
 import * as DocumentPicker from 'react-native-document-picker'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
@@ -20,6 +20,7 @@ import { useAuth } from '@store/auth/useAuth'
 import { useUser } from '@store/user/useUser'
 import { convertDateToDateString, getCurrentDate, initializeDate } from '@helpers/time'
 import { useRefData } from '@store/refData/useRefData'
+import { GenderDescriptionEnum } from '@config/constant/user'
 
 interface UserInformationForm {
 	firstName: string
@@ -27,7 +28,7 @@ interface UserInformationForm {
 	userName: string
 	countryCode: ICountry
 	phoneNumber: string
-	gender: string
+	gender: keyof typeof GenderDescriptionEnum
 	floor: string
 	unit: string
 	dateOfBirth: Date
@@ -89,7 +90,7 @@ const UserInformationPage = () => {
 	const formik = useFormik<UserInformationForm>({
 		enableReinitialize: true,
 		validateOnBlur: false,
-		initialValues: userInforformDataJson,
+		initialValues: userInforConst,
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
 			await createUserAction(
@@ -229,7 +230,7 @@ const UserInformationPage = () => {
 							onValueChange={(e) => {
 								formik.setFieldValue('gender', e)
 							}}
-							items={GenderList}
+							items={GenderOptions}
 							onBlur={formik.handleBlur('gender')}
 							errorMessage={
 								formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
