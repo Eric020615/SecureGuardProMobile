@@ -8,6 +8,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import { convertDateStringToFormattedString } from '@helpers/time'
 import { ITimeFormat } from '@config/constant'
 import { useParcel } from '@store/parcel/useParcel'
+import { ParcelStatusDescriptionEnum } from '@config/constant/parcel'
 
 const ParcelDetailsPage = () => {
 	const { width } = Dimensions.get('window') // Get full screen width
@@ -75,6 +76,14 @@ const ParcelDetailsPage = () => {
 									{parcelDetails.createdDateTime
 										? convertDateStringToFormattedString(parcelDetails.createdDateTime, ITimeFormat.dateTime)
 										: 'N/A'}
+								</Text>
+							</View>
+
+							{/* Parcel Status */}
+							<View className="mt-3">
+								<Text className="text-lg text-black font-bold">Parcel Status</Text>
+								<Text className="text-base text-black">
+									{ParcelStatusDescriptionEnum[parcelDetails.parcelStatus] || 'N/A'}
 								</Text>
 							</View>
 						</View>

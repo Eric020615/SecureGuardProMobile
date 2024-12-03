@@ -1,3 +1,5 @@
+import { DocumentStatusDescriptionEnum } from '@config/constant'
+import { ParcelStatusDescriptionEnum } from '@config/constant/parcel'
 import { GeneralFileResponseDto } from '@dtos/application/application.dto'
 
 export interface GetParcelDto {
@@ -15,6 +17,8 @@ export interface GetParcelDetailsDto {
 	parcelImage: GeneralFileResponseDto
 	floor: string
 	unit: string
+	parcelStatus: keyof typeof ParcelStatusDescriptionEnum
+	status: keyof typeof DocumentStatusDescriptionEnum
 	createdBy: string
 	createdDateTime: string
 	updatedBy: string
