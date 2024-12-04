@@ -38,6 +38,7 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 				router.push('/home')
 			}
 		} catch (error) {
+			ToastAndroid.show(error.message, ToastAndroid.CENTER)
 			router.push('/sign-in')
 		}
 	}
