@@ -32,7 +32,7 @@ const AvailabilitySlotPage = () => {
 	const { isLoading } = useApplication()
 
 	useEffect(() => {
-		formik.setFieldValue('facility', id)
+		formik.setFieldValue('facilityId', id)
 		formik.setFieldValue('startDate', convertDateStringToDate(startDate as string))
 		formik.setFieldValue(
 			'endDate',
@@ -62,7 +62,7 @@ const AvailabilitySlotPage = () => {
 	}
 
 	const validationSchema = Yup.object().shape({
-		facility: Yup.string().required('Please select a facility to proceed.'),
+		facilityId: Yup.string().required('Please select a facility to proceed.'),
 		startDate: Yup.date()
 			.required('Please select a start date and time for your booking.')
 			.min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),
@@ -87,6 +87,7 @@ const AvailabilitySlotPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
+			console.log('values', values)
 			await submitBookingAction({
 				facilityId: values.facilityId,
 				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),

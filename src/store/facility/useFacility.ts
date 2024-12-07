@@ -100,10 +100,10 @@ export const useFacility = create<State & Actions>((set, get) => ({
 		)
 	},
 
-	checkAvailabilitySlotAction: async (facility: string, startDate: string, endDate: string) => {
+	checkAvailabilitySlotAction: async (facilityId: string, startDate: string, endDate: string) => {
 		return generalAction(
 			async () => {
-				const response = await checkAvailabilitySlot(facility, startDate, endDate)
+				const response = await checkAvailabilitySlot(facilityId, startDate, endDate)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

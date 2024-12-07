@@ -72,7 +72,7 @@ export const cancelBooking = async (facilityBookingGuid: string): Promise<IRespo
 }
 
 export const checkAvailabilitySlot = async (
-	facility: string,
+	facilityId: string,
 	startDate: string,
 	endDate: string,
 ): Promise<IResponse<SpaceAvailabilityDto[]>> => {
@@ -83,7 +83,7 @@ export const checkAvailabilitySlot = async (
 		{},
 		token,
 		{
-			facility,
+			facilityId,
 			startDate,
 			endDate,
 		},
