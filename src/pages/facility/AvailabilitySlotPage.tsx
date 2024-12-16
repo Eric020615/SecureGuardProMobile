@@ -87,7 +87,6 @@ const AvailabilitySlotPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: async (values) => {
-			console.log('values', values)
 			await submitBookingAction({
 				facilityId: values.facilityId,
 				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),

@@ -1,15 +1,16 @@
 {
   "compilerOptions": {
+    "jsx": "react-native",
     "paths": {
       "@components/*": ["./src/components/*"],
       "@assets/*": ["./src/assets/*"],
-      // "@/*": ["./*"],
       "@store/*": ["./src/store/*"],
       "@config/*": ["./src/config/*"],
       "@api/*": ["./src/api/*"],
       "@pages/*": ["./src/pages/*"],
       "@dtos/*": ["./src/dtos/*"],
-      "@helpers/*": ["./src/helpers/*"]
+      "@helpers/*": ["./src/helpers/*"],
+      "@contexts/*": ["./src/context/*"]
     }
   },
   "extends": "expo/tsconfig.base",

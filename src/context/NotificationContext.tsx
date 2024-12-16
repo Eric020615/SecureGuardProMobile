@@ -28,35 +28,61 @@ export const NotificationProvider: React.FC<NotificationProviderProps> = ({ chil
 	const [notification, setNotification] = useState<Notifications.Notification | null>(null)
 	const [error, setError] = useState<Error | null>(null)
 
-	const notificationListener = useRef<Subscription>()
-	const responseListener = useRef<Subscription>()
+	// const notificationListener = useRef<Subscription>()
+	// const responseListener = useRef<Subscription>()
+
+	// useEffect(() => {
+	// 	registerForPushNotificationsAsync().then(
+	// 		(token) => setExpoPushToken(token),
+	// 		(error) => setError(error),
+	// 	)
+
+	// 	notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
+	// 		setNotification(notification)
+	// 	})
+
+	// 	responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
+	// 		console.log(
+	// 			'🔔 Notification Response: ',
+	// 			JSON.stringify(response, null, 2),
+	// 			JSON.stringify(response.notification.request.content.data, null, 2),
+	// 		)
+	// 		// Handle the notification response here
+	// 	})
+
+	// 	return () => {
+	// 		if (notificationListener.current) {
+	// 			Notifications.removeNotificationSubscription(notificationListener.current)
+	// 		}
+	// 		if (responseListener.current) {
+	// 			Notifications.removeNotificationSubscription(responseListener.current)
+	// 		}
+	// 	}
+	// }, [])
 
 	useEffect(() => {
-		registerForPushNotificationsAsync().then(
-			(token) => setExpoPushToken(token),
-			(error) => setError(error),
-		)
+		let isMounted = true
 
-		notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
-			setNotification(notification)
+		registerForPushNotificationsAsync()
+			.then((token) => {
+				if (isMounted) setExpoPushToken(token)
+			})
+			.catch((error) => {
+				if (isMounted) setError(error)
+			})
+
+		const notificationListener = Notifications.addNotificationReceivedListener((notification) => {
+			if (isMounted) setNotification(notification)
 		})
 
-		responseListener.current = Notifications.addNotificationResponseReceivedListener((response) => {
-			console.log(
-				'🔔 Notification Response: ',
-				JSON.stringify(response, null, 2),
-				JSON.stringify(response.notification.request.content.data, null, 2),
-			)
-			// Handle the notification response here
+		const responseListener = Notifications.addNotificationResponseReceivedListener((response) => {
+			console.log('Notification Response:', response)
 		})
 
 		return () => {
-			if (notificationListener.current) {
-				Notifications.removeNotificationSubscription(notificationListener.current)
-			}
-			if (responseListener.current) {
-				Notifications.removeNotificationSubscription(responseListener.current)
-			}
+			isMounted = false
+			notificationListener.remove?.()
+			responseListener.remove?.()
 		}
 	}, [])
 
