@@ -89,12 +89,14 @@ const SignUpPage = () => {
 						onBlur={formik.handleBlur('confirmPassword')}
 						errorMessage={formik.errors.confirmPassword}
 						placeholder={'Enter your confirm password'}
+						testId='confirm-password-form-field'
 					/>
 					<CustomButton
 						title="Sign Up"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
 						isLoading={isLoading}
+						testId='sign-up-button'
 					/>
 
 					<View className="justify-center pt-5 flex-row gap-2">

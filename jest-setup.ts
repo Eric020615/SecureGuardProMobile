@@ -14,4 +14,12 @@ jest.mock('@helpers/notification', () => ({
 	registerForPushNotificationsAsync: jest.fn(() => Promise.resolve('mock-token')),
 }))
 
+jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
+
+jest.mock('react-native-document-picker', () => ({
+  pick: jest.fn(),
+  isCancel: jest.fn(() => false),
+}));
+
+
 console.log('jest-setup.ts is executed!')

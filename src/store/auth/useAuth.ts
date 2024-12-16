@@ -5,16 +5,16 @@ import { AuthTokenPayloadDto, ForgotPasswordDto, ResetPasswordDto, SignInFormDto
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { IResponse } from '@api/globalHandler'
 
-interface State {
+export interface State {
 	isLogged: boolean
 	tempToken: string
 }
 
-interface Actions {
+export interface Actions {
 	signUpAction: (userSignUpForm: UserSignUpFormDto) => Promise<any>
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
 	resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
-	forgotPasswordAction: (ForgotPasswordDto: ForgotPasswordDto) => Promise<any>
+	forgotPasswordAction: (forgotPasswordDto: ForgotPasswordDto) => Promise<any>
 	checkJwtAuthAction: (token: string) => Promise<IResponse<AuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
 }
@@ -54,10 +54,10 @@ export const useAuth = create<State & Actions>((set) => ({
 		)
 	},
 
-	forgotPasswordAction: async (ForgotPasswordDto: ForgotPasswordDto) => {
+	forgotPasswordAction: async (forgotPasswordDto: ForgotPasswordDto) => {
 		return generalAction(
 			async () => {
-				const response = await forgotPassword(ForgotPasswordDto)
+				const response = await forgotPassword(forgotPasswordDto)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

@@ -9,6 +9,7 @@ import { useFormik } from 'formik'
 import { useApplication } from '@store/application/useApplication'
 import { useAuth } from '@store/auth/useAuth'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { ForgotPasswordDto } from '@dtos/auth/auth.dto'
 
 interface ForgotPassword {
 	email: string
@@ -27,10 +28,16 @@ const ForgotPasswordPage = () => {
 			email: '',
 		},
 		validationSchema: validationSchema,
-		onSubmit: async (values) => {
-			await forgotPasswordAction(values)
+		onSubmit: (values) => {
+			console.log(values)
+			forgotPassword(values)
 		},
 	})
+
+	const forgotPassword = async (values: ForgotPasswordDto) => {
+		await forgotPasswordAction(values)
+	}
+	
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
 			<ActionConfirmationModal

@@ -10,6 +10,7 @@ interface ButtonProps {
 	isLoading?: boolean
 	rightReactNativeIcons?: ReactElement
 	leftReactNativeIcons?: ReactElement
+	testId?: string
 }
 
 const CustomButton = ({
@@ -21,6 +22,7 @@ const CustomButton = ({
 	isLoading,
 	rightReactNativeIcons,
 	leftReactNativeIcons,
+	testId,
 }: ButtonProps) => {
 	return (
 		<TouchableOpacity
@@ -29,6 +31,7 @@ const CustomButton = ({
 			className={`rounded-xl justify-center 
       		items-center ${containerStyles} ${isLoading ? 'opacity-50' : ''}`}
 			disabled={isLoading}
+			testID={testId}
 		>
 			{leftReactNativeIcons ? (
 				<View className={`${iconStyles}`}>{leftReactNativeIcons}</View>

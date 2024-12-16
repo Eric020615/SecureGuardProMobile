@@ -59,6 +59,7 @@ interface CustomFormFieldProps {
 	textStyle?: string
 	onBlur?: (value?: any) => void
 	errorMessage?: any
+	testId?: string
 }
 
 const CustomFormFieldStyled = {
@@ -199,7 +200,7 @@ const CustomFormField = (
 	}
 
 	return (
-		<View className={`space-y-2 ${props.containerStyle}`}>
+		<View className={`space-y-2 ${props.containerStyle}`} testID={props.testId}>
 			{props.title && (
 				<Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>
 			)}

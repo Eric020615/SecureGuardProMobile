@@ -1,24 +1,24 @@
-import { GenderDescriptionEnum } from "../user"
+import { GenderDescriptionEnum } from '../user'
 
 export const signUpConst = {
-    email: "",
-    password: "",
-    confirmPassword: ""
+	email: '',
+	password: '',
+	confirmPassword: '',
 }
 
 export const userInforConst = {
-    firstName: '',
-    lastName: '',
-    userName: '',
-    countryCode: null,
-    phoneNumber: '',
-    gender: 'M' as keyof typeof GenderDescriptionEnum,
-    floor: '',
-    unit: '',
-    dateOfBirth: null
+	firstName: '',
+	lastName: '',
+	userName: '',
+	countryCode: null,
+	phoneNumber: '',
+	gender: null,
+	floor: '',
+	unit: '',
+	dateOfBirth: null,
 }
 
 export const signInConst = {
-    email: "",
-    password: "",
+	email: '',
+	password: '',
 }

@@ -87,6 +87,7 @@ const UserInformationPage = () => {
 			}
 		}
 	}
+
 	const formik = useFormik<UserInformationForm>({
 		enableReinitialize: true,
 		validateOnBlur: false,
@@ -158,9 +159,7 @@ const UserInformationPage = () => {
 						}}
 						onBlur={formik.handleBlur('firstName')}
 						errorMessage={
-							formik.touched.firstName &&
-							formik.errors.firstName &&
-							(formik.errors.firstName as string)
+							formik.errors.firstName
 						}
 						placeholder={'Enter your first name'}
 					/>
@@ -174,9 +173,7 @@ const UserInformationPage = () => {
 						}}
 						onBlur={formik.handleBlur('lastName')}
 						errorMessage={
-							formik.touched.lastName &&
-							formik.errors.lastName &&
-							(formik.errors.lastName as string)
+							formik.errors.lastName
 						}
 						placeholder={'Enter your last name'}
 					/>
@@ -194,9 +191,7 @@ const UserInformationPage = () => {
 						}}
 						onBlur={formik.handleBlur('phoneNumber')}
 						errorMessage={
-							formik.touched.phoneNumber &&
-							formik.errors.phoneNumber &&
-							(formik.errors.phoneNumber as string)
+							formik.errors.phoneNumber
 						}
 						placeholder={'Enter phone number'}
 					/>
@@ -213,9 +208,7 @@ const UserInformationPage = () => {
 								buttonTitle={convertDateToDateString(formik.values.dateOfBirth, ITimeFormat.date)}
 								mode="date"
 								errorMessage={
-									formik.touched.dateOfBirth &&
-									formik.errors.dateOfBirth &&
-									(formik.errors.dateOfBirth as string)
+									formik.errors.dateOfBirth
 								}
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
@@ -233,7 +226,7 @@ const UserInformationPage = () => {
 							items={GenderOptions}
 							onBlur={formik.handleBlur('gender')}
 							errorMessage={
-								formik.touched.gender && formik.errors.gender && (formik.errors.gender as string)
+								formik.errors.gender
 							}
 							placeholder={'Gender'}
 						/>
@@ -258,7 +251,7 @@ const UserInformationPage = () => {
 							}
 							onBlur={formik.handleBlur('floor')}
 							errorMessage={
-								formik.touched.floor && formik.errors.floor && (formik.errors.floor as string)
+								formik.errors.floor
 							}
 							placeholder={'Select floor'}
 						/>
@@ -283,7 +276,7 @@ const UserInformationPage = () => {
 							}
 							onBlur={formik.handleBlur('unit')}
 							errorMessage={
-								formik.touched.unit && formik.errors.unit && (formik.errors.unit as string)
+								formik.errors.unit
 							}
 							placeholder={'Select unit'}
 						/>
