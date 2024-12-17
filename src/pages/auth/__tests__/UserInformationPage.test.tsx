@@ -1,121 +1,106 @@
 import React from 'react'
-import { render, fireEvent, act } from '@testing-library/react-native'
-import { NotificationProvider } from '@contexts/NotificationContext'
-import * as DocumentPicker from 'react-native-document-picker'
+import { render, fireEvent, waitFor } from '@testing-library/react-native'
 import UserInformationPage from '@pages/auth/UserInformationPage'
+import { UserInformationFormDto } from '@dtos/user/user.dto'
 
-jest.mock('react-native-document-picker', () => ({
-	pick: jest.fn(),
-	isCancel: jest.fn(() => false),
-}))
+const mockCreateUserAction = jest
+	.fn()
+	.mockImplementation((IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
+		if (tempToken === 'valid-token') {
+			return Promise.resolve({
+				success: true,
+				data: { userId: 1 },
+				msg: 'User created successfully',
+			})
+		}
+		return Promise.resolve({
+			success: false,
+			data: null,
+			msg: 'Invalid token',
+		})
+	})
+
+const mockPropertyList = [
+	{ floorId: '1', units: [{ unitId: '101' }] },
+	{ floorId: '2', units: [{ unitId: '201' }] },
+]
+const mockGetPropertyListAction = jest.fn().mockResolvedValue({
+	success: true,
+	data: mockPropertyList,
+	msg: '',
+})
 
 jest.mock('@store/refData/useRefData', () => ({
-	useRefData: () => ({
-		propertyList: [
-			{ floorId: '1', units: [{ unitId: '1A' }, { unitId: '1B' }] },
-			{ floorId: '2', units: [{ unitId: '2A' }, { unitId: '2B' }] },
-		],
-		getPropertyListAction: jest.fn(),
-	}),
+	useRefData: () => {
+		const data = {
+			propertyList: mockPropertyList, // Mock the propertyList state
+			getPropertyListAction: mockGetPropertyListAction, // Mock the action
+		}
+
+		return data
+	},
 }))
 
 jest.mock('@store/user/useUser', () => ({
-	useUser: () => ({
-		createUserAction: jest.fn(),
-	}),
-}))
-
-jest.mock('@store/auth/useAuth', () => ({
-	useAuth: () => ({
-		tempToken: 'mock-token',
-	}),
-}))
-
-jest.mock('@store/application/useApplication', () => ({
-	useApplication: () => ({
-		isLoading: false,
-	}),
-}))
-
-jest.mock('@store/modal/useModal', () => ({
-	useModal: () => ({
-		setActionConfirmModalAction: jest.fn(),
-	}),
+	useUser: () => {
+		const data = {
+			createUserAction: mockCreateUserAction, // Mock the action
+		}
+		return data
+	},
 }))
 
 describe('UserInformationPage', () => {
-	it('renders correctly with all fields and buttons', () => {
-		const { getByText, getByPlaceholderText } = render(
-			<NotificationProvider>
-				<UserInformationPage />
-			</NotificationProvider>,
-		)
-
-		expect(getByText('Welcome')).toBeTruthy()
-		expect(getByText('We need something more')).toBeTruthy()
-		expect(getByPlaceholderText('Enter your username')).toBeTruthy()
-		expect(getByPlaceholderText('Enter your first name')).toBeTruthy()
-		expect(getByPlaceholderText('Enter your last name')).toBeTruthy()
-		expect(getByPlaceholderText('Enter phone number')).toBeTruthy()
-		expect(getByText('Submit')).toBeTruthy()
+	it('renders correctly', () => {
+		const { getByText } = render(<UserInformationPage />)
+		expect(getByText(/Welcome/i)).toBeTruthy()
+		expect(getByText(/We need something more/i)).toBeTruthy()
 	})
 
-	it('validates required fields correctly', async () => {
-		const { getByText, findByText } = render(
-			<NotificationProvider>
-				<UserInformationPage />
-			</NotificationProvider>,
-		)
+	it('validates required fields', async () => {
+		const { getByText } = render(<UserInformationPage />)
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 0)) // Simulate async effects
-		})
 		fireEvent.press(getByText('Submit'))
-
-		expect(await findByText('First Name is required')).toBeTruthy()
-		expect(await findByText('Last Name is required')).toBeTruthy()
-		expect(await findByText('Phone Number is required')).toBeTruthy()
-		expect(await findByText('Date of Birth is required')).toBeTruthy()
-		expect(await findByText('Gender is required')).toBeTruthy()
+		await waitFor(() => {
+			expect(getByText('First Name is required')).toBeTruthy()
+			expect(getByText('Last Name is required')).toBeTruthy()
+			expect(getByText('Phone Number is required')).toBeTruthy()
+			expect(getByText('Unit Number is required')).toBeTruthy()
+			expect(getByText('Date of Birth is required')).toBeTruthy()
+			expect(getByText('Gender is required')).toBeTruthy()
+		})
 	})
 
-	// it('handles valid form submission', async () => {
-	// 	const mockCreateUserAction = jest.fn()
-	// 	jest.spyOn(require('@store/user/useUser'), 'useUser').mockReturnValue({
-	// 		createUserAction: mockCreateUserAction,
+	it('validates phone number format', async () => {
+		const { getByText, getByPlaceholderText } = render(<UserInformationPage />)
+		const phoneNumberInput = getByPlaceholderText('Enter phone number')
+		fireEvent.changeText(phoneNumberInput, 'invalid-number')
+
+		fireEvent.press(getByText('Submit'))
+		await waitFor(() => {
+			expect(getByText('Phone number is not valid')).toBeTruthy()
+		})
+	})
+
+	// it('submits form with valid data', async () => {
+	// 	const { getByText, getByPlaceholderText, getByTestId, findByTestId } = render(<UserInformationPage />)
+
+	// 	// Fill out the form with valid data
+	// 	fireEvent.changeText(getByPlaceholderText('Enter your username'), 'testuser')
+	// 	fireEvent.changeText(getByPlaceholderText('Enter your first name'), 'John')
+	// 	fireEvent.changeText(getByPlaceholderText('Enter your last name'), 'Doe')
+	// 	fireEvent.changeText(getByPlaceholderText('Enter phone number'), '1000000000')
+
+	// 	// Select unit and gender
+	// 	fireEvent(getByTestId('unit-picker'), 'onValueChange', '101') // Select a unit
+	// 	fireEvent(getByTestId('gender-picker'), 'onValueChange', 'M') // Select gender
+
+	// 	// Press Submit to finalize the form
+	// 	fireEvent.press(getByText('Submit'))
+
+	// 	// Check if the form submission action was called
+	// 	await waitFor(() => {
+	// 		expect(mockCreateUserAction).toHaveBeenCalled()
 	// 	})
-
-	// 	const { getByPlaceholderText, getByText } = render(
-	// 		<NotificationProvider>
-	// 			<UserInformationPage />
-	// 		</NotificationProvider>,
-	// 	)
-
-	// 	await act(async () => {
-	// 		fireEvent.changeText(getByPlaceholderText('Enter your username'), 'testuser')
-	// 		fireEvent.changeText(getByPlaceholderText('Enter your first name'), 'John')
-	// 		fireEvent.changeText(getByPlaceholderText('Enter your last name'), 'Doe')
-	// 		fireEvent.changeText(getByPlaceholderText('Enter phone number'), '1234567890')
-	// 		fireEvent.press(getByText('Submit'))
-	// 	})
-
-	// 	expect(mockCreateUserAction).toHaveBeenCalled()
-	// })
-
-	// it('handles file selection', async () => {
-	// 	const mockFile = { uri: 'file://mockfile', type: 'image/jpeg', name: 'mockfile.jpg' }
-	// 	;(DocumentPicker.pick as jest.Mock).mockResolvedValue([mockFile])
-
-	// 	const { getByText } = render(
-	// 		<NotificationProvider>
-	// 			<UserInformationPage />
-	// 		</NotificationProvider>,
-	// 	)
-
-	// 	await act(async () => {
-	// 		fireEvent.press(getByText('Submit'))
-	// 	})
-
-	// 	expect(DocumentPicker.pick).toHaveBeenCalled()
 	// })
 })

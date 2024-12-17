@@ -4,16 +4,29 @@ import SignUpPage from '@pages/auth/SignUpPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
 
 describe('SignUpPage', () => {
-	it('renders correctly with default UI elements', async () => {
-		const { findByText, getByText, getByPlaceholderText, getByTestId } = render(
+	const setup = async () => {
+		const utils = render(
 			<NotificationProvider>
 				<SignUpPage />
 			</NotificationProvider>,
 		)
 
 		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 0)) // Simulate async effects
+			await new Promise((resolve) => setTimeout(resolve, 0)) // Ensure async effects complete
 		})
+
+		return {
+			...utils,
+			triggerSignUp: () => fireEvent.press(utils.getByTestId('sign-up-button')),
+			fillEmail: (email) => fireEvent.changeText(utils.getByPlaceholderText('Enter your email'), email),
+			fillPassword: (password) => fireEvent.changeText(utils.getByPlaceholderText('Enter your password'), password),
+			fillConfirmPassword: (password) =>
+				fireEvent.changeText(utils.getByPlaceholderText('Enter your confirm password'), password),
+		}
+	}
+
+	it('renders correctly with default UI elements', async () => {
+		const { getByText, getByPlaceholderText, getByTestId } = await setup()
 
 		expect(getByText('Gate Mate')).toBeTruthy()
 		expect(getByTestId('sign-up-button')).toBeTruthy()
@@ -25,27 +38,19 @@ describe('SignUpPage', () => {
 	})
 
 	it('validates email, password, and confirm password fields correctly', async () => {
-		const { getByPlaceholderText, findByText, getByTestId, queryByText } = render(
-			<NotificationProvider>
-				<SignUpPage />
-			</NotificationProvider>,
-		)
+		const { findByText, triggerSignUp, fillEmail, fillPassword, fillConfirmPassword } = await setup()
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 0))
-		})
-
-		fireEvent.press(getByTestId('sign-up-button'))
-
-		// Expect validation errors to be displayed
+		// Trigger "Sign Up" without filling any fields
+		triggerSignUp()
 		expect(await findByText('Email is required')).toBeTruthy()
 		expect(await findByText('Password is required')).toBeTruthy()
 		expect(await findByText('Confirm Password is required')).toBeTruthy()
 
-		fireEvent.changeText(getByPlaceholderText('Enter your email'), 'invalid-email')
-		fireEvent.changeText(getByPlaceholderText('Enter your password'), 'Password123!')
-		fireEvent.changeText(getByPlaceholderText('Enter your confirm password'), 'DifferentPassword123!')
-		fireEvent.press(getByTestId('sign-up-button'))
+		// Fill fields with invalid email and mismatched passwords
+		fillEmail('invalid-email')
+		fillPassword('Password123!')
+		fillConfirmPassword('DifferentPassword123!')
+		triggerSignUp()
 
 		expect(await findByText('Invalid Email')).toBeTruthy()
 		expect(await findByText('Passwords must match')).toBeTruthy()

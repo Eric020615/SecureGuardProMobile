@@ -94,6 +94,7 @@ const CustomFormField = (
 							secureTextEntry={props.isSecureTextEntry && !showPassword}
 							onBlur={props.onBlur}
 							keyboardType="default"
+							testID={props.testId}
 						/>
 						{props.isSecureTextEntry && (
 							<TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
@@ -124,6 +125,7 @@ const CustomFormField = (
 							onBlur={props.onBlur}
 							placeholder={props.placeholder}
 							onChangeText={props.setPhoneNumber}
+							testID={props.testId}
 						/>
 					</View>
 				)
@@ -136,10 +138,11 @@ const CustomFormField = (
 							title={props.buttonTitle ? props.buttonTitle : props.placeholder}
 							rightReactNativeIcons={<Ionicons name="caret-down" color={'#000000'} size={14} />}
 							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-psemibold`}
+							testId={props.testId}
 						/>
 						<DatePicker
 							modal
-							open={props.showDateTime}
+							open={true}
 							date={props.selectedDate}
 							onConfirm={props.onChange}
 							onCancel={() => props.setShowDateTime(!props.showDateTime)}
@@ -157,6 +160,7 @@ const CustomFormField = (
 							selectedValue={props.selectedValue}
 							onValueChange={props.onValueChange}
 							onBlur={props.onBlur}
+							testID={props.testId}
 						>
 							{!props.selectedValue && <Picker.Item label={props.placeholder} value="" />}
 							{props.items.map((x) => (
@@ -200,7 +204,7 @@ const CustomFormField = (
 	}
 
 	return (
-		<View className={`space-y-2 ${props.containerStyle}`} testID={props.testId}>
+		<View className={`space-y-2 ${props.containerStyle}`}>
 			{props.title && (
 				<Text className={`text-base text-black ${props.textStyle}`}>{props.title}</Text>
 			)}

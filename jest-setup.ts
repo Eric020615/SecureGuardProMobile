@@ -14,12 +14,19 @@ jest.mock('@helpers/notification', () => ({
 	registerForPushNotificationsAsync: jest.fn(() => Promise.resolve('mock-token')),
 }))
 
-jest.mock('react-native/Libraries/EventEmitter/NativeEventEmitter');
-
 jest.mock('react-native-document-picker', () => ({
-  pick: jest.fn(),
-  isCancel: jest.fn(() => false),
-}));
+	pick: jest.fn(),
+	isCancel: jest.fn(() => false),
+}))
 
-
-console.log('jest-setup.ts is executed!')
+jest.mock('./node_modules/react-native-date-picker/src/modules', () => {
+	return {
+		getNativeModule: () => ({
+			openPicker: jest.fn(), // Mock openPicker
+			closePicker: jest.fn(), // Mock closePicker
+		}),
+		// Mock the getNativeComponent function to return a mock component
+		getNativeComponent: jest.fn(() => {
+		}),
+	}
+})

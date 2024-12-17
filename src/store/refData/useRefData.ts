@@ -11,7 +11,7 @@ interface Actions {
     getPropertyListAction: () => Promise<any>
 }
 
-export const useRefData = create<State & Actions>((set, get) => ({
+export const useRefData = create<State & Actions>((set) => ({
 	propertyList: [],
 	getPropertyListAction: async () => {
 		return generalAction(

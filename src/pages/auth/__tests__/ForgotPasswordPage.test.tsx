@@ -1,20 +1,12 @@
 import React from 'react'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 import ForgotPasswordPage from '@pages/auth/ForgotPasswordPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
-import { useAuth } from '@store/auth/useAuth'
-import { ForgotPasswordDto } from '@dtos/auth/auth.dto'
-
-// Mock Zustand store
-jest.mock('@store/auth/useAuth', () => ({
-	useAuth: () => ({
-		forgotPasswordAction: jest.fn((data: ForgotPasswordDto) => {}), // Mocking the action here
-	}),
-}))
 
 describe('ForgotPasswordPage', () => {
-	it('renders correctly with default UI elements', async () => {
-		const { getByText, getByPlaceholderText } = render(
+	// Helper function to render the component and provide reusable actions
+	const setup = async () => {
+		const utils = render(
 			<NotificationProvider>
 				<ForgotPasswordPage />
 			</NotificationProvider>,
@@ -23,6 +15,16 @@ describe('ForgotPasswordPage', () => {
 		await act(async () => {
 			await new Promise((resolve) => setTimeout(resolve, 0)) // Simulate async effects
 		})
+
+		return {
+			...utils,
+			triggerSubmit: () => fireEvent.press(utils.getByText('Submit')),
+			fillEmail: (email) => fireEvent.changeText(utils.getByPlaceholderText('Enter your email'), email),
+		}
+	}
+
+	it('renders correctly with default UI elements', async () => {
+		const { getByText, getByPlaceholderText } = await setup()
 
 		expect(getByText('Reset Password')).toBeTruthy()
 		expect(getByText('Please enter your email address to request reset password link.')).toBeTruthy()
@@ -31,25 +33,15 @@ describe('ForgotPasswordPage', () => {
 	})
 
 	it('validates email field correctly', async () => {
-		const { getByText, getByPlaceholderText, findByText } = render(
-			<NotificationProvider>
-				<ForgotPasswordPage />
-			</NotificationProvider>,
-		)
+		const { findByText, triggerSubmit, fillEmail } = await setup()
 
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 0)) // Simulate async effects
-		})
-
-		fireEvent.press(getByText('Submit'))
-
-		// Expect validation error for empty email field
+		// Trigger "Submit" without entering an email
+		triggerSubmit()
 		expect(await findByText('Email is required')).toBeTruthy()
 
-		fireEvent.changeText(getByPlaceholderText('Enter your email'), 'invalid-email')
-		fireEvent.press(getByText('Submit'))
-
-		// Expect validation error for invalid email
+		// Enter an invalid email and trigger "Submit"
+		fillEmail('invalid-email')
+		triggerSubmit()
 		expect(await findByText('Invalid Email')).toBeTruthy()
 	})
 })
