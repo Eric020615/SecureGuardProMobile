@@ -38,7 +38,7 @@ const UserInformationPage = () => {
 	const [selectedFiles, setSelectedFiles] = useState<DocumentPicker.DocumentPickerResponse[]>([])
 	const [showCalendar, setShowCalendar] = useState(false)
 	const setActionConfirmModal = useModal((state) => state.setActionConfirmModalAction)
-	const { id, createUserAction } = useUser()
+	const { createUserAction } = useUser()
 	const tempToken = useAuth((state) => state.tempToken)
 	const isLoading = useApplication((state) => state.isLoading)
 	const { propertyList, getPropertyListAction } = useRefData()
@@ -51,6 +51,7 @@ const UserInformationPage = () => {
 	}, [])
 
 	const validationSchema = Yup.object().shape({
+		userName: Yup.string().required('Username is required'),
 		firstName: Yup.string().required('First Name is required'),
 		lastName: Yup.string().required('Last Name is required'),
 		phoneNumber: Yup.string()
@@ -58,11 +59,14 @@ const UserInformationPage = () => {
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
 				if (!value) return false
 				const phone = parsePhoneNumberFromString(value, formik.values.countryCode.cca2 as CountryCode)
+				console.log(phone)
+				console.log(phone?.isValid())
 				return phone ? phone.isValid() : false
 			}),
-		unit: Yup.string().required('Unit Number is required'),
-		dateOfBirth: Yup.date().required('Date of Birth is required'),
 		gender: Yup.string().required('Gender is required'),
+		floor: Yup.string().required('Floor number is required'),
+		unit: Yup.string().required('Unit number is required'),
+		dateOfBirth: Yup.date().required('Date of Birth is required'),
 	})
 	const onDatePickerChange = (selectedDate: Date) => {
 		formik.setFieldValue('dateOfBirth', initializeDate(selectedDate))
@@ -148,7 +152,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('userName')}
 						errorMessage={formik.errors.userName}
 						placeholder={'Enter your username'}
-						testId='username-form-field'
+						testId="username-form-field"
 					/>
 					<CustomFormField
 						title="First Name"
@@ -161,7 +165,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('firstName')}
 						errorMessage={formik.errors.firstName}
 						placeholder={'Enter your first name'}
-						testId='first-name-form-field'
+						testId="first-name-form-field"
 					/>
 					<CustomFormField
 						title="Last Name"
@@ -174,7 +178,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('lastName')}
 						errorMessage={formik.errors.lastName}
 						placeholder={'Enter your last name'}
-						testId='last-name-form-field'
+						testId="last-name-form-field"
 					/>
 					<CustomFormField
 						title="Phone Number"
@@ -191,7 +195,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('phoneNumber')}
 						errorMessage={formik.errors.phoneNumber}
 						placeholder={'Enter phone number'}
-						testId='phone-number-form-field'
+						testId="phone-number-form-field"
 					/>
 					<View className="flex flex-row mb-3">
 						<View className="flex-1 mr-2">
@@ -207,7 +211,7 @@ const UserInformationPage = () => {
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
 								placeholder={'DOB'}
-								testId='dob-form-field'
+								testId="dob-form-field"
 							/>
 						</View>
 						<CustomFormField
@@ -222,7 +226,7 @@ const UserInformationPage = () => {
 							onBlur={formik.handleBlur('gender')}
 							errorMessage={formik.errors.gender}
 							placeholder={'Gender'}
-							testId='gender-form-field'
+							testId="gender-form-field"
 						/>
 					</View>
 					<View className="flex flex-row mb-3">
@@ -283,14 +287,14 @@ const UserInformationPage = () => {
 						clearFile={() => {
 							setSelectedFiles([])
 						}}
-						testId='supported-document-form-field'
+						testId="supported-document-form-field"
 					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
 						isLoading={isLoading}
-						testId='submit-button'
+						testId="submit-button"
 					/>
 				</View>
 			</ScrollView>

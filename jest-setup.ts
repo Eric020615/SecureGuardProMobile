@@ -26,7 +26,21 @@ jest.mock('./node_modules/react-native-date-picker/src/modules', () => {
 			closePicker: jest.fn(), // Mock closePicker
 		}),
 		// Mock the getNativeComponent function to return a mock component
-		getNativeComponent: jest.fn(() => {
-		}),
+		getNativeComponent: jest.fn(() => {}),
+	}
+})
+
+// jest.setup.ts
+beforeAll(() => {
+	const originalWarn = console.warn
+	console.warn = (...args: any[]) => {
+		if (
+			args[0] &&
+			typeof args[0] === 'string' &&
+			args[0].includes('new NativeEventEmitter() was called with a non-null argument without the required `removeListeners` method')
+		) {
+			return // Ignore the specific warning
+		}
+		// originalWarn(...args) // Call the original warn method for other warnings
 	}
 })

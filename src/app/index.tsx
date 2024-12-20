@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { View, Text, ScrollView, Image, Alert, BackHandler } from 'react-native'
+import { View, Text, ScrollView, Image, Alert, BackHandler, LogBox } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Images from '@assets/images'
 import CustomButton from '@components/buttons/customButton/CustomButton'
@@ -7,6 +7,8 @@ import { router, useNavigation } from 'expo-router'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 
 const App = () => {
+	LogBox.ignoreLogs(['new NativeEventEmitter']) // Ignore log notification by message
+	LogBox.ignoreAllLogs() //Ignore all log notifications
 	const navigation = useNavigation()
 	configureReanimatedLogger({
 		level: ReanimatedLogLevel.warn,
