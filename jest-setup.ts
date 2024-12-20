@@ -1,8 +1,6 @@
 import '@testing-library/react-native/extend-expect'
 
-jest.mock('@react-native-async-storage/async-storage', () =>
-	require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
-)
+jest.mock('@react-native-async-storage/async-storage', () => require('@react-native-async-storage/async-storage/jest/async-storage-mock'))
 
 jest.mock('expo-notifications', () => ({
 	addNotificationReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
@@ -34,11 +32,7 @@ jest.mock('./node_modules/react-native-date-picker/src/modules', () => {
 beforeAll(() => {
 	const originalWarn = console.warn
 	console.warn = (...args: any[]) => {
-		if (
-			args[0] &&
-			typeof args[0] === 'string' &&
-			args[0].includes('new NativeEventEmitter() was called with a non-null argument without the required `removeListeners` method')
-		) {
+		if (args[0] && typeof args[0] === 'string' && args[0].includes('new NativeEventEmitter() was called with a non-null argument without the required `removeListeners` method')) {
 			return // Ignore the specific warning
 		}
 		// originalWarn(...args) // Call the original warn method for other warnings

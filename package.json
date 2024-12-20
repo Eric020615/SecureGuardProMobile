@@ -14,7 +14,10 @@
   },
   "jest": {
     "preset": "jest-expo",
-    "setupFilesAfterEnv": ["<rootDir>/jest-setup.ts"],
+    "setupFilesAfterEnv": [
+      "<rootDir>/jest-setup.ts",
+      "<rootDir>/node_modules/react-native-gesture-handler/jestSetup.js"
+    ],
     "transform": {
       "^.+\\.[t|j]sx?$": "babel-jest"
     },

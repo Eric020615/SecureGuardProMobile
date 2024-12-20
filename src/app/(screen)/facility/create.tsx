@@ -1,4 +1,4 @@
-import CreateFacilityBookingPage from "@pages/facility/CreateFacilityBookingPage";
+import CreateFacilityBookingPage from "@pages/facility/createFacilityBooking/CreateFacilityBookingPage";
 
 const CreateFacility = () => {
   return (

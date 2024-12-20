@@ -1,9 +1,7 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import SignUpPage from '@pages/auth/SignUp/SignUpPage'
+import SignUpPage from '@pages/auth/signUp/SignUpPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
-import { UserSignUpFormDto } from '@dtos/auth/auth.dto'
-import { useAuth } from '@store/auth/useAuth'
 
 const mockSignUpAction = jest.fn()
 jest.mock('@store/auth/useAuth', () => ({

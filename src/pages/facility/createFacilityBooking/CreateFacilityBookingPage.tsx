@@ -103,6 +103,7 @@ const CreateFacilityBookingPage = () => {
 							item={FacilityOptions}
 							onChangeIndex={setfacility}
 							containerStyle="w-full" // Ensure slider takes full width
+							testId='facility-image-slider'
 						/>
 					</View>
 					<View>
@@ -129,6 +130,7 @@ const CreateFacilityBookingPage = () => {
 							setShowDateTime={setShowCalendar}
 							showDateTime={showCalendar}
 							placeholder={'Select booking date'}
+							testId='booking-date-form-field'
 						/>
 						<CustomFormField
 							containerStyle="mt-4"
@@ -146,6 +148,7 @@ const CreateFacilityBookingPage = () => {
 								(formik.errors.duration as string)
 							}
 							placeholder={'Select booking duration'}
+							testId='booking-duration-form-field'
 						/>
 						<CustomFormField
 							containerStyle="my-4"
@@ -163,6 +166,7 @@ const CreateFacilityBookingPage = () => {
 								(formik.errors.numOfGuest as string)
 							}
 							placeholder={'Select number of guests'}
+							testId='number-of-guest-form-field'
 						/>
 						<CustomButton
 							title="Check"
@@ -170,6 +174,7 @@ const CreateFacilityBookingPage = () => {
 							containerStyles="border-primary border bg-primary p-3 w-full mt-2 flex flex-row self-center"
 							isLoading={isLoading}
 							textStyles="text-sm text-white"
+							testId='check-booking-button'
 						/>
 					</View>
 				</View>

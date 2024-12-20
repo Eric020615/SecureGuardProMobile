@@ -58,6 +58,7 @@ const SignInPage = () => {
 						}}
 						errorMessage={formik.errors.email}
 						placeholder={'Enter your email'}
+						testId='email-form-field'
 					/>
 					<CustomFormField
 						title="Password"
@@ -70,6 +71,7 @@ const SignInPage = () => {
 						isSecureTextEntry={true}
 						errorMessage={formik.errors.password}
 						placeholder={'Enter your password'}
+						testId='password-form-field'
 					/>
 					<View className="justify-end flex-row pt-2">
 						<Link href="/forgot-password" className="text-sm font-psemibold text-primary">
@@ -81,6 +83,7 @@ const SignInPage = () => {
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-4"
 						isLoading={isLoading}
+						testId='sign-in-button'
 					/>
 					<View className="justify-center pt-5 flex-row gap-2">
 						<Text className="text-sm font-pregular">Don't have account?</Text>

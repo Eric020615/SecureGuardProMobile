@@ -138,11 +138,11 @@ const CustomFormField = (
 							title={props.buttonTitle ? props.buttonTitle : props.placeholder}
 							rightReactNativeIcons={<Ionicons name="caret-down" color={'#000000'} size={14} />}
 							textStyles={`${CustomFormFieldStyled.placeholderText} ${props.buttonTextStyles} font-psemibold`}
-							testId={props.testId}
+							testId={props.testId + "-button"}
 						/>
 						<DatePicker
 							modal
-							open={true}
+							open={props.showDateTime}
 							date={props.selectedDate}
 							onConfirm={props.onChange}
 							onCancel={() => props.setShowDateTime(!props.showDateTime)}
@@ -150,6 +150,7 @@ const CustomFormField = (
 							mode={props.mode}
 							minimumDate={props.minimumDate}
 							maximumDate={props.maximumDate}
+							testID={props.testId + "-date-picker"}
 						/>
 					</>
 				)

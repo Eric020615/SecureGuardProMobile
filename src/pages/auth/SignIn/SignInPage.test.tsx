@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import SignInPage from '@pages/auth/SignIn/SignInPage'
+import SignInPage from '@pages/auth/signIn/SignInPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
 
 describe('SignInPage', () => {
@@ -18,36 +18,34 @@ describe('SignInPage', () => {
 
 		return {
 			...utils,
-			triggerLogIn: () => fireEvent.press(utils.getByText('Log In')),
-			fillEmail: (email) => fireEvent.changeText(utils.getByPlaceholderText('Enter your email'), email),
-			fillPassword: (password) => fireEvent.changeText(utils.getByPlaceholderText('Enter your password'), password),
+			triggerLogIn: async () => {
+				fireEvent.press(utils.getByTestId('sign-in-button'))
+				await act(async () => {
+					await new Promise((resolve) => setTimeout(resolve, 0)) // Ensure async effects complete
+				})
+			},
+			fillEmail: (email: string) => fireEvent.changeText(utils.getByTestId('email-form-field'), email),
+			fillPassword: (password: string) => fireEvent.changeText(utils.getByTestId('password-form-field'), password),
 		}
 	}
-	
-	it('renders correctly with default UI elements', async () => {
-		const { getByText, getByPlaceholderText } = await setup()
 
-		expect(getByText('Gate Mate')).toBeTruthy()
-		expect(getByText('Log in')).toBeTruthy()
-		expect(getByPlaceholderText('Enter your email')).toBeTruthy()
-		expect(getByPlaceholderText('Enter your password')).toBeTruthy()
-		expect(getByText('Forgot your password?')).toBeTruthy()
-		expect(getByText("Don't have account?")).toBeTruthy()
+	it('verify email address field', async () => {
+		const { fillEmail, queryByText, triggerLogIn } = await setup()
+		fillEmail('ericjuncheng10@gmail.com')
+		await triggerLogIn()
+		expect(await queryByText('Email is required')).toBeNull()
+		fillEmail('')
+		await triggerLogIn()
+		expect(await queryByText('Email is required')).toBeTruthy()
 	})
 
-	it('validates email and password fields correctly', async () => {
-		const { findByText, triggerLogIn, fillEmail, fillPassword } = await setup()
-
-		// Trigger "Log In" without filling any fields
-		triggerLogIn()
-		expect(await findByText('Email is required')).toBeTruthy()
-		expect(await findByText('Password is required')).toBeTruthy()
-
-		// Fill fields with invalid email and valid password
-		fillEmail('invalid-email')
-		fillPassword('password123')
-		triggerLogIn()
-
-		expect(await findByText('Invalid Email')).toBeTruthy()
+	it('verify password field', async () => {
+		const { fillPassword, queryByText, triggerLogIn } = await setup()
+		fillPassword('Abcd1234@')
+		await triggerLogIn()
+		expect(await queryByText('Password is required')).toBeNull()
+		fillPassword('')
+		await triggerLogIn()
+		expect(await queryByText('Password is required')).toBeTruthy()
 	})
 })

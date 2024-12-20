@@ -59,8 +59,6 @@ const UserInformationPage = () => {
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
 				if (!value) return false
 				const phone = parsePhoneNumberFromString(value, formik.values.countryCode.cca2 as CountryCode)
-				console.log(phone)
-				console.log(phone?.isValid())
 				return phone ? phone.isValid() : false
 			}),
 		gender: Yup.string().required('Gender is required'),

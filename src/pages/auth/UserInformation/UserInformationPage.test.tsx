@@ -1,25 +1,23 @@
 import React from 'react'
-import { render, fireEvent, act } from '@testing-library/react-native'
-import UserInformationPage from '@pages/auth/UserInformation/UserInformationPage'
+import { render, fireEvent, act, waitFor } from '@testing-library/react-native'
+import UserInformationPage from '@pages/auth/userInformation/UserInformationPage'
 import { UserInformationFormDto } from '@dtos/user/user.dto'
 import { NotificationProvider } from '@contexts/NotificationContext'
 
-const mockCreateUserAction = jest
-	.fn()
-	.mockImplementation((IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
-		if (tempToken === 'valid-token') {
-			return Promise.resolve({
-				success: true,
-				data: { userId: 1 },
-				msg: 'User created successfully',
-			})
-		}
+const mockCreateUserAction = jest.fn().mockImplementation((IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
+	if (tempToken === 'valid-token') {
 		return Promise.resolve({
-			success: false,
-			data: null,
-			msg: 'Invalid token',
+			success: true,
+			data: { userId: 1 },
+			msg: 'User created successfully',
 		})
+	}
+	return Promise.resolve({
+		success: false,
+		data: null,
+		msg: 'Invalid token',
 	})
+})
 
 const mockPropertyList = [
 	{ floorId: '1', units: [{ unitId: '101', isAssigned: false, assignedTo: null }] },
@@ -81,7 +79,7 @@ describe('UserInformationPage', () => {
 			fillUnit: (unit: string) => fireEvent(utils.getByTestId('unit-form-field'), 'onValueChange', unit),
 		}
 	}
-	
+
 	it('verify username field', async () => {
 		const { fillUsername, queryByText, triggerSubmit } = await setup()
 		fillUsername('eric123')

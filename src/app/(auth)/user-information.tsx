@@ -1,5 +1,5 @@
 import React from "react";
-import UserInformationPage from "@pages/auth/UserInformation/UserInformationPage";
+import UserInformationPage from "@pages/auth/userInformation/UserInformationPage";
 
 const UserInformation = () => {
   return (

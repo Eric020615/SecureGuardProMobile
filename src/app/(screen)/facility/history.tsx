@@ -1,4 +1,4 @@
-import FacilityBookingHistoryPage from "@pages/facility/FacilityBookingHistoryPage";
+import FacilityBookingHistoryPage from "@pages/facility/facilityBookingHistory/FacilityBookingHistoryPage";
 
 const FacilityHistory = () => {
   return (

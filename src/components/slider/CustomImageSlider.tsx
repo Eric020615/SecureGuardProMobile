@@ -10,9 +10,10 @@ interface CustomImageSliderProps {
 	}[]
 	onChangeIndex: Dispatch<SetStateAction<string>>
 	containerStyle?: string
+	testId?: string
 }
 
-const CustomImageSlider = ({ item, onChangeIndex, containerStyle }: CustomImageSliderProps) => {
+const CustomImageSlider = ({ item, onChangeIndex, containerStyle, testId }: CustomImageSliderProps) => {
 	const { width } = Dimensions.get('window') // Get full screen width
 	const imageHeight = (width * 9) / 16 // 16:9 ratio
 	const [currentIndex, setCurrentIndex] = useState(0) // Track the current index
@@ -51,6 +52,7 @@ const CustomImageSlider = ({ item, onChangeIndex, containerStyle }: CustomImageS
 						/>
 					</View>
 				)}
+				testID={testId}
 			/>
 
 			{/* Pagination Dots */}

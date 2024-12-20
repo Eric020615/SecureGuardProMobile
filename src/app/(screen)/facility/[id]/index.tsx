@@ -1,5 +1,5 @@
 import React from 'react'
-import FacilityBookingDetailsPage from '@pages/facility/details/FacilityBookingDetailsPage'
+import FacilityBookingDetailsPage from '@pages/facility/facilityBookingDetails/FacilityBookingDetailsPage'
 
 const FacilityBookingDetails = () => {
   return (

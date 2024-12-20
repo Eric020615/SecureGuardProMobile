@@ -1,4 +1,4 @@
-import AvailabilitySlotPage from "@pages/facility/AvailabilitySlotPage";
+import AvailabilitySlotPage from "@pages/facility/availabilitySlot/AvailabilitySlotPage";
 
 const AvailabilitySlot = () => {
   return (
