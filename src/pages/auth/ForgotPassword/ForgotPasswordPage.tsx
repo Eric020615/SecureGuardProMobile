@@ -29,7 +29,6 @@ const ForgotPasswordPage = () => {
 		},
 		validationSchema: validationSchema,
 		onSubmit: (values) => {
-			console.log(values)
 			forgotPassword(values)
 		},
 	})

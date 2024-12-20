@@ -39,7 +39,6 @@ const SignUpPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
-		console.log(useAuth().signUpAction); // Should log the mock function
 		await signUpAction(values)
 	}
 

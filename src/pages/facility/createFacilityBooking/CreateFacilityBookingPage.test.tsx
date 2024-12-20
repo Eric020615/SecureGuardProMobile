@@ -8,7 +8,7 @@ describe('CreateFacilityBookingPage', () => {
 		const utils = render(
 			<NotificationProvider>
 				<CreateFacilityBookingPage />
-			</NotificationProvider>,
+			</NotificationProvider>
 		)
 
 		await act(async () => {
