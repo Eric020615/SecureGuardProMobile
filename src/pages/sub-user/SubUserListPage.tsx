@@ -2,7 +2,7 @@ import { View, Text, ListRenderItem, ActivityIndicator, Switch } from 'react-nat
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { router } from 'expo-router'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import CustomFlatList from '@components/list/CustomFlatList'

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, ScrollView, ActivityIndicator, Alert } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import { router, useLocalSearchParams } from 'expo-router'
 import { ITimeFormat } from '@config/constant'

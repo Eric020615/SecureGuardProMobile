@@ -2,7 +2,7 @@ import { View, Text, ScrollView } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomFormField from '@components/form/CustomFormField'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { Link, router } from 'expo-router'
@@ -39,6 +39,7 @@ const SignUpPage = () => {
 	const isLoading = useApplication((state) => state.isLoading)
 
 	const signUp = async (values: UserSignUpFormDto) => {
+		console.log(useAuth().signUpAction); // Should log the mock function
 		await signUpAction(values)
 	}
 
@@ -63,6 +64,7 @@ const SignUpPage = () => {
 						onBlur={formik.handleBlur('email')}
 						errorMessage={formik.errors.email}
 						placeholder={'Enter your email'}
+						testId='email-form-field'
 					/>
 					<CustomFormField
 						title="Password"
@@ -76,6 +78,7 @@ const SignUpPage = () => {
 						onBlur={formik.handleBlur('password')}
 						errorMessage={formik.errors.password}
 						placeholder={'Enter your password'}
+						testId='password-form-field'
 					/>
 					<CustomFormField
 						title="Confirm Password"

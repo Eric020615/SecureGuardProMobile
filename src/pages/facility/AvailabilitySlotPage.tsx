@@ -1,7 +1,7 @@
 import { View, Text, ListRenderItem, TouchableOpacity } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { router, useLocalSearchParams } from 'expo-router'
 import CustomFlatList from '@components/list/CustomFlatList'
 import Ionicons from 'react-native-vector-icons/Ionicons'

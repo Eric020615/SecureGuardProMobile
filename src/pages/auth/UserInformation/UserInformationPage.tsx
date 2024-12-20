@@ -5,7 +5,7 @@ import { useFormik } from 'formik'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import CustomFormField from '@components/form/CustomFormField'
 import { userInforConst } from '@config/constant/auth'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { ICountry } from 'react-native-international-phone-number'
 import { GenderOptions } from '@config/listOption/user'
 import { CountryCode, parsePhoneNumberFromString } from 'libphonenumber-js'
@@ -148,6 +148,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('userName')}
 						errorMessage={formik.errors.userName}
 						placeholder={'Enter your username'}
+						testId='username-form-field'
 					/>
 					<CustomFormField
 						title="First Name"
@@ -160,6 +161,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('firstName')}
 						errorMessage={formik.errors.firstName}
 						placeholder={'Enter your first name'}
+						testId='first-name-form-field'
 					/>
 					<CustomFormField
 						title="Last Name"
@@ -172,6 +174,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('lastName')}
 						errorMessage={formik.errors.lastName}
 						placeholder={'Enter your last name'}
+						testId='last-name-form-field'
 					/>
 					<CustomFormField
 						title="Phone Number"
@@ -188,6 +191,7 @@ const UserInformationPage = () => {
 						onBlur={formik.handleBlur('phoneNumber')}
 						errorMessage={formik.errors.phoneNumber}
 						placeholder={'Enter phone number'}
+						testId='phone-number-form-field'
 					/>
 					<View className="flex flex-row mb-3">
 						<View className="flex-1 mr-2">
@@ -203,7 +207,7 @@ const UserInformationPage = () => {
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
 								placeholder={'DOB'}
-								testId="date-picker"
+								testId='dob-form-field'
 							/>
 						</View>
 						<CustomFormField
@@ -218,7 +222,7 @@ const UserInformationPage = () => {
 							onBlur={formik.handleBlur('gender')}
 							errorMessage={formik.errors.gender}
 							placeholder={'Gender'}
-							testId="gender-picker"
+							testId='gender-form-field'
 						/>
 					</View>
 					<View className="flex flex-row mb-3">
@@ -242,7 +246,7 @@ const UserInformationPage = () => {
 							onBlur={formik.handleBlur('floor')}
 							errorMessage={formik.errors.floor}
 							placeholder={'Select floor'}
-							testId="floor-picker"
+							testId="floor-form-field"
 						/>
 						<CustomFormField
 							title="Unit"
@@ -266,7 +270,7 @@ const UserInformationPage = () => {
 							onBlur={formik.handleBlur('unit')}
 							errorMessage={formik.errors.unit}
 							placeholder={'Select unit'}
-							testId="unit-picker"
+							testId="unit-form-field"
 						/>
 					</View>
 					<CustomFormField
@@ -279,12 +283,14 @@ const UserInformationPage = () => {
 						clearFile={() => {
 							setSelectedFiles([])
 						}}
+						testId='supported-document-form-field'
 					/>
 					<CustomButton
 						title="Submit"
 						handlePress={formik.handleSubmit}
 						containerStyles="bg-primary p-3 w-full mt-7"
 						isLoading={isLoading}
+						testId='submit-button'
 					/>
 				</View>
 			</ScrollView>

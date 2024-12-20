@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCard } from '@store/card/useCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 
 const QrCodePage = () => {
 	const { qrCode, getQrCodeAction, createQrCodeAction } = useCard()

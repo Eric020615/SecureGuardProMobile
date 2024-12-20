@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { View, Text, ScrollView, Image, Alert, BackHandler } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import Images from '@assets/images'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { router, useNavigation } from 'expo-router'
 import { configureReanimatedLogger, ReanimatedLogLevel } from 'react-native-reanimated'
 

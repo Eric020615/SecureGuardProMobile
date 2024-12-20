@@ -1,7 +1,7 @@
 import { View, Text, TouchableOpacity, ListRenderItem, ActivityIndicator } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { router } from 'expo-router'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { ITimeFormat } from '@config/constant'

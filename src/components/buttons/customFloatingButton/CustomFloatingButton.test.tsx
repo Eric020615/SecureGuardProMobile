@@ -1,7 +1,7 @@
 import React from 'react';
 import { View } from 'react-native';
 import { render, fireEvent } from '@testing-library/react-native';
-import CustomFloatingButton from '@components/buttons/CustomFloatingButton'; // Adjust the path as necessary
+import CustomFloatingButton from '@components/buttons/customFloatingButton/CustomFloatingButton'; // Adjust the path as necessary
 
 describe('CustomFloatingButton Component', () => {
     const defaultProps = {

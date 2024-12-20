@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 import Modal from 'react-native-modal'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 
 interface CustomConfirmModalProps {
 	isOpen: boolean

@@ -7,7 +7,7 @@ import { router } from 'expo-router'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useUser } from '@store/user/useUser'
 import UserAvatar from '@bhavberi/react-native-user-avatar/src'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 import { RoleDescriptionEnum } from '@config/constant/user'
 
 const userProfileViewPage = () => {

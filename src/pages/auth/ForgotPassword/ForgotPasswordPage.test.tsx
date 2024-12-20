@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import ForgotPasswordPage from '@pages/auth/ForgotPasswordPage'
+import ForgotPasswordPage from '@pages/auth/ForgotPassword/ForgotPasswordPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
 
 describe('ForgotPasswordPage', () => {

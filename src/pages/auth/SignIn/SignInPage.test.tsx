@@ -1,6 +1,6 @@
 import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
-import SignInPage from '@pages/auth/SignInPage'
+import SignInPage from '@pages/auth/SignIn/SignInPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
 
 describe('SignInPage', () => {

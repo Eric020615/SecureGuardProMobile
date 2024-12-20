@@ -1,7 +1,7 @@
 import React from 'react'
 import { render, fireEvent } from '@testing-library/react-native'
 import { Text, View } from 'react-native'
-import CustomButton from '@components/buttons/CustomButton'
+import CustomButton from '@components/buttons/customButton/CustomButton'
 
 describe('CustomButton Component', () => {
     const defaultProps = {
