@@ -34,7 +34,6 @@ const AvailabilitySlotPage = () => {
 	const initialEndDate = moment(startDate as string)
 		.add(duration as string, 'hours')
 		.toDate()
-
 	const validationSchema = Yup.object().shape({
 		facilityId: Yup.string().required('Please select a facility to proceed.'),
 		startDate: Yup.date().required('Please select a start date and time for your booking.').min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),

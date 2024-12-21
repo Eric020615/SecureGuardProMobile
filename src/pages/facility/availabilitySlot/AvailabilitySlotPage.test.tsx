@@ -4,6 +4,8 @@ import { NotificationProvider } from '@contexts/NotificationContext'
 import AvailabilitySlotPage from './AvailabilitySlotPage'
 import { FacilityBookingFormDto } from '@dtos/facility/facility.dto'
 import { useFacility } from '@store/facility/useFacility'
+import { generalAction } from '@store/application/useApplication'
+import { createBooking } from '@api/facilityService/facilityService'
 
 jest.mock('expo-router', () => ({
 	...jest.requireActual('expo-router'), // Retain other functionalities of expo-router
@@ -15,23 +17,57 @@ jest.mock('expo-router', () => ({
 	}),
 }))
 
-jest.mock('@store/facility/useFacility', () => ({
-	...jest.requireActual('@store/facility/useFacility'), // Retain other functionalities of useFacility
-	useFacility: jest.fn().mockReturnValue({
-		availabilitySlot: [
-			{
-				spaceId: '1',
-				spaceName: 'Space 1',
-				isAvailable: true,
-			},
-			{
-				spaceId: '2',
-				spaceName: 'Space 2',
-				isAvailable: false,
-			},
-		],
-		checkAvailabilitySlotAction: jest.fn(),
-		submitBookingAction: jest.fn((facilityBookingForm: FacilityBookingFormDto) => {}),
+// jest.mock('@store/facility/useFacility', () => ({
+// 	...jest.requireActual('@store/facility/useFacility'), // Retain other functionalities of useFacility
+// 	useFacility: jest.fn().mockReturnValue({
+// 		availabilitySlot: [
+// 			{
+// 				spaceId: '1',
+// 				spaceName: 'Space 1',
+// 				isAvailable: true,
+// 			},
+// 			{
+// 				spaceId: '2',
+// 				spaceName: 'Space 2',
+// 				isAvailable: false,
+// 			},
+// 		],
+// 		checkAvailabilitySlotAction: jest.fn(),
+// 		// submitBookingAction: jest.fn((facilityBookingForm: FacilityBookingFormDto) => {}),
+// 	}),
+// }))
+
+jest.mock('@store/facility/useFacility', () => {
+	const originalModule = jest.requireActual('@store/facility/useFacility') // Retain the original module
+	const originalSubmitBookingAction = originalModule.useFacility.getState().submitBookingAction
+
+	return {
+		...originalModule, // Retain other functionalities of useFacility
+		useFacility: jest.fn().mockReturnValue({
+			availabilitySlot: [
+				{
+					spaceId: '1',
+					spaceName: 'Space 1',
+					isAvailable: true,
+				},
+				{
+					spaceId: '2',
+					spaceName: 'Space 2',
+					isAvailable: false,
+				},
+			],
+			checkAvailabilitySlotAction: jest.fn(), // Mocked action
+			submitBookingAction: originalSubmitBookingAction, // Retain the original action
+		}),
+	}
+})
+
+jest.mock('@api/facilityService/facilityService', () => ({
+	...jest.requireActual('@api/facilityService/facilityService'),
+	createBooking: jest.fn().mockReturnValue({
+		success: true,
+		msg: 'Booking successfully submitted!',
+		data: null,
 	}),
 }))
 
@@ -52,12 +88,19 @@ describe('AvailabilitySlotPage', () => {
 
 		return {
 			...utils,
-			selectSlot: (index: number) => fireEvent(utils.getByTestId(`slot-${index}`), 'onValueChange', true),
-			deselectSlot: (index: number) => fireEvent(utils.getByTestId(`slot-${index}`), 'onValueChange', false),
-			triggerSubmit: async () => {
-				fireEvent.press(utils.getByTestId('submit-button'))
+			selectSlot: async (index: number) => {
 				await act(async () => {
-					await new Promise((resolve) => setTimeout(resolve, 0)) // Ensure async effects complete
+					fireEvent(utils.getByTestId(`slot-${index}`), 'onValueChange', true)
+				})
+			},
+			deselectSlot: async (index: number) => {
+				await act(async () => {
+					fireEvent(utils.getByTestId(`slot-${index}`), 'onValueChange', false)
+				})
+			},
+			triggerSubmit: async () => {
+				await act(async () => {
+					fireEvent.press(utils.getByTestId('submit-button'))
 				})
 			},
 		}
@@ -68,18 +111,16 @@ describe('AvailabilitySlotPage', () => {
 		await triggerSubmit()
 		expect(queryByText('Please select a slot to proceed.')).toBeTruthy()
 
-		selectSlot(0)
+		await selectSlot(0)
 		await triggerSubmit()
 		expect(queryByText('Please select a slot to proceed.')).toBeNull()
 	})
 
 	it('verifies the submit button', async () => {
-		const { queryByText, triggerSubmit, selectSlot } = await setup()
-		selectSlot(0) // Deselect the slot
+		const { triggerSubmit, selectSlot, queryByText } = await setup()
+		await selectSlot(0)
 		await triggerSubmit()
-		await act(async () => {
-			await new Promise((resolve) => setTimeout(resolve, 0)) // Ensure async effects complete
-		})
-		expect(useFacility().submitBookingAction).toHaveBeenCalledTimes(1)
+		expect(createBooking).toHaveBeenCalledTimes(1)
+		expect(queryByText('Booking successfully submitted!')).toBeTruthy()
 	})
 })
