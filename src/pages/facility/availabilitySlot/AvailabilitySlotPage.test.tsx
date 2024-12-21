@@ -48,8 +48,6 @@ jest.mock('@api/facilityService/facilityService', () => ({
 	}),
 }))
 
-jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
-
 describe('AvailabilitySlotPage', () => {
 	beforeEach(() => {
 		jest.clearAllMocks() // Clears all mock calls and state
@@ -96,10 +94,12 @@ describe('AvailabilitySlotPage', () => {
 	})
 
 	it('verifies the submit button', async () => {
-		const { triggerSubmit, selectSlot, queryByText } = await setup()
+		const { triggerSubmit, selectSlot, getByText } = await setup()
 		await selectSlot(0)
 		await triggerSubmit()
 		expect(createBooking).toHaveBeenCalledTimes(1)
-		expect(queryByText('Booking successfully submitted!')).toBeTruthy()
+		await act(async () => {
+			expect(getByText('Booking successfully submitted!')).toBeTruthy()
+		})
 	})
 })

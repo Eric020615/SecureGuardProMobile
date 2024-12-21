@@ -1,28 +1,14 @@
 import React from 'react'
-import { render, fireEvent, act, waitFor } from '@testing-library/react-native'
+import { render, fireEvent, act } from '@testing-library/react-native'
 import UserInformationPage from '@pages/auth/userInformation/UserInformationPage'
-import { UserInformationFormDto } from '@dtos/user/user.dto'
 import { NotificationProvider } from '@contexts/NotificationContext'
-
-const mockCreateUserAction = jest.fn().mockImplementation((IUserInformationFormDto: UserInformationFormDto, tempToken: string) => {
-	if (tempToken === 'valid-token') {
-		return Promise.resolve({
-			success: true,
-			data: { userId: 1 },
-			msg: 'User created successfully',
-		})
-	}
-	return Promise.resolve({
-		success: false,
-		data: null,
-		msg: 'Invalid token',
-	})
-})
+import { useRefData } from '@store/refData/useRefData'
 
 const mockPropertyList = [
 	{ floorId: '1', units: [{ unitId: '101', isAssigned: false, assignedTo: null }] },
 	{ floorId: '2', units: [{ unitId: '201', isAssigned: false, assignedTo: null }] },
 ]
+
 const mockGetPropertyListAction = jest.fn().mockResolvedValue({
 	success: true,
 	data: mockPropertyList,
@@ -31,22 +17,20 @@ const mockGetPropertyListAction = jest.fn().mockResolvedValue({
 
 jest.mock('@store/refData/useRefData', () => ({
 	useRefData: () => {
-		const data = {
+		return {
 			propertyList: mockPropertyList, // Mock the propertyList state
 			getPropertyListAction: mockGetPropertyListAction, // Mock the action
 		}
-
-		return data
 	},
 }))
 
-jest.mock('@store/user/useUser', () => ({
-	useUser: () => {
-		const data = {
-			createUserAction: mockCreateUserAction, // Mock the action
-		}
-		return data
-	},
+jest.mock('@api/userService/userService', () => ({
+	...jest.requireActual('@api/userService/userService'),
+	createUser: jest.fn().mockReturnValue({
+		success: true,
+		msg: 'User created successfully!',
+		data: null,
+	}),
 }))
 
 describe('UserInformationPage', () => {
@@ -164,4 +148,6 @@ describe('UserInformationPage', () => {
 		await triggerSubmit()
 		expect(await queryByText('Unit number is required')).toBeTruthy()
 	})
+
+	it('verify Submit button', async () => {})
 })
