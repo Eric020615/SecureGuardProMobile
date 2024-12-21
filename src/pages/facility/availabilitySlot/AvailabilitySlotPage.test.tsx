@@ -2,9 +2,6 @@ import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import AvailabilitySlotPage from './AvailabilitySlotPage'
-import { FacilityBookingFormDto } from '@dtos/facility/facility.dto'
-import { useFacility } from '@store/facility/useFacility'
-import { generalAction } from '@store/application/useApplication'
 import { createBooking } from '@api/facilityService/facilityService'
 
 jest.mock('expo-router', () => ({
@@ -16,26 +13,6 @@ jest.mock('expo-router', () => ({
 		numOfGuest: '2',
 	}),
 }))
-
-// jest.mock('@store/facility/useFacility', () => ({
-// 	...jest.requireActual('@store/facility/useFacility'), // Retain other functionalities of useFacility
-// 	useFacility: jest.fn().mockReturnValue({
-// 		availabilitySlot: [
-// 			{
-// 				spaceId: '1',
-// 				spaceName: 'Space 1',
-// 				isAvailable: true,
-// 			},
-// 			{
-// 				spaceId: '2',
-// 				spaceName: 'Space 2',
-// 				isAvailable: false,
-// 			},
-// 		],
-// 		checkAvailabilitySlotAction: jest.fn(),
-// 		// submitBookingAction: jest.fn((facilityBookingForm: FacilityBookingFormDto) => {}),
-// 	}),
-// }))
 
 jest.mock('@store/facility/useFacility', () => {
 	const originalModule = jest.requireActual('@store/facility/useFacility') // Retain the original module
@@ -70,6 +47,8 @@ jest.mock('@api/facilityService/facilityService', () => ({
 		data: null,
 	}),
 }))
+
+jest.mock('react-native/Libraries/Animated/NativeAnimatedHelper');
 
 describe('AvailabilitySlotPage', () => {
 	beforeEach(() => {

@@ -2,6 +2,14 @@ import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import CreateFacilityBookingPage from '@pages/facility/createFacilityBooking/CreateFacilityBookingPage'
+import { router } from 'expo-router'
+
+// jest.mock('expo-router', () => ({
+// 	...jest.requireActual('expo-router'), // Retain other functionalities of expo-router
+// 	router: {
+// 		push: jest.fn(),
+// 	}
+// }))
 
 describe('CreateFacilityBookingPage', () => {
 	const setup = async () => {
@@ -41,11 +49,11 @@ describe('CreateFacilityBookingPage', () => {
 
 	// it('verifies the booking date field', async () => {
 	// 	const { fillDate, queryByText, triggerSubmit } = await setup()
-	// 	await fillDate(new Date('2024-12-21T12:00:00')) // Valid date
+	// 	await fillDate(new Date('2024-12-22T12:00:00')) // Valid date
 	// 	await triggerSubmit()
 	// 	expect(queryByText('Start time is required')).toBeNull()
 
-	// 	fillDate(new Date('2023-12-15T12:00:00')) // Invalid date
+	// 	fillDate(new Date('2023-12-20T12:00:00')) // Invalid date
 	// 	await triggerSubmit()
 	// 	expect(queryByText('Start date must be after now')).toBeTruthy()
 
@@ -74,5 +82,11 @@ describe('CreateFacilityBookingPage', () => {
 		selectNumOfGuests() // Invalid number of guests
 		await triggerSubmit()
 		expect(queryByText('Number of guest is required')).toBeTruthy()
+	})
+
+	it('verifies the submit button', async () => {
+		const { triggerSubmit, queryByText } = await setup()
+		await triggerSubmit()
+		expect(queryByText('An error occurred while processing your request')).toBeNull()
 	})
 })
