@@ -48,106 +48,128 @@ describe('UserInformationPage', () => {
 		return {
 			...utils,
 			triggerSubmit: async () => {
-				fireEvent.press(utils.getByTestId('submit-button'))
 				await act(async () => {
-					await new Promise((resolve) => setTimeout(resolve, 0)) // Ensure async effects complete
+					fireEvent.press(utils.getByTestId('submit-button'))
 				})
 			},
-			fillUsername: (username: string) => fireEvent.changeText(utils.getByTestId('username-form-field'), username),
-			fillFirstName: (firstName: string) => fireEvent.changeText(utils.getByTestId('first-name-form-field'), firstName),
-			fillLastName: (lastName: string) => fireEvent.changeText(utils.getByTestId('last-name-form-field'), lastName),
-			fillPhoneNumber: (phoneNumber: string) => fireEvent.changeText(utils.getByTestId('phone-number-form-field'), phoneNumber),
-			fillDOB: (dob: string) => fireEvent.changeText(utils.getByTestId('dob-form-field'), dob),
-			fillGender: (gender: string) => fireEvent(utils.getByTestId('gender-form-field'), 'onValueChange', gender),
-			fillFloor: (floor: string) => fireEvent(utils.getByTestId('floor-form-field'), 'onValueChange', floor),
-			fillUnit: (unit: string) => fireEvent(utils.getByTestId('unit-form-field'), 'onValueChange', unit),
+			fillUsername: async (username: string) => {
+				await act(async () => {
+					fireEvent.changeText(utils.getByTestId('username-form-field'), username)
+				})
+			},
+			fillFirstName: async (firstName: string) => {
+				await act(async () => {
+					fireEvent.changeText(utils.getByTestId('first-name-form-field'), firstName)
+				})
+			},
+			fillLastName: async (lastName: string) => {
+				await act(async () => {
+					fireEvent.changeText(utils.getByTestId('last-name-form-field'), lastName)
+				})
+			},
+			fillPhoneNumber: async (phoneNumber: string) => {
+				await act(async () => {
+					fireEvent.changeText(utils.getByTestId('phone-number-form-field'), phoneNumber)
+				})
+			},
+			fillDOB: async (dob: string) => {
+				await act(async () => {
+					fireEvent.changeText(utils.getByTestId('dob-form-field'), dob)
+				})
+			},
+			fillGender: async (gender: string) => {
+				await act(async () => {
+					fireEvent(utils.getByTestId('gender-form-field'), 'onValueChange', gender)
+				})
+			},
+			fillFloor: async (floor: string) => {
+				await act(async () => {
+					fireEvent(utils.getByTestId('floor-form-field'), 'onValueChange', floor)
+				})
+			},
+			fillUnit: async (unit: string) => {
+				await act(async () => {
+					fireEvent(utils.getByTestId('unit-form-field'), 'onValueChange', unit)
+				})
+			},
 		}
 	}
 
 	it('verify username field', async () => {
 		const { fillUsername, queryByText, triggerSubmit } = await setup()
-		fillUsername('eric123')
+		await fillUsername('eric123')
 		await triggerSubmit()
 		expect(await queryByText('Username is required')).toBeNull()
-		fillUsername('')
+		await fillUsername('')
 		await triggerSubmit()
 		expect(await queryByText('Username is required')).toBeTruthy()
 	})
 
 	it('verify first name field', async () => {
 		const { fillFirstName, queryByText, triggerSubmit } = await setup()
-		fillFirstName('Eng')
+		await fillFirstName('Eng')
 		await triggerSubmit()
 		expect(await queryByText('First Name is required')).toBeNull()
-		fillFirstName('')
+		await fillFirstName('')
 		await triggerSubmit()
 		expect(await queryByText('First Name is required')).toBeTruthy()
 	})
 
 	it('verify last name field', async () => {
 		const { fillLastName, queryByText, triggerSubmit } = await setup()
-		fillLastName('Cheng')
+		await fillLastName('Cheng')
 		await triggerSubmit()
 		expect(await queryByText('Last Name is required')).toBeNull()
-		fillLastName('')
+		await fillLastName('')
 		await triggerSubmit()
 		expect(await queryByText('Last Name is required')).toBeTruthy()
 	})
 
 	it('verify phone number field', async () => {
 		const { fillPhoneNumber, queryByText, triggerSubmit } = await setup()
-		fillPhoneNumber('012-1234567')
+		await fillPhoneNumber('012-1234567')
 		await triggerSubmit()
 		expect(await queryByText('Phone Number is required')).toBeNull()
 		expect(await queryByText('Phone number is not valid')).toBeNull()
-		fillPhoneNumber('')
+		await fillPhoneNumber('')
 		await triggerSubmit()
 		expect(await queryByText('Phone Number is required')).toBeTruthy()
-		fillPhoneNumber('012-123')
+		await fillPhoneNumber('012-123')
 		await triggerSubmit()
 		expect(await queryByText('Phone number is not valid')).toBeTruthy()
 	})
 
-	// it('verify date of birth field', async () => {
-	// 	const { fillDOB, queryByText, triggerSubmit } = await setup()
-	// 	fillDOB('2000-01-01')
-	// 	await triggerSubmit()
-	// 	expect(await queryByText('Date of Birth is required')).toBeNull()
-	// 	fillDOB('')
-	// 	await triggerSubmit()
-	// 	expect(await queryByText('Date of Birth is required')).toBeTruthy()
-	// })
-
 	it('verify gender field', async () => {
 		const { fillGender, queryByText, triggerSubmit } = await setup()
-		fillGender('M')
+		await fillGender('M')
 		await triggerSubmit()
 		expect(await queryByText('Gender is required')).toBeNull()
-		fillGender('')
+		await fillGender('')
 		await triggerSubmit()
 		expect(await queryByText('Gender is required')).toBeTruthy()
 	})
 
 	it('verify floor field', async () => {
 		const { fillFloor, queryByText, triggerSubmit } = await setup()
-		fillFloor('1')
+		await fillFloor('1')
 		await triggerSubmit()
 		expect(await queryByText('Floor number is required')).toBeNull()
-		fillFloor('')
+		await fillFloor('')
 		await triggerSubmit()
 		expect(await queryByText('Floor number is required')).toBeTruthy()
 	})
 
 	it('verify unit field', async () => {
 		const { fillFloor, fillUnit, queryByText, triggerSubmit } = await setup()
-		fillFloor('1')
-		fillUnit('101')
+		await fillFloor('1')
+		await fillUnit('101')
 		await triggerSubmit()
 		expect(await queryByText('Unit number is required')).toBeNull()
-		fillUnit('')
+		await fillUnit('')
 		await triggerSubmit()
 		expect(await queryByText('Unit number is required')).toBeTruthy()
 	})
 
-	it('verify Submit button', async () => {})
+	it('verify Submit button', async () => {
+	})
 })

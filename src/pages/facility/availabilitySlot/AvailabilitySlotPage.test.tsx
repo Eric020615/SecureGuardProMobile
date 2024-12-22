@@ -84,19 +84,23 @@ describe('AvailabilitySlotPage', () => {
 	it('verifies the slot selection field', async () => {
 		const { queryByText, triggerSubmit, selectSlot } = await setup()
 		await triggerSubmit()
-		expect(queryByText('Please select a slot to proceed.')).toBeTruthy()
+		await act(async () => {
+			expect(queryByText('Please select a slot to proceed.')).toBeTruthy()
+		})
 
 		await selectSlot(0)
 		await triggerSubmit()
-		expect(queryByText('Please select a slot to proceed.')).toBeNull()
+		await act(async () => {
+			expect(queryByText('Please select a slot to proceed.')).toBeNull()
+		})
 	})
 
 	it('verifies the submit button', async () => {
 		const { triggerSubmit, selectSlot, getByText } = await setup()
 		await selectSlot(0)
 		await triggerSubmit()
-		expect(createBooking).toHaveBeenCalledTimes(1)
 		await act(async () => {
+			expect(createBooking).toHaveBeenCalledTimes(1)
 			expect(getByText('Booking successfully submitted!')).toBeTruthy()
 		})
 	})

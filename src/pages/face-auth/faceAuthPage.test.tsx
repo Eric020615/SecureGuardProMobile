@@ -1,8 +1,9 @@
 import React from 'react'
-import { act, fireEvent, render } from '@testing-library/react-native'
+import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import FaceAuthPage from '@pages/face-auth/FaceAuthPage'
 import { uploadUserFaceAuth } from '@api/cardService/cardService'
+import { useFaceAuth } from '@store/faceAuth/useFaceAuth'
 
 jest.mock('@api/cardService/cardService', () => ({
 	...jest.requireActual('@api/cardService/cardService'),
@@ -19,6 +20,8 @@ jest.mock('@store/faceAuth/useFaceAuth', () => {
 		...originalModule, // Retain other functionalities of useFacility
 		useFaceAuth: jest.fn().mockReturnValue({
 			...originalModule.useFaceAuth.getState(),
+			takePictureAction: jest.fn(() => {}),
+			retakePictureAction: jest.fn(),
 			image: {
 				uri: 'file:///mocked-path-to-image.png', // Mock a valid local file path
 				width: 300, // Example dimensions
@@ -67,6 +70,16 @@ describe('FaceAuthPage', () => {
 
 		return {
 			...utils,
+			triggerTake: async () => {
+				await act(async () => {
+					fireEvent.press(utils.getByTestId('take-button'))
+				})
+			},
+			triggerRetake: async () => {
+				await act(async () => {
+					fireEvent.press(utils.getByTestId('retake-button'))
+				})
+			},
 			triggerSave: async () => {
 				await act(async () => {
 					fireEvent.press(utils.getByTestId('save-button'))
@@ -78,9 +91,27 @@ describe('FaceAuthPage', () => {
 	it('verify the Save button', async () => {
 		const { getByText, triggerSave } = await setup()
 		await triggerSave()
-		expect(uploadUserFaceAuth).toHaveBeenCalledTimes(1)
 		await act(async () => {
+			expect(uploadUserFaceAuth).toHaveBeenCalledTimes(1)
 			expect(getByText('Face authentication successfully uploaded!')).toBeTruthy()
+		})
+	})
+
+	it('verify the Retake Picture button', async () => {
+		const { triggerRetake } = await setup()
+		await triggerRetake()
+		await act(async () => {
+			expect(useFaceAuth().retakePictureAction).toHaveBeenCalledTimes(1)
+		})
+	})
+
+	it('verify the Take Picture button', async () => {
+		await act(async () => {
+			useFaceAuth().image = null
+		})
+		const { getByTestId } = await setup()
+		await act(async () => {
+			expect(getByTestId('take-button')).toBeTruthy()
 		})
 	})
 })

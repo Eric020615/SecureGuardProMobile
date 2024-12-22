@@ -2,21 +2,13 @@ import React from 'react'
 import { act, fireEvent, render } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import CreateFacilityBookingPage from '@pages/facility/createFacilityBooking/CreateFacilityBookingPage'
-import { router } from 'expo-router'
-
-// jest.mock('expo-router', () => ({
-// 	...jest.requireActual('expo-router'), // Retain other functionalities of expo-router
-// 	router: {
-// 		push: jest.fn(),
-// 	}
-// }))
 
 describe('CreateFacilityBookingPage', () => {
 	const setup = async () => {
 		const utils = render(
 			<NotificationProvider>
 				<CreateFacilityBookingPage />
-			</NotificationProvider>
+			</NotificationProvider>,
 		)
 
 		await act(async () => {
@@ -87,6 +79,8 @@ describe('CreateFacilityBookingPage', () => {
 	it('verifies the submit button', async () => {
 		const { triggerSubmit, queryByText } = await setup()
 		await triggerSubmit()
-		expect(queryByText('An error occurred while processing your request')).toBeNull()
+		await act(async () => {
+			expect(queryByText('An error occurred while processing your request')).toBeNull()
+		})
 	})
 })

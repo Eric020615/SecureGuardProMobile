@@ -123,6 +123,7 @@ const FaceAuthPage = () => {
 							containerStyles="flex flex-row items-center justify-center h-10"
 							textStyles="text-base text-[f1f1f1]] font-bold ml-4"
 							leftReactNativeIcons={<Entypo name="retweet" color={'#f1f1f1'} size={28} />}
+							testId='retake-button'
 						/>
 						<CustomButton
 							title="Save"
@@ -141,6 +142,7 @@ const FaceAuthPage = () => {
 							containerStyles="flex flex-row items-center justify-center h-10"
 							textStyles="text-base text-[f1f1f1]] font-bold ml-4"
 							leftReactNativeIcons={<Entypo name="camera" color={'#f1f1f1'} size={28} />}
+							testId='take-button'
 						/>
 					</>
 				)}
