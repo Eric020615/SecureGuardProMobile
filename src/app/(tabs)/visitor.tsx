@@ -1,5 +1,5 @@
 import React from 'react'
-import VisitorListPage from '@pages/visitor/VisitorListPage'
+import VisitorListPage from '@pages/visitor/visitorList/VisitorListPage'
 
 const Visitor = () => {
   return (

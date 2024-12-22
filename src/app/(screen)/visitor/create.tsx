@@ -1,4 +1,4 @@
-import CreateVisitorPage from '@pages/visitor/CreateVisitorPage'
+import CreateVisitorPage from '@pages/visitor/createVisitor/CreateVisitorPage'
 
 const CreateVisitor = () => {
   return (

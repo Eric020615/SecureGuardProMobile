@@ -1,4 +1,4 @@
-import VisitorDetailsPage from '@pages/visitor/details/VisitorDetailsPage'
+import VisitorDetailsPage from '@pages/visitor/visitorDetails/VisitorDetailsPage'
 import React from 'react'
 
 const VisitorDetails = () => {

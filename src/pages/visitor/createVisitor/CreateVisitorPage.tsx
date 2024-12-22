@@ -41,7 +41,7 @@ const CreateVisitorPage = () => {
 		visitDateTime: Yup.date().required('Visit date is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
-		visitorEmail: Yup.string().email('Invalid email address'),
+		visitorEmail: Yup.string().email('Invalid email address').required('Visitor email is required'),
 		visitorPhoneNumber: Yup.string()
 			.required('Visitor phone number is required')
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {
@@ -104,9 +104,8 @@ const CreateVisitorPage = () => {
 								formik.setFieldValue('visitorName', e)
 							}}
 							placeholder={'Enter full name'}
-							errorMessage={
-								formik.touched.visitorName && formik.errors.visitorName && (formik.errors.visitorName as string)
-							}
+							errorMessage={formik.touched.visitorName && formik.errors.visitorName && (formik.errors.visitorName as string)}
+							testId="visitor-name-form-field"
 						/>
 						<CustomFormField
 							containerStyle="mt-4"
@@ -118,9 +117,8 @@ const CreateVisitorPage = () => {
 								formik.setFieldValue('visitorEmail', e)
 							}}
 							placeholder={'Enter email'}
-							errorMessage={
-								formik.touched.visitorEmail && formik.errors.visitorEmail && (formik.errors.visitorEmail as string)
-							}
+							errorMessage={formik.touched.visitorEmail && formik.errors.visitorEmail && (formik.errors.visitorEmail as string)}
+							testId="visitor-email-form-field"
 						/>
 						<CustomFormField
 							containerStyle="mt-4"
@@ -133,11 +131,8 @@ const CreateVisitorPage = () => {
 							}}
 							items={VisitorCategoryOptions}
 							placeholder={'Select visitor category'}
-							errorMessage={
-								formik.touched.visitorCategory &&
-								formik.errors.visitorCategory &&
-								(formik.errors.visitorCategory as string)
-							}
+							errorMessage={formik.touched.visitorCategory && formik.errors.visitorCategory && (formik.errors.visitorCategory as string)}
+							testId="visitor-category-form-field"
 						/>
 						<CustomFormField
 							containerStyle="mt-4"
@@ -152,12 +147,9 @@ const CreateVisitorPage = () => {
 								formik.setFieldValue('visitorPhoneNumber', e)
 							}}
 							phoneNumber={`${formik.values.visitorPhoneNumber}`}
-							errorMessage={
-								formik.touched.visitorPhoneNumber &&
-								formik.errors.visitorPhoneNumber &&
-								(formik.errors.visitorPhoneNumber as string)
-							}
+							errorMessage={formik.touched.visitorPhoneNumber && formik.errors.visitorPhoneNumber && (formik.errors.visitorPhoneNumber as string)}
 							placeholder={'Enter phone number'}
+							testId="visitor-phone-form-field"
 						/>
 						<View className="flex flex-row gap-4 mt-1">
 							<View className="flex-1">
@@ -170,14 +162,11 @@ const CreateVisitorPage = () => {
 									buttonTitle={convertDateToDateString(formik.values.visitDateTime, ITimeFormat.dateTime)}
 									minimumDate={getCurrentDate()}
 									mode="datetime"
-									errorMessage={
-										formik.touched.visitDateTime &&
-										formik.errors.visitDateTime &&
-										(formik.errors.visitDateTime as string)
-									}
+									errorMessage={formik.touched.visitDateTime && formik.errors.visitDateTime && (formik.errors.visitDateTime as string)}
 									setShowDateTime={setShowCalendar}
 									showDateTime={showCalendar}
 									placeholder={'Select visit date'}
+									testId="visit-date-form-field"
 								/>
 							</View>
 						</View>
@@ -187,6 +176,7 @@ const CreateVisitorPage = () => {
 							containerStyles="bg-primary p-4 w-full mt-8 self-center"
 							isLoading={isLoading}
 							textStyles="text-sm text-white"
+							testId="submit-button"
 						/>
 					</View>
 				</View>
