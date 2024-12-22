@@ -22,7 +22,6 @@ const FaceAuthPage = () => {
 			MediaLibrary.requestPermissionsAsync()
 			await requestCameraPermission()
 		})()
-		console.log(image)
 	}, [])
 
 	if (!cameraPermission) {
@@ -65,7 +64,6 @@ const FaceAuthPage = () => {
 
 	const saveImage = async () => {
 		if (image) {
-			console.log(image)
 			const file = await convertImageToGeneralFile(image)
 			await uploadUserFaceAuthAction({
 				faceData: file,

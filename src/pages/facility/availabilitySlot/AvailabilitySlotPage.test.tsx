@@ -8,7 +8,7 @@ jest.mock('expo-router', () => ({
 	...jest.requireActual('expo-router'), // Retain other functionalities of expo-router
 	useLocalSearchParams: jest.fn().mockReturnValue({
 		id: 'BC',
-		startDate: '2024-12-22T12:00:00',
+		startDate: '2025-12-10T12:00:00',
 		duration: '2',
 		numOfGuest: '2',
 	}),
@@ -16,8 +16,6 @@ jest.mock('expo-router', () => ({
 
 jest.mock('@store/facility/useFacility', () => {
 	const originalModule = jest.requireActual('@store/facility/useFacility') // Retain the original module
-	const originalSubmitBookingAction = originalModule.useFacility.getState().submitBookingAction
-
 	return {
 		...originalModule, // Retain other functionalities of useFacility
 		useFacility: jest.fn().mockReturnValue({
@@ -34,7 +32,7 @@ jest.mock('@store/facility/useFacility', () => {
 				},
 			],
 			checkAvailabilitySlotAction: jest.fn(), // Mocked action
-			submitBookingAction: originalSubmitBookingAction, // Retain the original action
+			submitBookingAction: originalModule.useFacility.getState().submitBookingAction, // Retain the original action
 		}),
 	}
 })
