@@ -82,6 +82,7 @@ const CardPage = () => {
 							handlePress={() => {
 								createCard()
 							}}
+							testId='activate-badge-button'
 						/>
 					</View>
 				)}

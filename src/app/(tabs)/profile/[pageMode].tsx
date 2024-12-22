@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocalSearchParams } from 'expo-router'
-import ProfileDetailsViewPage from '@pages/profile/details/ViewPage'
-import ProfileDetailsEditPage from '@pages/profile/details/EditPage'
+import ProfileDetailsViewPage from '@pages/profile/profileDetails/ViewPage'
+import ProfileDetailsEditPage from '@pages/profile/profileDetails/EditPage'
 
 const Profile = () => {
 	const { pageMode } = useLocalSearchParams()

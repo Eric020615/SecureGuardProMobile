@@ -1,5 +1,5 @@
 import React from 'react'
-import CardPage from '@pages/profile/CardPage'
+import CardPage from '@pages/profile/card/CardPage'
 
 const Card = () => {
   return (

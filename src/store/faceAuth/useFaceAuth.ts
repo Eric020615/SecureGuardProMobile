@@ -36,6 +36,7 @@ export const useFaceAuth = create<State & Actions>((set) => ({
 	uploadUserFaceAuthAction: async (createUserFaceAuthDto: CreateUserFaceAuthDto) => {
 		return generalAction(
 			async () => {
+				console.log(createUserFaceAuthDto)
 				const response = await uploadUserFaceAuth(createUserFaceAuthDto)
 				if (!response?.success) {
 					throw new Error(response.msg)

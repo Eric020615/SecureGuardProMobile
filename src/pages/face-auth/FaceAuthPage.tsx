@@ -22,6 +22,7 @@ const FaceAuthPage = () => {
 			MediaLibrary.requestPermissionsAsync()
 			await requestCameraPermission()
 		})()
+		console.log(image)
 	}, [])
 
 	if (!cameraPermission) {
@@ -64,6 +65,7 @@ const FaceAuthPage = () => {
 
 	const saveImage = async () => {
 		if (image) {
+			console.log(image)
 			const file = await convertImageToGeneralFile(image)
 			await uploadUserFaceAuthAction({
 				faceData: file,
@@ -109,7 +111,7 @@ const FaceAuthPage = () => {
 				</CameraView>
 			) : (
 				<View className="flex-1">
-					<Image source={{ uri: image.uri }} className="flex-1" />
+					{ image.uri && <Image source={{ uri: image.uri }} className="flex-1" /> }
 				</View>
 			)}
 			<View className="bg-black px-5 py-2">
@@ -130,6 +132,7 @@ const FaceAuthPage = () => {
 							containerStyles="flex flex-row items-center justify-center h-10"
 							textStyles="text-base text-[f1f1f1]] font-bold ml-4"
 							leftReactNativeIcons={<Entypo name="check" color={'#f1f1f1'} size={28} />}
+							testId='save-button'
 						/>
 					</View>
 				) : (
