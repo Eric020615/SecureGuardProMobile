@@ -1,5 +1,5 @@
 import React from 'react'
-import { act, fireEvent, render, waitFor } from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import FaceAuthPage from '@pages/face-auth/FaceAuthPage'
 import { uploadUserFaceAuth } from '@api/cardService/cardService'

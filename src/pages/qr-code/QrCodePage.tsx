@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCard } from '@store/card/useCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import CustomButton from '@components/buttons/customButton/CustomButton'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 const QrCodePage = () => {
 	const { qrCode, getQrCodeAction, createQrCodeAction } = useCard()
@@ -42,6 +43,7 @@ const QrCodePage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<ActionConfirmationModal />
 			<View className="flex-1 justify-center items-center px-4 my-6">
 				<Text className="text-4xl text-black font-bold text-center">QR Code</Text>
 				<View className="justify-center items-center mt-6">
@@ -53,6 +55,7 @@ const QrCodePage = () => {
 										source={{ uri: `data:image/png;base64,${qrCode}` }}
 										style={{ width: 200, height: 200 }}
 										resizeMode="contain"
+										testID='qr-code-image'
 									/>
 									<Text className="text-base text-gray-600 mt-6">Scan the QR code above for more details.</Text>
 								</>
