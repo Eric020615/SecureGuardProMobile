@@ -5,7 +5,7 @@ import { router } from 'expo-router'
 import { images, icons } from '@assets/index'
 import { useUser } from '@store/user/useUser'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
-import UserAvatar from '@bhavberi/react-native-user-avatar/src';
+import CustomUserAvatar from '@components/userAvatar/CustomUserAvatar'
 
 const HomePage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -23,7 +23,7 @@ const HomePage = () => {
 					<Image source={images.homeBackground} />
 					<View className="absolute flex flex-row justify-between w-full top-10 px-6">
 						<Text className="text-white font-bold text-2xl">Welcome {userProfile.userName}</Text>
-						<UserAvatar name={userProfile?.userName || 'User'} size={40} bgColor="#10312b" />
+						<CustomUserAvatar userName={userProfile.userName} size={40} bgColor="#10312b" />
 					</View>
 					<View className="p-8">
 						<Text className="text-black text-lg font-psemibold mb-4">About Your Property</Text>

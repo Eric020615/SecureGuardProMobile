@@ -1,3 +1,4 @@
+import React from 'react'
 import { View, Text } from "react-native";
 import { Tabs } from "expo-router";
 import Entypo from "react-native-vector-icons/Entypo";
@@ -42,7 +43,7 @@ const TabsLayout = () => {
         }}
       >
         <Tabs.Screen
-          name="home"
+          name="home/index"
           options={{
             title: "Home",
             headerShown: false,
