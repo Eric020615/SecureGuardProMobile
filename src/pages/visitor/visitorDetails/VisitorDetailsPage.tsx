@@ -25,6 +25,7 @@ const VisitorDetailsPage = () => {
 	const fetchVisitorDetailsByVisitorId = async (id: string) => {
 		try {
 			setLoading(true)
+			console.log('id', id)
 			await getVisitorDetailsByIdAction(id)
 		} catch (error) {
 			console.error('Error fetching visitor details:', error)
