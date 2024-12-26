@@ -1,4 +1,4 @@
-import SubUserListPage from '@pages/sub-user/SubUserListPage'
+import SubUserListPage from '@pages/sub-user/SubUserList/SubUserListPage'
 
 const SubUser = () => {
 	return <SubUserListPage />

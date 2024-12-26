@@ -69,12 +69,14 @@ const CreateSubUserPage = () => {
 							}}
 							errorMessage={formik.errors.email}
 							placeholder={'Enter your email'}
+							testId='email-form-field'
 						/>
 						<CustomButton
 							title="Submit"
 							handlePress={formik.handleSubmit}
 							containerStyles="bg-primary p-3 w-full mt-7"
 							isLoading={isLoading}
+							testId='submit-button'
 						/>
 					</View>
 				</View>
