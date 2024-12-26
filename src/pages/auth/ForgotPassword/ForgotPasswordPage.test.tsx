@@ -37,11 +37,15 @@ describe('ForgotPasswordPage', () => {
 
 		// Trigger "Submit" without entering an email
 		triggerSubmit()
-		expect(await findByText('Email is required')).toBeTruthy()
+		await act(async () => {
+			expect(await findByText('Email is required')).toBeTruthy()
+		})
 
 		// Enter an invalid email and trigger "Submit"
 		fillEmail('invalid-email')
 		triggerSubmit()
-		expect(await findByText('Invalid Email')).toBeTruthy()
+		await act(async () => {
+			expect(await findByText('Invalid Email')).toBeTruthy()
+		})
 	})
 })
