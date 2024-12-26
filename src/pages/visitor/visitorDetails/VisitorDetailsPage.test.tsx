@@ -1,8 +1,11 @@
 import React from 'react'
-import { act, render } from '@testing-library/react-native'
+import { act, fireEvent, render } from '@testing-library/react-native'
 import { NotificationProvider } from '@contexts/NotificationContext'
 import VisitorDetailsPage from './VisitorDetailsPage'
 import { GetVisitorDetailsDto } from '@dtos/visitor/visitor.dto'
+import Share from 'react-native-share'
+import { convertDateStringToFormattedString } from '@helpers/time'
+import { ITimeFormat } from '@config/constant'
 
 jest.mock('@api/visitorService/visitorService', () => ({
 	...jest.requireActual('@api/visitorService/visitorService'),
@@ -34,7 +37,9 @@ jest.mock('expo-router', () => ({
 	}),
 }))
 
-jest.mock('react-native-share', () => ({}))
+jest.mock('react-native-share', () => ({
+	open: jest.fn().mockResolvedValue({}),
+}))
 
 describe('VisitorDetailsPage', () => {
 	beforeEach(() => {
@@ -54,11 +59,27 @@ describe('VisitorDetailsPage', () => {
 
 		return {
 			...utils,
+			triggerShare: async () => {
+				await act(async () => {
+					fireEvent.press(utils.getByTestId('share-button'))
+				})
+			},
 		}
 	}
 
-	it('should render visitor details', async () => {
-		const { getByText } = await setup()
-		expect(getByText('John Doe')).toBeDefined()
+	it('verified share button', async () => {
+		const { triggerShare } = await setup()
+		triggerShare()
+		const shareOptions = {
+			title: 'Share via',
+			message: `Visitor Details: \n\n👤 Name: John Doe
+			\n📅 Visit Date: ${
+				convertDateStringToFormattedString('2025-01-01T10:00:00Z', ITimeFormat.dateTime)
+			}\n\n🔗 View Details: ${process.env.EXPO_PUBLIC_WEB_URL}/visitor/access-pass/?token=mock-token-123`,
+		}
+		await act(async () => {
+			expect(Share.open).toHaveBeenCalledTimes(1)
+			expect(Share.open).toHaveBeenCalledWith(shareOptions)
+		})
 	})
 })

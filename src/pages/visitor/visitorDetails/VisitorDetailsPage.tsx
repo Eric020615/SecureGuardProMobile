@@ -25,7 +25,6 @@ const VisitorDetailsPage = () => {
 	const fetchVisitorDetailsByVisitorId = async (id: string) => {
 		try {
 			setLoading(true)
-			console.log('id', id)
 			await getVisitorDetailsByIdAction(id)
 		} catch (error) {
 			console.error('Error fetching visitor details:', error)
@@ -106,6 +105,7 @@ const VisitorDetailsPage = () => {
 							containerStyles="items-center h-fit"
 							handlePress={onShare}
 							rightReactNativeIcons={<Ionicons name="share-social" color={'#000000'} size={24} />}
+							testId='share-button'
 						/>
 					</View>
 
