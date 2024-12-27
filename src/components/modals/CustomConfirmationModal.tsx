@@ -12,6 +12,8 @@ interface CustomConfirmModalProps {
 	}
 	onConfirm?: () => void
 	onCancel?: () => void
+	onConfirmTestId?: string
+	onCancelTestId?: string
 }
 
 const CustomConfirmModal = ({
@@ -20,6 +22,8 @@ const CustomConfirmModal = ({
 	content,
 	onConfirm = () => {},
 	onCancel = () => {},
+	onConfirmTestId,
+	onCancelTestId,
 }: CustomConfirmModalProps) => {
 	return (
 		<Modal isVisible={isOpen} onBackdropPress={setOpen} className="bg-transparent">
@@ -37,6 +41,7 @@ const CustomConfirmModal = ({
 						}}
 						containerStyles="bg-red-500 p-2 w-[30%] self-center"
 						textStyles="text-sm text-white"
+						testId= {onCancelTestId}
 					/>
 					<CustomButton
 						title="Confirm"
@@ -46,6 +51,7 @@ const CustomConfirmModal = ({
 						}}
 						containerStyles="bg-primary p-2 w-[30%] self-center"
 						textStyles="text-sm text-white"
+						testId= {onConfirmTestId}
 					/>
 				</View>
 			</View>

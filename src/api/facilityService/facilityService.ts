@@ -88,6 +88,5 @@ export const checkAvailabilitySlot = async (
 			endDate,
 		},
 	)
-	console.log('checkAvailabilitySlot', response)
 	return response
 }

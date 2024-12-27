@@ -89,7 +89,6 @@ export const useVisitor = create<State & Actions>((set, get) => ({
 				if(!response?.success){
 					throw new Error(response.msg)
 				}
-				console.log('response', response)
 				set({ visitorDetails: response.data })
 				return response
 			},

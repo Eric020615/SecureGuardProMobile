@@ -72,6 +72,7 @@ const FacilityBookingHistoryPage = () => {
 							setSelectedFacilityBookingId(item.bookingGuid)
 						}}
 						leftReactNativeIcons={<Ionicons name="close-circle" color={'#ffffff'} size={16} />}
+						testId={`cancel-booking-button-${index}`}
 					/>
 				) : (
 					<></>
@@ -117,6 +118,7 @@ const FacilityBookingHistoryPage = () => {
 					subtitle: 'This action cannot be undone',
 				}}
 				onConfirm={onConfirm}
+				onConfirmTestId='cancel-confirm-button'
 			/>
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {
@@ -143,6 +145,7 @@ const FacilityBookingHistoryPage = () => {
 							}}
 							title="Past"
 							textStyles={`text-base ${isPast ? 'text-white' : 'text-primary'} `}
+							testId='past-button'
 						/>
 						<CustomButton
 							containerStyles={`${!isPast ? 'bg-primary' : 'bg-white'} p-2 flex-1 rounded-2xl`}
@@ -151,6 +154,7 @@ const FacilityBookingHistoryPage = () => {
 							}}
 							title="Upcoming"
 							textStyles={`text-base ${!isPast ? 'text-white' : 'text-primary'} `}
+							testId='upcoming-button'
 						/>
 					</View>
 					<View className="flex-1 mt-4">
