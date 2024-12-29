@@ -12,7 +12,7 @@ import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 import { convertDateStringToFormattedString } from '@helpers/time'
 import CustomButton from '@components/buttons/customButton/CustomButton'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import { Menu, MenuItem } from 'react-native-material-menu'
+import { Menu, MenuItem,  } from 'react-native-material-menu'
 import CustomConfirmModal from '@components/modals/CustomConfirmationModal'
 
 const ParcelListPage = () => {
@@ -93,6 +93,7 @@ const ParcelListPage = () => {
 							</TouchableOpacity>
 						}
 						onRequestClose={handleMenuToggle}
+						testID={`menu-${index}`}
 					>
 						{/* Delete Button */}
 						<MenuItem
@@ -100,8 +101,10 @@ const ParcelListPage = () => {
 								setMenuVisible(false)
 								setOpen(!open)
 								setSelectedParcelId(item.parcelGuid)
+								console.log("hello motherfucker")
 							}}
 							className="text-gray-700 flex flex-row items-center space-x-2"
+							testID={`delete-button-${index}`}
 						>
 							<View className="flex flex-row items-center">
 								<AntDesign name="delete" size={16} color="#000" />
@@ -130,6 +133,7 @@ const ParcelListPage = () => {
 					subtitle: 'This action cannot be undone',
 				}}
 				onConfirm={onConfirm}
+				onConfirmTestId='delete-confirm-button'
 			/>
 			<ActionConfirmationModal
 				onSuccessConfirm={() => {

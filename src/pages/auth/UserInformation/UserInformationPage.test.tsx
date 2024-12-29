@@ -2,7 +2,6 @@ import React from 'react'
 import { render, fireEvent, act } from '@testing-library/react-native'
 import UserInformationPage from '@pages/auth/userInformation/UserInformationPage'
 import { NotificationProvider } from '@contexts/NotificationContext'
-import { useRefData } from '@store/refData/useRefData'
 
 const mockPropertyList = [
 	{ floorId: '1', units: [{ unitId: '101', isAssigned: false, assignedTo: null }] },

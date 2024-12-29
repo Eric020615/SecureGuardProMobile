@@ -1,8 +1,7 @@
-import { FlatList, ListRenderItem, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
-import { ReactElement, useEffect, useMemo, useState } from 'react'
+import React from 'react';
+import { FlatList, ListRenderItem, Text, View, ViewStyle } from 'react-native'
+import { ReactElement, useMemo } from 'react'
 import CustomDataNotFound from '@components/dataNotFound/CustomDataNotFound'
-import { Menu, MenuItem } from 'react-native-material-menu' // Example of a dropdown library
-import Ionicons from 'react-native-vector-icons/Ionicons' // Import the icon set you want to use
 
 interface CustomFlatListProps<T> {
 	data: T[]
@@ -74,6 +73,7 @@ const CustomFlatList = <T extends object>({
 					offset: (itemHeight + gap) * index,
 					index,
 				})}
+				testID='flat-list'
 			/>
 		</View>
 	)
