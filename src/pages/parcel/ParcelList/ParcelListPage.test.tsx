@@ -104,7 +104,7 @@ describe('ParcelListPage', () => {
 	})
 
 	it('verifies parcel deletion', async () => {
-		const { getByText, findByText, triggerDeleteParcel, triggerDeleteConfirm } = await setup()
+		const { getByText, triggerDeleteParcel, triggerDeleteConfirm } = await setup()
 		React.useState = jest.fn().mockReturnValue([true, { open: true }])
 		await triggerDeleteParcel(0)
 		await triggerDeleteConfirm()
