@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCard } from '@store/card/useCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import CustomButton from '@components/buttons/CustomButton'
+import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
 
 const QrCodePage = () => {
 	const { qrCode, getQrCodeAction, createQrCodeAction } = useCard()
@@ -42,6 +43,7 @@ const QrCodePage = () => {
 
 	return (
 		<SafeAreaView className="bg-slate-100 h-full">
+			<ActionConfirmationModal />
 			<View className="flex-1 justify-center items-center px-4 my-6">
 				<Text className="text-4xl text-black font-bold text-center">QR Code</Text>
 				<View className="justify-center items-center mt-6">

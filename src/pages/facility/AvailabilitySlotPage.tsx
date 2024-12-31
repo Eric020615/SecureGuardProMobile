@@ -30,6 +30,44 @@ const AvailabilitySlotPage = () => {
 	const [selectedSlot, setSelectedSlot] = useState<number | null>(null) // State to track selected slot
 	const { availabilitySlot, checkAvailabilitySlotAction, submitBookingAction } = useFacility()
 	const { isLoading } = useApplication()
+	const initialStartDate = convertDateStringToDate(startDate as string)
+	const initialEndDate = moment(startDate as string)
+		.add(duration as string, 'hours')
+		.toDate()
+
+	const validationSchema = Yup.object().shape({
+		facilityId: Yup.string().required('Please select a facility to proceed.'),
+		startDate: Yup.date()
+			.required('Please select a start date and time for your booking.')
+			.min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),
+		endDate: Yup.date()
+			.required('Please select a start date and time for your booking.')
+			.min(Yup.ref('startDate'), 'End time cannot be before the start time, please select a valid end time.'),
+		numOfGuest: Yup.number().required('Please select the number of guests for your booking.'),
+		spaceId: Yup.string().required('Please select a slot to proceed.'),
+	})
+
+	const formik = useFormik<FacilityBooking>({
+		enableReinitialize: true,
+		validateOnBlur: false,
+		initialValues: {
+			facilityId: id as keyof typeof FacilityDescriptionEnum,
+			startDate: initialStartDate,
+			endDate: initialEndDate,
+			numOfGuest: parseInt(numOfGuest as string),
+			spaceId: '',
+		},
+		validationSchema: validationSchema,
+		onSubmit: async (values) => {
+			await submitBookingAction({
+				facilityId: values.facilityId,
+				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),
+				endDate: convertDateToDateString(values.endDate, ITimeFormat.isoDateTime),
+				numOfGuest: values.numOfGuest,
+				spaceId: values.spaceId,
+			})
+		},
+	})
 
 	useEffect(() => {
 		formik.setFieldValue('facilityId', id)
@@ -61,43 +99,6 @@ const AvailabilitySlotPage = () => {
 			formik.setFieldValue('spaceId', space)
 		}
 	}
-
-	const validationSchema = Yup.object().shape({
-		facilityId: Yup.string().required('Please select a facility to proceed.'),
-		startDate: Yup.date()
-			.required('Please select a start date and time for your booking.')
-			.min(getCurrentDate(), 'Start time cannot be in the past, please select a valid future date and time'),
-		endDate: Yup.date()
-			.required('Please select a start date and time for your booking.')
-			.min(Yup.ref('startDate'), 'End time cannot be before the start time, please select a valid end time.'),
-		numOfGuest: Yup.number().required('Please select the number of guests for your booking.'),
-		spaceId: Yup.string().required('Please select a slot to proceed.'),
-	})
-
-	const formik = useFormik<FacilityBooking>({
-		enableReinitialize: true,
-		validateOnBlur: false,
-		initialValues: {
-			facilityId: id as keyof typeof FacilityDescriptionEnum,
-			startDate: convertDateStringToDate(startDate as string),
-			endDate: moment(startDate as string)
-				.add(duration as string, 'hours')
-				.toDate(),
-			numOfGuest: parseInt(numOfGuest as string),
-			spaceId: '',
-		},
-		validationSchema: validationSchema,
-		onSubmit: async (values) => {
-			console.log('values', values)
-			await submitBookingAction({
-				facilityId: values.facilityId,
-				startDate: convertDateToDateString(values.startDate, ITimeFormat.isoDateTime),
-				endDate: convertDateToDateString(values.endDate, ITimeFormat.isoDateTime),
-				numOfGuest: values.numOfGuest,
-				spaceId: values.spaceId,
-			})
-		},
-	})
 
 	const renderItem: ListRenderItem<SpaceAvailabilityDto> = ({ item, index }) => (
 		<TouchableOpacity

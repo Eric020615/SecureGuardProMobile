@@ -36,9 +36,7 @@ const FaceAuthPage = () => {
 		return (
 			<SafeAreaView className="h-full bg-black">
 				<View className="flex-1 justify-center mx-8">
-					<Text className="text-center pb-10 text-white">
-						We need your permission to show the camera
-					</Text>
+					<Text className="text-center pb-10 text-white">We need your permission to show the camera</Text>
 					<CustomButton
 						title="Grant Permission"
 						handlePress={requestCameraPermission}
@@ -82,12 +80,7 @@ const FaceAuthPage = () => {
 				}}
 			/>
 			{!image ? (
-				<CameraView
-					className="flex-1 rounded-3xl"
-					facing={facing}
-					ref={cameraRef}
-					enableTorch={flash}
-				>
+				<CameraView className="flex-1 rounded-3xl" facing={facing} ref={cameraRef} enableTorch={flash}>
 					<View className="flex-1 bg-transparent">
 						<View className="flex-row justify-between px-8 py-4">
 							<CustomButton
@@ -100,17 +93,13 @@ const FaceAuthPage = () => {
 								handlePress={toggleFlash}
 								containerStyles="flex flex-row items-center justify-center h-10"
 								textStyles="text-base text-[f1f1f1]] font-bold ml-4"
-								leftReactNativeIcons={
-									<Entypo name="flash" color={flash ? 'gray' : '#f1f1f1'} size={28} />
-								}
+								leftReactNativeIcons={<Entypo name="flash" color={flash ? 'gray' : '#f1f1f1'} size={28} />}
 							/>
 						</View>
 					</View>
 				</CameraView>
 			) : (
-				<View className="flex-1">
-					<Image source={{ uri: image.uri }} className="flex-1" />
-				</View>
+				<View className="flex-1">{image.uri && <Image source={{ uri: image.uri }} className="flex-1" />}</View>
 			)}
 			<View className="bg-black px-5 py-2">
 				{image ? (
