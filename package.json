@@ -8,6 +8,7 @@
     "start:prod": "NODE_ENV=development yarn run start",
     "android": "expo run:android",
     "ios": "expo run:ios",
+    "ios:build": "eas build -p ios",
     "web": "expo start --web",
     "lint": "eslint ."
   },

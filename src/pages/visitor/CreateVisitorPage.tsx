@@ -41,7 +41,7 @@ const CreateVisitorPage = () => {
 		visitDateTime: Yup.date().required('Visit date is required'),
 		visitorCategory: Yup.string().min(1).required('Visitor category is required'),
 		visitorName: Yup.string().min(1).required('Visitor name is required'),
-		visitorEmail: Yup.string().email('Invalid email address'),
+		visitorEmail: Yup.string().email('Invalid email address').required('Visitor email is required'),
 		visitorPhoneNumber: Yup.string()
 			.required('Visitor phone number is required')
 			.test('is-valid-phone', 'Phone number is not valid', (value) => {

@@ -40,7 +40,7 @@ const AvailabilitySlotPage = () => {
 				.add(duration as string, 'hours')
 				.format(ITimeFormat.dateTime),
 		),
-		formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
+			formik.setFieldValue('numOfGuest', parseInt(numOfGuest as string))
 		fetchAvailabilitySlot()
 	}, [id, startDate, duration, numOfGuest])
 
@@ -55,9 +55,10 @@ const AvailabilitySlotPage = () => {
 	const handleSlotSelection = (index: number, space: string) => {
 		if (selectedSlot === index) {
 			setSelectedSlot(null)
+			formik.setFieldValue('spaceId', null)
 		} else {
 			setSelectedSlot(index)
-			formik.setFieldValue('space', space)
+			formik.setFieldValue('spaceId', space)
 		}
 	}
 
@@ -70,7 +71,7 @@ const AvailabilitySlotPage = () => {
 			.required('Please select a start date and time for your booking.')
 			.min(Yup.ref('startDate'), 'End time cannot be before the start time, please select a valid end time.'),
 		numOfGuest: Yup.number().required('Please select the number of guests for your booking.'),
-		space: Yup.string().required('Please select a slot to proceed.'),
+		spaceId: Yup.string().required('Please select a slot to proceed.'),
 	})
 
 	const formik = useFormik<FacilityBooking>({
@@ -185,6 +186,9 @@ const AvailabilitySlotPage = () => {
 							itemHeight={120} // Customize the item height if needed
 							listFooterComponent={<></>}
 						/>
+						{formik.touched.spaceId && formik.errors.spaceId && (formik.errors.spaceId as string) && (
+							<Text className="text-red-500 text-sm mt-4">{formik.errors.spaceId}</Text>
+						)}
 					</View>
 					<View>
 						<CustomButton
