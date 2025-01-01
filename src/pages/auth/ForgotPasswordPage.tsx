@@ -43,9 +43,9 @@ const ForgotPasswordPage = () => {
 				<View className="w-full min-h-[85vh] px-4 my-6">
 					<View className="grid justify-center flex-1">
 						<View className="mb-5 gap-2">
-							<Text className="text-3xl text-black font-bold text-center">Reset Password</Text>
+							<Text className="text-3xl text-black font-bold text-center">Forgot Password</Text>
 							<Text className="text-xl text-gray-600 font-normal text-center">
-								Please enter your email address to request reset password link.
+								Enter your email address below to request a password reset.
 							</Text>
 						</View>
 						<CustomFormField

@@ -205,6 +205,7 @@ const UserInformationPage = () => {
 								setShowDateTime={setShowCalendar}
 								showDateTime={showCalendar}
 								placeholder={'DOB'}
+								maximumDate={getCurrentDate()}
 							/>
 						</View>
 						<CustomFormField

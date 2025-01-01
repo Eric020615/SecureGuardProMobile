@@ -33,8 +33,14 @@ export const forgotPassword = async (forgotPasswordDto: ForgotPasswordDto): Prom
 }
 
 // Check authentication
-export const checkAuth = async (token: string): Promise<IResponse<AuthTokenPayloadDto>> => {
-	return handleApiRequest<AuthTokenPayloadDto>(listUrl.auth.checkAuth.path, listUrl.auth.checkAuth.type, {}, token)
+export const checkAuth = async (token: string, check: boolean): Promise<IResponse<AuthTokenPayloadDto>> => {
+	return handleApiRequest<AuthTokenPayloadDto>(
+		listUrl.auth.checkAuth.path,
+		listUrl.auth.checkAuth.type,
+		undefined,
+		token,
+		{ check },
+	)
 }
 
 // Reset password

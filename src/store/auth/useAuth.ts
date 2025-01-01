@@ -15,7 +15,7 @@ interface Actions {
 	signInAction: (userSignInForm: SignInFormDto) => Promise<any>
 	resetPasswordAction: (resetPasswordDto: ResetPasswordDto) => Promise<any>
 	forgotPasswordAction: (forgotPasswordDto: ForgotPasswordDto) => Promise<any>
-	checkJwtAuthAction: (token: string) => Promise<IResponse<AuthTokenPayloadDto>>
+	checkJwtAuthAction: (token: string, check?: boolean) => Promise<IResponse<AuthTokenPayloadDto>>
 	setTempTokenAction: (token: string) => void
 }
 
@@ -82,10 +82,10 @@ export const useAuth = create<State & Actions>((set) => ({
 		)
 	},
 
-	checkJwtAuthAction: async (token: string) => {
+	checkJwtAuthAction: async (token: string,  check?: boolean) => {
 		return generalAction(
 			async () => {
-				const response = await checkAuth(token)
+				const response = await checkAuth(token, check)
 				if (!response?.success) {
 					throw new Error(response.msg)
 				}

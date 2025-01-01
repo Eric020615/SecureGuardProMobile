@@ -27,7 +27,7 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 			if (!value) {
 				throw new Error('Unauthorized')
 			}
-			const response = await checkJwtAuthAction(value)
+			const response = await checkJwtAuthAction(value, true)
 			if (!response.success) {
 				throw new Error('Unauthorized')
 			}
@@ -39,7 +39,8 @@ const GlobalProvider: React.FC<{ children: React.ReactNode }> = ({ children }) =
 			}
 		} catch (error) {
 			ToastAndroid.show(error.message, ToastAndroid.CENTER)
-			router.push('/sign-in')
+			await AsyncStorage.clear()
+			router.replace('/sign-in')
 		}
 	}
 
