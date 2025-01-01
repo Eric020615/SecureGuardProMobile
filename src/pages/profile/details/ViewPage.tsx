@@ -23,7 +23,7 @@ const userProfileViewPage = () => {
 	const logOut = async () => {
 		try {
 			await AsyncStorage.clear()
-			router.push('/sign-in')
+			router.replace('/sign-in')
 		} catch (error) {
 			console.log(error)
 		}
