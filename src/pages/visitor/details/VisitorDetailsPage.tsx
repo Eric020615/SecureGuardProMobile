@@ -7,7 +7,7 @@ import { router, useLocalSearchParams } from 'expo-router'
 import { ITimeFormat } from '@config/constant'
 import { useVisitor } from '@store/visitor/useVisitor'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
-import { convertDateStringToFormattedString } from '@helpers/time'
+import { compareDateStrings, convertDateStringToFormattedString } from '@helpers/time'
 import Share from 'react-native-share'
 import { VisitorCategoryDescriptionEnum } from '@config/constant/visitor'
 
@@ -101,11 +101,13 @@ const VisitorDetailsPage = () => {
 							}}
 							rightReactNativeIcons={<Ionicons name="arrow-back" color={'#000000'} size={24} />}
 						/>
-						<CustomButton
-							containerStyles="items-center h-fit"
-							handlePress={onShare}
-							rightReactNativeIcons={<Ionicons name="share-social" color={'#000000'} size={24} />}
-						/>
+						{visitorDetails && visitorDetails.token && compareDateStrings(visitorDetails.visitDateTime) === 1 && (
+							<CustomButton
+								containerStyles="items-center h-fit"
+								handlePress={onShare}
+								rightReactNativeIcons={<Ionicons name="share-social" color={'#000000'} size={24} />}
+							/>
+						)}
 					</View>
 
 					{/* Title */}

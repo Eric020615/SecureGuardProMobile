@@ -43,7 +43,7 @@ const CardPage = () => {
 				<Text className="text-3xl text-black font-bold mt-6">Access Card</Text>
 
 				{/* Content Conditional on Badge Presence */}
-				{hasBadge ? (
+				{card && hasBadge ? (
 					// Show the card if badge exists
 					<View className="flex-1 justify-center items-center mt-6 mb-6">
 						<View className="w-full h-fit bg-primary rounded-lg shadow-lg p-6 max-w-lg">
@@ -54,7 +54,7 @@ const CardPage = () => {
 							</View>
 
 							<Text className="text-white text-xl font-mono tracking-wider mt-6">
-								{card.badgeNumber.toString().padStart(16, '0')}
+								{card.badgeNumber && card.badgeNumber.toString().padStart(16, '0')}
 							</Text>
 
 							<View className="flex flex-row justify-between mt-4">

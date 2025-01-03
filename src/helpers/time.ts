@@ -44,3 +44,15 @@ export const initializeDate = (date: Date) => {
 	if(!date) return null
 	return moment(date).startOf("day").toDate()
 }
+
+// Compare two DateTimeOffset strings
+export const compareDateStrings = (a: string, b?: string) => {
+    if (!a) return null; // If `a` is not provided, return null as comparison is invalid
+
+    const dateA = moment(a);
+    const dateB = b ? moment(b) : moment(); // Use current date if `b` is not provided
+
+    if (dateA.isBefore(dateB)) return -1;
+    if (dateA.isAfter(dateB)) return 1;
+    return 0; // Dates are equal
+};
