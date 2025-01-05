@@ -15,8 +15,8 @@ jest.mock('@api/facilityService/facilityService', () => ({
 					bookingId: 1,
 					bookingGuid: 'booking-guid-001',
 					facilityId: 'GR', // Replace with actual key from FacilityDescriptionEnum
-					startDate: '2025-01-01T09:00:00Z',
-					endDate: '2025-01-01T11:00:00Z',
+					startDate: '2025-02-10T09:00:00Z',
+					endDate: '2025-02-11T11:00:00Z',
 					bookedBy: '1',
 					isCancelled: false,
 					bookingStatus: 'ACTIVE', // Replace with actual key from DocumentStatusDescriptionEnum
