@@ -17,7 +17,6 @@ export const getFile = async (document: DocumentPickerResponse): Promise<General
 		} as GeneralFileDto
 		return file
 	} catch (error) {
-		console.log(error)
 		throw new Error(error)
 	}
 }
@@ -35,7 +34,6 @@ export const convertImageToGeneralFile = async (image: CameraCapturedPicture): P
         };
         return file;
     } catch (error) {
-        console.log(error);
         throw new Error(error);
     }
 };

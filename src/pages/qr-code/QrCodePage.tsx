@@ -1,28 +1,32 @@
 import { View, Text, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { useCard } from '@store/card/useCard'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import CustomButton from '@components/buttons/CustomButton'
 import ActionConfirmationModal from '@components/modals/ActionConfirmationModal'
+import { useFocusEffect } from 'expo-router'
 
 const QrCodePage = () => {
 	const { qrCode, getQrCodeAction, createQrCodeAction } = useCard()
 	const [hasBadge, setHasBadge] = useState(false)
 	const [hasQrCode, setHasQrCode] = useState(false)
 
-	useEffect(() => {
-		const checkBadge = async () => {
-			const badge = await AsyncStorage.getItem('card')
-			setHasBadge(!!badge) // Update state based on whether the badge exists
-		}
-		checkBadge()
-	}, [])
+	// Check badge whenever the screen is focused
+	useFocusEffect(
+		useCallback(() => {
+			const checkBadge = async () => {
+				const badge = await AsyncStorage.getItem('card');
+				setHasBadge(!!badge); // Update state based on whether the badge exists
+			};
+
+			checkBadge(); // Trigger check when page is focused
+		}, [])
+	);
 
 	useEffect(() => {
 		const fetchQrCode = async () => {
 			if (!hasBadge) return // Do nothing if no badge
-
 			if (!qrCode) {
 				await getQrCodeAction() // Trigger fetching of QR code
 			}

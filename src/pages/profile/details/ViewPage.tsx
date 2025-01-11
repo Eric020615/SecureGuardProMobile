@@ -9,6 +9,7 @@ import { useUser } from '@store/user/useUser'
 import UserAvatar from '@bhavberi/react-native-user-avatar/src'
 import CustomButton from '@components/buttons/CustomButton'
 import { RoleDescriptionEnum } from '@config/constant/user'
+import { useCard } from '@store/card/useCard'
 
 const userProfileViewPage = () => {
 	const { userProfile, getUserProfileByIdAction } = useUser()
@@ -23,9 +24,9 @@ const userProfileViewPage = () => {
 	const logOut = async () => {
 		try {
 			await AsyncStorage.clear()
+			useCard.setState({ qrCode: '' })
 			router.replace('/sign-in')
 		} catch (error) {
-			console.log(error)
 		}
 	}
 

@@ -77,7 +77,6 @@ const UserInformationPage = () => {
 			setSelectedFiles(pickerFile)
 		} catch (error) {
 			if (DocumentPicker.isCancel(error)) {
-				console.log(error)
 			} else {
 				setActionConfirmModal({
 					title: 'File Selection Failed',
