@@ -55,6 +55,11 @@ const FacilityBookingDetails = () => {
 								<Text className="text-base text-black">{FacilityDescriptionEnum[facilityBookingDetails.facilityId] || 'N/A'}</Text>
 							</View>
 
+							<View className="mt-3">
+								<Text className="text-lg text-black font-bold">Space</Text>
+								<Text className="text-base text-black">{facilityBookingDetails.spaceId || 'N/A'}</Text>
+							</View>
+
 							{/* Booked By */}
 							<View className="mt-3">
 								<Text className="text-lg text-black font-bold">Booked By</Text>

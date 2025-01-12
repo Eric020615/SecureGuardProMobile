@@ -31,6 +31,7 @@ export interface GetFacilityBookingDetailsDto {
 	bookingId: number
 	bookingGuid: string
 	facilityId: keyof typeof FacilityDescriptionEnum
+	spaceId: string
 	startDate: string
 	endDate: string
 	bookedBy: string
